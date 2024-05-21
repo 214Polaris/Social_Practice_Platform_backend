@@ -5,7 +5,7 @@ import org.example.practice_platform_backend.mapper.UserMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-
+import java.io.*;
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 
@@ -16,10 +16,8 @@ public class UserController {
     UserMapper userMapper;
 
     @PostMapping(value = "/login", consumes = "multipart/form-data")
-    public ResponseEntity<?> loginUser(@ModelAttribute User user) {
-        String user_name = user.getUser_name();
-        String passwd = user.getPasswd();
-        User loggedInUser = userMapper.login(user_name, passwd);
+    public ResponseEntity<?> loginUser(@RequestParam("user_name") String name, @RequestParam("passwd") String password) {
+        User loggedInUser = userMapper.login(name, password);
         if (loggedInUser != null) {
             return ResponseEntity.ok().body("操作成功");
         } else {
