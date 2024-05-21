@@ -31,4 +31,10 @@ public class User {
         return password;
     }
 
+    public int getPhone_number(){return phone_number;}
+
+    public String getName(){return name;}
+
+    public String getUser_category(){return user_category;}
+
 }
