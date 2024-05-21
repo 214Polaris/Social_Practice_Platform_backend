@@ -1,0 +1,11 @@
+services:
+  mysql:
+    image: 'mysql:latest'
+    environment:
+      - 'MYSQL_DATABASE=social_practicedb'
+      - 'MYSQL_PASSWORD=czj666'
+      - 'MYSQL_ROOT_PASSWORD=czj666'
+      - 'MYSQL_USER=user'
+    ports:
+      - '3306:3306'
+
