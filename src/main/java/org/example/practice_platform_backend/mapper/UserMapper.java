@@ -14,4 +14,8 @@ public interface UserMapper {
     @Update("insert into user values(default,#{user_name},#{passwd})")
     @Transactional
     void register(User user);
+
+    //验证 userid 是否存在
+    @Select("select * from user where user_id=#{userId}")
+    User getUserById(@Param("userId")int userId);
 }
