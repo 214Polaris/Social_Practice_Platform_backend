@@ -48,6 +48,7 @@ public class JwtInterceptor implements HandlerInterceptor {
         }
         return true;
     }
+
     // 回应报文结构
     private void directResponse(HttpServletResponse response, String errorMessage) {
         PrintWriter writer = null;

@@ -11,7 +11,10 @@ public interface UserMapper {
     User login(@Param("user_name")String user_name,@Param("passwd") String passwd);
 
     //注册
-    @Update("insert into user values(default,#{user_name},#{passwd})")
+    @Insert("insert into user(name,username,passwd,phone_number,user_category) " +
+            "values(#{name}, #{user_name}, #{password}, #{phone_number}, #{user_category})")
+    //设置主键自增长
+    @Options(useGeneratedKeys = true, keyProperty = "user_id")
     @Transactional
     void register(User user);
 
