@@ -1,5 +1,4 @@
 package org.example.practice_platform_backend.controllers;
-import com.nimbusds.oauth2.sdk.Response;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.example.practice_platform_backend.entity.User;
@@ -12,7 +11,7 @@ import org.example.practice_platform_backend.utils.JwtUtils;
 @RequestMapping("/api")
 public class UserController {
     @Autowired
-    UserMapper userMapper;
+    private UserMapper userMapper;
 
     // jwt
     @Autowired
@@ -23,6 +22,7 @@ public class UserController {
     public ResponseEntity<?> loginUser(@RequestParam("user_name") String name, @RequestParam("passwd") String password) {
         User loggedInUser = userMapper.login(name, password);
         if (loggedInUser != null) {
+            // 生成 token 并返回
             HttpHeaders headers = new HttpHeaders();
             headers.add("token", jwtUtils.generateToken(loggedInUser));
             return ResponseEntity.ok().headers(headers).body("登录成功");
@@ -30,5 +30,17 @@ public class UserController {
             return ResponseEntity.status(400).body("用户名或密码错误");
         }
     }
+
+    // 处理注册请求
+    @PostMapping(value="/register")
+    public ResponseEntity<?> registerUser(@RequestBody User user){
+        try{
+            userMapper.register(user);
+            return ResponseEntity.ok().body("注册成功");
+        } catch (Exception e){
+            return ResponseEntity.status(400).body("注册失败");
+        }
+    }
+
 }
 

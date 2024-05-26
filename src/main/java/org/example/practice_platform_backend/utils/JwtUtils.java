@@ -2,8 +2,6 @@ package org.example.practice_platform_backend.utils;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.*;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.context.properties.*;
 import org.springframework.stereotype.*;
 import org.springframework.beans.factory.annotation.Value;
 import io.jsonwebtoken.Claims;
@@ -15,6 +13,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
+@Setter
 @Component
 public class JwtUtils {
     private static final String CLAIM_KEY_USERNAME = "sub";

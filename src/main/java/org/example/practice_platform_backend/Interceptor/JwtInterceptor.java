@@ -19,6 +19,11 @@ public class JwtInterceptor implements HandlerInterceptor {
     UserMapper userMapper;
     JwtUtils jwtUtils;
 
+    public JwtInterceptor(JwtUtils jwtUtils, UserMapper userMapper) {
+        this.jwtUtils = jwtUtils;
+        this.userMapper = userMapper;
+    }
+
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
         String token = request.getHeader("token");
@@ -48,6 +53,7 @@ public class JwtInterceptor implements HandlerInterceptor {
         }
         return true;
     }
+
     // 回应报文结构
     private void directResponse(HttpServletResponse response, String errorMessage) {
         PrintWriter writer = null;
