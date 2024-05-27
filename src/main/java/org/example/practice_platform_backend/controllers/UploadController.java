@@ -49,8 +49,9 @@ public class UploadController {
         //头像图片名称
         String fileName = user_id + "_avatar" + suffix ;
 
-        //图片路径
-        File fileDir = new File("/www/wwwroot/user/uploadfiles/avatar/");
+        //图片路径(本地运行请改为自己的)
+        //File fileDir = new File("/www/wwwroot/user/uploadfiles/avatar/");
+        File fileDir = new File("/Users/a214/Documents/IntelliJ/practice_platform_backend/uploadfiles/avatar/");
 
         if(!fileDir.exists()){
             boolean success = fileDir.mkdirs();

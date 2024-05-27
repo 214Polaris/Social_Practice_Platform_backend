@@ -2,6 +2,10 @@ package org.example.practice_platform_backend.utils;
 
 import lombok.Setter;
 import org.springframework.stereotype.Component;
+import org.apache.tomcat.util.codec.binary.Base64;
+import org.springframework.web.multipart.MultipartFile;
+import java.io.*;
+import java.util.Objects;
 import java.util.Random;
 import java.util.UUID;
 
@@ -55,9 +59,66 @@ public class ImageUtils {
      * @return 随机目录
      */
     public static String getDir() {
-        String s = "0123456789ABCDEF";
+        String s = "0123456789ABCPDF";
         Random r = new Random();
         // /A/A
         return "/" + s.charAt(r.nextInt(16)) + "/" + s.charAt(r.nextInt(16));
     }
+
+    /**
+     * 获取字节类型的图片
+     * @return 字节类型图片
+     */
+    public String getFileBytes(String filePath) throws IOException {
+        try (FileInputStream fileInputStream = new FileInputStream(filePath);) {
+            ByteArrayOutputStream bos = new ByteArrayOutputStream();
+            byte[] b = new byte[1024];
+            int len = -1;
+            while ((len = fileInputStream.read(b)) != -1) {
+                bos.write(b, 0, len);
+            }
+            byte[] data = bos.toByteArray();
+            return new String(Objects.requireNonNull(Base64.encodeBase64(data,true)));
+        }
+    }
+
+    /*** 将base64字符串，生成文件
+     * 之后有可能用到*/
+    public static File convertBase64ToFile(String fileBase64String, String filePath, String fileName) {
+        BufferedOutputStream bos = null;
+        FileOutputStream fos = null;
+        File file = null;
+        try {
+            File dir = new File(filePath);
+            //判断文件目录是否存在
+            if (!dir.exists() && dir.isDirectory()) {
+                dir.mkdirs();
+            }
+            byte[] bfile = Base64.decodeBase64(fileBase64String);
+            file = new File(filePath + File.separator + fileName);
+            fos = new FileOutputStream(file);
+            bos = new BufferedOutputStream(fos);
+            bos.write(bfile);
+            return file;
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            if (bos != null) {
+                try {
+                    bos.close();
+                } catch (IOException e1) {
+                    e1.printStackTrace();
+                }
+            }
+            if (fos != null) {
+                try {
+                    fos.close();
+                } catch (IOException e1) {
+                    e1.printStackTrace();
+                }
+            }
+        }
+        return null;
+    }
+
 }
