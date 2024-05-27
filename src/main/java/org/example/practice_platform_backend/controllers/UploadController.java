@@ -47,10 +47,10 @@ public class UploadController {
         String suffix = ImageUtils.getSuffix(originalFilename);
 
         //头像图片名称
-        String fileName = user_id + "_avatar." + suffix ;
+        String fileName = user_id + "_avatar" + suffix ;
 
         //图片路径
-        File fileDir = new File("/Users/a214/Documents/IntelliJ/practice_platform_backend/uploadfiles/avatar/");
+        File fileDir = new File("/www/wwwroot/user/uploadfiles/avatar/");
 
         if(!fileDir.exists()){
             boolean success = fileDir.mkdirs();

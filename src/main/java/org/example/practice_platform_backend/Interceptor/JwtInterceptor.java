@@ -38,7 +38,8 @@ public class JwtInterceptor implements HandlerInterceptor {
         try{
             user = jwtUtils.getUserInfoFromToken(token,User.class);
         } catch (JWTVerificationException j){
-            throw new RuntimeException("401");
+            directResponse(response,"jwt 解析失败");
+            return false;
         }
         user = userMapper.getUserById(user.getUser_id());
         if(user == null){

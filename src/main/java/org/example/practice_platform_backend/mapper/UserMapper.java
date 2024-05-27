@@ -28,4 +28,19 @@ public interface UserMapper {
     //获取头像
     @Select("select avatar_path from user where user_id = #{user_id}")
     String getAvatar(@Param("user_id")int userId);
+
+    //修改用户信息（mybatis动态修改）
+    @Update("<script>" +
+            "UPDATE user" +
+            "<set>" +
+            "<if test='name != null'>name = #{name},</if>" +
+            "<if test='user_name != null'>username = #{user_name},</if>" +
+            "<if test='password != null'>passwd = #{password},</if>" +
+            "<if test='phone_number != null'>phone_number = #{phone_number},</if>" +
+            "</set>" +
+            "WHERE user_id = #{user_id}" +
+            "</script>")
+    @Transactional
+    void modifyInfo(User user);
+
 }

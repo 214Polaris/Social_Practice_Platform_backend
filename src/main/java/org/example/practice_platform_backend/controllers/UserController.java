@@ -1,5 +1,7 @@
 package org.example.practice_platform_backend.controllers;
+import com.nimbusds.oauth2.sdk.Request;
 import com.nimbusds.oauth2.sdk.Response;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.example.practice_platform_backend.entity.User;
@@ -40,6 +42,24 @@ public class UserController {
             return ResponseEntity.ok().body("注册成功");
         } catch (Exception e){
             return ResponseEntity.status(400).body("注册失败");
+        }
+    }
+
+    // 修改用户信息
+    @PostMapping(value="/modify_info")
+    public ResponseEntity<?> modifyUser(@RequestBody User newInfo, HttpServletRequest request){
+        String token = request.getHeader("token");
+        int user_id = jwtUtils.getUserInfoFromToken(token,User.class).getUser_id();
+        newInfo.setUser_id(user_id);
+        User user = userMapper.login(newInfo.getUser_name(),newInfo.getPassword());
+        if(user != null){
+            return ResponseEntity.status(400).body("账号密码不能与之前一样");
+        }
+        try{
+            userMapper.modifyInfo(newInfo);
+            return ResponseEntity.status(200).body("修改成功");
+        } catch (Exception e){
+            return ResponseEntity.status(400).body("修改失败");
         }
     }
 
