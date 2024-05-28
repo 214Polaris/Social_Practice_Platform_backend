@@ -6,7 +6,7 @@ import org.example.practice_platform_backend.utils.JwtUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
-
+import java.nio.file.StandardCopyOption;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -50,8 +50,8 @@ public class SaveFileService {
         try {
             // 确保目录存在
             saveFile.getParentFile().mkdirs();
-            // 将文件写入目标路径
-            Files.copy(photo.toPath(), saveFile.toPath());
+            // 将文件写入目标路径，确保能够覆盖文件
+            Files.copy(photo.toPath(), saveFile.toPath(),StandardCopyOption.REPLACE_EXISTING);
             //将头像路径保存到数据库中
             String filePath = fileDir + fileName;
             userMapper.updateAvatar(user_id, filePath);
