@@ -1,6 +1,7 @@
 package org.example.practice_platform_backend.mapper;
 import org.example.practice_platform_backend.entity.User;
 import org.apache.ibatis.annotations.*;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.transaction.annotation.Transactional;
 
 @Mapper
@@ -13,6 +14,7 @@ public interface UserMapper {
     @Insert("insert into user(name,username,passwd,phone_number,user_category) " +
             "values(#{name}, #{user_name}, #{password}, #{phone_number}, #{user_category})")
     //设置主键自增长
+    @Async
     @Options(useGeneratedKeys = true, keyProperty = "user_id")
     @Transactional
     void register(User user);
@@ -22,6 +24,7 @@ public interface UserMapper {
     User getUserById(@Param("userId")int userId);
 
     //保存上传的头像图片路径
+    @Async
     @Update("UPDATE user SET avatar_path = #{avatar_path} WHERE user_id = #{user_id}")
     void updateAvatar(@Param("user_id")int user_id,@Param("avatar_path") String avatar_path);
 
@@ -30,6 +33,7 @@ public interface UserMapper {
     String getAvatar(@Param("user_id")int userId);
 
     //修改用户信息（mybatis动态修改）
+    @Async
     @Update("<script>" +
             "UPDATE user" +
             "<set>" +

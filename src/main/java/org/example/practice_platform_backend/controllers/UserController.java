@@ -7,10 +7,12 @@ import org.springframework.http.ResponseEntity;
 import org.example.practice_platform_backend.entity.User;
 import org.example.practice_platform_backend.mapper.UserMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.web.bind.annotation.*;
 import org.example.practice_platform_backend.utils.JwtUtils;
 
 @RestController
+@EnableAsync
 @RequestMapping("/api")
 public class UserController {
     @Autowired

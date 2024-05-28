@@ -28,6 +28,6 @@ public class InterceptorConfig implements WebMvcConfigurer {
     public void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(jwtInterceptor(jwtUtils,userMapper)).addPathPatterns("/**")
                 //在这里修改不拦截的路径"/api/login"，如果要放拦截的接口，用addPathPatterns
-                .excludePathPatterns("/api/login","/api/register","/**/excel","/**/import");
+                .excludePathPatterns("/api/load_comment","/api/login","/api/register","/**/excel","/**/import");
     }
 }

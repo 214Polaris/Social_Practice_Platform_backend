@@ -15,13 +15,4 @@ public class User {
     public User(){
     }
 
-    public User(int user_id, String user_name, String password, int phone_number, String name, String user_category) {
-        this.user_id = user_id;
-        this.user_name = user_name;
-        this.password = password;
-        this.phone_number = phone_number;
-        this.name = name;
-        this.user_category = user_category;
-    }
-
 }

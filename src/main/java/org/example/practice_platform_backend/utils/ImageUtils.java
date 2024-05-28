@@ -1,9 +1,12 @@
 package org.example.practice_platform_backend.utils;
 
 import lombok.Setter;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
 import org.apache.tomcat.util.codec.binary.Base64;
+import net.coobird.thumbnailator.Thumbnails;
 import org.springframework.web.multipart.MultipartFile;
+
 import java.io.*;
 import java.util.Objects;
 import java.util.Random;
@@ -63,6 +66,19 @@ public class ImageUtils {
         Random r = new Random();
         // /A/A
         return "/" + s.charAt(r.nextInt(16)) + "/" + s.charAt(r.nextInt(16));
+    }
+
+    /**
+     * 生成图片缩略图
+     * @Param sourceFile 源文件
+     * @Param toFile 目标文件
+     */
+    public void photoSmaller(File sourceFile,File toFile) throws IOException {
+        Thumbnails.of(sourceFile)
+                .size(200, 150)//尺寸
+                //.watermark(Positions.CENTER, ImageIO.read(markIco), 0.1f)
+                .outputQuality(0.4f)//缩略图质量
+                .toFile(toFile);
     }
 
     /**

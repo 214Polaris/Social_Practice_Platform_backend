@@ -6,6 +6,7 @@ import org.example.practice_platform_backend.utils.CommentUtils;
 import org.example.practice_platform_backend.utils.ImageUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -14,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import java.util.Map;
 
 @Controller
+@EnableAsync
 @RequestMapping("/api")
 public class CommentController {
     @Autowired

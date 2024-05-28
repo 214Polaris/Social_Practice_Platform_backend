@@ -4,6 +4,7 @@ import org.apache.ibatis.annotations.*;
 import org.example.practice_platform_backend.entity.Comment;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
+import org.springframework.scheduling.annotation.Async;
 
 import java.util.Map;
 
@@ -19,7 +20,7 @@ public interface CommentMapper {
             "</if>" +
             "</where> " +
             "ORDER BY comment_id DESC " +
-            "LIMIT 10" +
+            "LIMIT 5" +
             "</script>")
     Comment[] getCommentByCommentId(@Param("fruit_id") int fruit_id, @Param("comment_id") Integer comment_id);
 

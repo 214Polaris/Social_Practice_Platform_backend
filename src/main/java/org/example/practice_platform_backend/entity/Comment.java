@@ -20,11 +20,4 @@ public class Comment {
 
     public Comment(){};
 
-    public Comment(long comment_id, Date comment_time, String content, int fruit_id, int user_id) {
-        this.comment_id = comment_id;
-        this.comment_time = comment_time;
-        this.content = content;
-        this.fruit_id = fruit_id;
-        this.user_id = user_id;
-    }
 }
