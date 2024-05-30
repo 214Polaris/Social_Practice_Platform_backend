@@ -24,6 +24,7 @@ public class InterceptorConfig implements WebMvcConfigurer {
     public JwtInterceptor jwtInterceptor(JwtUtils jwtUtils, UserMapper userMapper) {
         return new JwtInterceptor(jwtUtils,userMapper);
     }
+
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(jwtInterceptor(jwtUtils,userMapper)).addPathPatterns("/**")

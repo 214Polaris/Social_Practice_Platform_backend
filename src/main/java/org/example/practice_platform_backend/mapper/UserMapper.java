@@ -10,14 +10,14 @@ public interface UserMapper {
     @Select("select * from user where username=#{user_name} and passwd=#{passwd}")
     User login(@Param("user_name")String user_name,@Param("passwd") String passwd);
 
-    //注册
-    @Insert("insert into user(name,username,passwd,phone_number,user_category) " +
-            "values(#{name}, #{user_name}, #{password}, #{phone_number}, #{user_category})")
-    //设置主键自增长
-    @Async
+    // 注册
+    @Insert("insert into user(name, username, passwd, phone_number, user_category, avatar_path) " +
+            "values(#{name}, #{user_name}, #{password}, #{phone_number}, #{user_category}, " +
+            "'/www/wwwroot/user/uploadfiles/avatar/default_avatar.jpeg')")
     @Options(useGeneratedKeys = true, keyProperty = "user_id")
     @Transactional
     void register(User user);
+
 
     //验证 userid 是否存在
     @Select("select * from user where user_id=#{userId}")

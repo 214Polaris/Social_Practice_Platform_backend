@@ -37,14 +37,8 @@ public class UploadController {
         // 从 token 中获取 user_id
         String token = request.getHeader("token");
         int user_id = jwtUtils.getUserInfoFromToken(token,User.class).getUser_id();
-        // 把传进来的 MultipartFile 文件转换成 File 并创建临时文件
-        String originalFilename = file.getOriginalFilename();
-        String suffix = ImageUtils.getSuffix(originalFilename);
-        assert originalFilename != null;
-        File tempPhoto = File.createTempFile(originalFilename,suffix);
-        file.transferTo(tempPhoto);
         // 异步调用保存文件的方法
-        saveFileService.savePhoto(originalFilename,tempPhoto,user_id);
+        saveFileService.savePhoto(file,user_id);
         //返回到 userInfo 路由
         // return "redirect:/userInfo";
         return "ok!";

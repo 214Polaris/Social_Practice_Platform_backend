@@ -1,8 +1,7 @@
 package org.example.practice_platform_backend.controllers;
-import com.nimbusds.oauth2.sdk.Request;
-import com.nimbusds.oauth2.sdk.Response;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.example.practice_platform_backend.entity.User;
 import org.example.practice_platform_backend.mapper.UserMapper;
@@ -10,6 +9,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.web.bind.annotation.*;
 import org.example.practice_platform_backend.utils.JwtUtils;
+import org.springframework.dao.*;
+
+import java.sql.SQLIntegrityConstraintViolationException;
 
 @RestController
 @EnableAsync
@@ -36,14 +38,21 @@ public class UserController {
         }
     }
 
-    // 处理注册请求
     @PostMapping(value="/register")
     public ResponseEntity<?> registerUser(@RequestBody User user){
-        try{
+        try {
             userMapper.register(user);
             return ResponseEntity.ok().body("注册成功");
-        } catch (Exception e){
-            return ResponseEntity.status(400).body("注册失败");
+        } catch (DataIntegrityViolationException e) {
+            if (e.getRootCause() instanceof SQLIntegrityConstraintViolationException sqlEx) {
+                if (sqlEx.getMessage().contains("Duplicate")) {
+                    return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("用户名已存在");
+                }
+            }
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("注册失败");
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("注册失败");
         }
     }
 

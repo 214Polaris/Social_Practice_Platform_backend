@@ -6,6 +6,8 @@ import org.example.practice_platform_backend.utils.JwtUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
+
 import java.nio.file.StandardCopyOption;
 import java.io.File;
 import java.io.IOException;
@@ -26,39 +28,49 @@ public class SaveFileService {
 
     // 处理保存操作
     @Async
-    public void savePhoto(String originalFilename, File file, int user_id) throws IOException {
-        //获取图片名称
+    public void savePhoto(MultipartFile file, int user_id) throws IOException {
+        // 把传进来的 MultipartFile 文件转换成 File 并创建临时文件
+        String originalFilename = file.getOriginalFilename();
         String suffix = ImageUtils.getSuffix(originalFilename);
-        //头像图片名称
-        String fileName = "/" + user_id + "_avatar" + suffix ;
-        //创建缩略图的临时文件
-        File smallerPhoto = File.createTempFile(originalFilename,suffix);
-        imageUtils.photoSmaller(file, smallerPhoto);
-        Boolean result = upLoadPhoto(fileName,smallerPhoto,user_id);
+        String thumbnailFileName = "/" + user_id + "_avatar" + suffix ;
+        String fileName = "/" + user_id + "_avatar" + "_origin" + suffix ;
+
+        // 原图的保存路径
+        //String fileDir = "/www/wwwroot/user/uploadfiles/avatar";
+        String fileDir = "/Users/a214/Documents/IntelliJ/practice_platform_backend/uploadfiles/avatar";
+
+        File thumbnailFile = new File(fileDir + fileName);
+
+        //保存原图
+        assert originalFilename != null;
+        File tempFile = File.createTempFile(fileName,suffix);
+        file.transferTo(tempFile);
+        saveFile(tempFile,fileDir,fileName,user_id);
+        //保存缩略图
+        File smallerPhoto = File.createTempFile(originalFilename,suffix);  //创建缩略图的临时文件
+        imageUtils.photoSmaller(tempFile,smallerPhoto);
+        saveFile(smallerPhoto,fileDir,thumbnailFileName,user_id);
         //删除临时文件
-        file.delete();
+        tempFile.delete();
         smallerPhoto.delete();
-        CompletableFuture.completedFuture(result);
+        //将头像路径保存到数据库中
+        String filePath = fileDir + thumbnailFileName;
+        userMapper.updateAvatar(user_id, filePath);
+        CompletableFuture.completedFuture(true);
     }
 
-    // 保存到本地
-    public Boolean upLoadPhoto(String fileName, File photo, int user_id) {
-        //图片路径(本地运行请改为自己的)
-        String fileDir = "/www/wwwroot/user/uploadfiles/avatar";
-        //String fileDir = "/Users/a214/Documents/IntelliJ/practice_platform_backend/uploadfiles/avatar";
-        File saveFile = new File(fileDir + fileName);
+    // 保存头像（缩略图）
+    public void saveFile(File sourceFile, String fileDir, String fileName, int user_id) {
         try {
+            File saveFile = new File(fileDir + fileName);
             // 确保目录存在
-            saveFile.getParentFile().mkdirs();
+            sourceFile.getParentFile().mkdirs();
             // 将文件写入目标路径，确保能够覆盖文件
-            Files.copy(photo.toPath(), saveFile.toPath(),StandardCopyOption.REPLACE_EXISTING);
-            //将头像路径保存到数据库中
-            String filePath = fileDir + fileName;
-            userMapper.updateAvatar(user_id, filePath);
-            return true;
+            Files.copy(sourceFile.toPath(), saveFile.toPath(),StandardCopyOption.REPLACE_EXISTING);
         } catch (IOException e) {
             e.printStackTrace();
-            return false;
         }
     }
+
+    // 低损保存图片 /www/wwwroot/user/uploadfiles/need_images/need_1/1919114514.jpeg
 }

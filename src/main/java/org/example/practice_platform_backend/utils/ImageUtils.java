@@ -77,13 +77,13 @@ public class ImageUtils {
         Thumbnails.of(sourceFile)
                 .size(200, 150)//尺寸
                 //.watermark(Positions.CENTER, ImageIO.read(markIco), 0.1f)
-                .outputQuality(0.4f)//缩略图质量
+                .outputQuality(0.8f)//缩略图质量
                 .toFile(toFile);
     }
 
     /**
-     * 获取字节类型的图片
-     * @return 字节类型图片
+     * base64加密后的字节类型的图片
+     * @return base64加密后的字节类型图片
      */
     public String getFileBytes(String filePath) throws IOException {
         try (FileInputStream fileInputStream = new FileInputStream(filePath);) {
