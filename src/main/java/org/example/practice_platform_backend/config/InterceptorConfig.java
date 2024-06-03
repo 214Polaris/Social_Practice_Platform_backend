@@ -27,8 +27,8 @@ public class InterceptorConfig implements WebMvcConfigurer {
 
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
-        registry.addInterceptor(jwtInterceptor(jwtUtils,userMapper)).addPathPatterns("/**")
-                //在这里修改不拦截的路径"/api/login"，如果要放拦截的接口，用addPathPatterns
-                .excludePathPatterns("/api/load_comment","/api/login","/api/register","/**/excel","/**/import");
+//        registry.addInterceptor(jwtInterceptor(jwtUtils,userMapper)).addPathPatterns("/**")
+//                //在这里修改不拦截的路径"/api/login"，如果要放拦截的接口，用addPathPatterns
+//                .excludePathPatterns("/api/load_comment","/api/login","/api/register","/**/excel","/**/import","/api/res_detail");
     }
 }
