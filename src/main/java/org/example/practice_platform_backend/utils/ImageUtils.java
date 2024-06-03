@@ -1,12 +1,9 @@
 package org.example.practice_platform_backend.utils;
 
 import lombok.Setter;
-import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
 import org.apache.tomcat.util.codec.binary.Base64;
 import net.coobird.thumbnailator.Thumbnails;
-import org.springframework.web.multipart.MultipartFile;
-
 import java.io.*;
 import java.util.Objects;
 import java.util.Random;
@@ -79,6 +76,23 @@ public class ImageUtils {
                 //.watermark(Positions.CENTER, ImageIO.read(markIco), 0.1f)
                 .outputQuality(0.8f)//缩略图质量
                 .toFile(toFile);
+    }
+
+    /**
+     * base64加密后的字节类型的缩略图
+     * @return base64加密后的字节类型缩略图
+     */
+    public String getThumbnail(String filePath) throws IOException {
+
+        try (FileInputStream fileInputStream = new FileInputStream(filePath);) {
+            ByteArrayOutputStream bos = new ByteArrayOutputStream();
+            Thumbnails.of(filePath)
+                    .size(400, 400)
+                    .outputQuality(0.5)
+                    .toOutputStream(bos);
+            byte[] data = bos.toByteArray();
+            return new String(Objects.requireNonNull(Base64.encodeBase64(data,true)));
+        }
     }
 
     /**

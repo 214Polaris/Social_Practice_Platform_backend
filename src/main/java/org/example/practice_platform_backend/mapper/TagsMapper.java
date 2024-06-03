@@ -21,6 +21,7 @@ public interface TagsMapper {
             "join team_category on team_category.category_id = need_category.id " +
             "where team_category.team_number = #{team_number}")
     List<String> searchTeamTags(@Param("team_number") int team_number);
+
     // 根据 fruit_id 搜索 tags
     @Select("SELECT need_category.category_name " +
             "from fruit_info " +

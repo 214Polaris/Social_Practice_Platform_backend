@@ -1,49 +1,48 @@
 package org.example.practice_platform_backend.mapper;
 
 import org.apache.ibatis.annotations.Param;
-import org.example.practice_platform_backend.entity.CommunityNeed;
 import org.example.practice_platform_backend.entity.SearchResult;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
-import org.springframework.security.core.parameters.P;
 
-import java.util.List;
+import java.util.HashMap;
+
 
 @Mapper
 public interface SearchResultMapper {
     // 搜索需求
-    @Select("select need.title,need.need_id,need_media.path " +
+    @Select("select need.title as name,need.need_id as id,need_media.path as image " +
             "from community_need as need " +
             "join need_media on need.need_id = need_media.need_id " +
-            "where need.address like #{location} " +
-            "and need.title like #{text} " +
+            "where need.address like CONCAT('%', #{location}, '%') " +
+            "and need.title like CONCAT('%', #{text}, '%') " +
             "and need_media.type='cover'")
     SearchResult searchNeed(@Param("location") String location, @Param("text") String text);
 
     // 搜索队伍
-    @Select("select team_name,avatar_path,team_number from college_team where address like #{location} " +
-            "and team_name like #{text}")
+    @Select("select team_name as name ,avatar_path as image,team_number as id from college_team where address like CONCAT('%', #{location}, '%') " +
+            "and team_name like CONCAT('%', #{text}, '%')")
     SearchResult searchTeam(@Param("location") String location, @Param("text") String text);
 
 
     // 搜索已结对的需求
-    @Select("select need.title,need.need_id,need_media.path " +
+    @Select("select need.title as name,need.need_id as id,need_media.path as image " +
             "from community_need as need " +
             "join need_media on need.need_id = need_media.need_id " +
-            "join succ_project on need.need_id = succ_project.need_id" +
-            "where need.address like #{location} " +
-            "and need.title like #{text} " +
+            "join succ_project on need.need_id = succ_project.need_id " +
+            "where need.address like CONCAT('%', #{location}, '%') " +
+            "and need.title like CONCAT('%', #{text}, '%') " +
             "and need_media.type='cover'")
     SearchResult searchSuccessNeed(@Param("location") String location,
                                     @Param("text") String text);
 
     // 搜索成果
-    @Select("SELECT fruit.title,media.path,fruit.fruit_id " +
-            "from fruit_info as fruit " +
-            "join fruit_media as media on fruit.fruit_id = media.fruit_id" +
-            "where fruit.position like #{location} " +
-            "and fruit.title like #{text} " +
-            "and media.type='cover'")
+    @Select("SELECT fruit.title, media.path, fruit.fruit_id " +
+            "FROM fruit_info AS fruit " +
+            "JOIN fruit_media AS media ON fruit.fruit_id = media.fruit_id " +
+            "WHERE fruit.position LIKE CONCAT('%', #{location}, '%') " +
+            "AND fruit.title LIKE CONCAT('%', #{text}, '%') " +
+            "AND media.type = 'cover'")
     SearchResult searchFruit(@Param("location") String location, @Param("text") String text);
 
 
