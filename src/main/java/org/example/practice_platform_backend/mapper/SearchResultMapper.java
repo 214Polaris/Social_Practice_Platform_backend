@@ -37,7 +37,7 @@ public interface SearchResultMapper {
                                     @Param("text") String text);
 
     // 搜索成果
-    @Select("SELECT fruit.title, media.path, fruit.fruit_id " +
+    @Select("SELECT fruit.title as name, media.path as image, fruit.fruit_id as id " +
             "FROM fruit_info AS fruit " +
             "JOIN fruit_media AS media ON fruit.fruit_id = media.fruit_id " +
             "WHERE fruit.position LIKE CONCAT('%', #{location}, '%') " +

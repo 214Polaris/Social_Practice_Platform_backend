@@ -4,6 +4,8 @@ import org.apache.ibatis.annotations.*;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.HashMap;
+
 @Mapper
 public interface UserMapper {
     //登录
@@ -18,10 +20,9 @@ public interface UserMapper {
     @Transactional
     void register(User user);
 
-
     //验证 userid 是否存在
-    @Select("select * from user where user_id=#{userId}")
-    User getUserById(@Param("userId")int userId);
+    @Select("select name,username,phone_number,avatar_path as image from user where user_id=#{userId}")
+    HashMap<String,String> getUserById(@Param("userId")int userId);
 
     //保存上传的头像图片路径
     @Async

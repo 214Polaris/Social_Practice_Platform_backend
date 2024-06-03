@@ -34,14 +34,15 @@ public class JwtInterceptor implements HandlerInterceptor {
             return false;
         }
         User user;
+        HashMap<String,String> result;
         try{
             user = jwtUtils.getUserInfoFromToken(token,User.class);
         } catch (JWTVerificationException j){
             directResponse(response,"jwt 解析失败");
             return false;
         }
-        user = userMapper.getUserById(user.getUser_id());
-        if(user == null){
+        result = userMapper.getUserById(user.getUser_id());
+        if(result == null){
             directResponse(response,"用户不存在，token 无效");
             return false;
         }
