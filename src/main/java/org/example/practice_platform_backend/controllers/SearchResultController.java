@@ -15,11 +15,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.dao.DataAccessException;
 
 import java.io.IOException;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
-import java.util.function.Function;
 
 @Controller
 @EnableAsync
@@ -83,7 +81,9 @@ public class SearchResultController {
             }
 
             //获取缩略图
-            searchResult.setImage(imageUtils.getThumbnail(searchResult.getImage()));
+            String path = "uploadfiles/" + searchResult.getImage();
+            // String path = "/Users/a214/Documents/IntelliJ/practice_platform_backend/uploadfiles/" + searchResult.getImage();
+            searchResult.setImage(imageUtils.getThumbnail(path));
             searchResult.setTags(tags);
             return ResponseEntity.ok(searchResult);
         } catch (DataAccessException e) {

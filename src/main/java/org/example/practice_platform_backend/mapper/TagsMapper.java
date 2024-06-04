@@ -28,7 +28,7 @@ public interface TagsMapper {
             "join succ_project on succ_project.project_id = fruit_info.project_id " +
             "join community_need on succ_project.need_id = community_need.need_id " +
             "join need_match on community_need.need_id = need_match.need_id " +
-            "join need_category on need_match.category_id = need_category.id" +
+            "join need_category on need_match.category_id = need_category.id " +
             "where fruit_info.fruit_id = #{fruit_id}")
     List<String> searchFruitTags(@Param("fruit_id") int fruit_id);
 }

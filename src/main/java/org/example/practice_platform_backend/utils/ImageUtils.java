@@ -27,6 +27,19 @@ public class ImageUtils {
         return name.substring(index + 1);
     }
 
+    /**
+     * 获取文件除去后缀的名称
+     * 如 yzt.jpg 最终获取的为 yzt
+     * @param name 上传上来的文件名称
+     * @return 除去后缀的名称
+     */
+    public static String getTrueName(String name) {
+        //获取最后一个"."
+        String trueName = getRealName(name);
+        int index = trueName.lastIndexOf(".");
+        return name.substring(0,index);
+    }
+
 
     /**
      * 获取文件后缀
@@ -74,7 +87,7 @@ public class ImageUtils {
         Thumbnails.of(sourceFile)
                 .size(200, 150)//尺寸
                 //.watermark(Positions.CENTER, ImageIO.read(markIco), 0.1f)
-                .outputQuality(0.8f)//缩略图质量
+                .outputQuality(0.4f)//缩略图质量
                 .toFile(toFile);
     }
 

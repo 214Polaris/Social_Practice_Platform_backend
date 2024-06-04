@@ -4,6 +4,7 @@ import org.example.practice_platform_backend.mapper.UserMapper;
 import org.example.practice_platform_backend.utils.ImageUtils;
 import org.example.practice_platform_backend.utils.JwtUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -16,6 +17,9 @@ import java.util.concurrent.CompletableFuture;
 
 @Service
 public class SaveFileService {
+    // 上传的路径
+    @Value("${uploadPath}")
+    private String uploadPath;
     @Autowired
     private UserMapper userMapper;
     // jwt
@@ -31,16 +35,11 @@ public class SaveFileService {
     public void savePhoto(MultipartFile file, int user_id) throws IOException {
         // 把传进来的 MultipartFile 文件转换成 File 并创建临时文件
         String originalFilename = file.getOriginalFilename();
-        String suffix = ImageUtils.getSuffix(originalFilename);
-        String thumbnailFileName = "/" + user_id + "_avatar" + suffix ;
-        String fileName = "/" + user_id + "_avatar" + "_origin" + suffix ;
-
-        // 原图的保存路径
-        //String fileDir = "/www/wwwroot/user/uploadfiles/avatar";
-        String fileDir = "/Users/a214/Documents/IntelliJ/practice_platform_backend/uploadfiles/avatar";
-
-        File thumbnailFile = new File(fileDir + fileName);
-
+        //String suffix = ImageUtils.getSuffix(originalFilename);
+        String suffix = ".jpg";
+        String thumbnailFileName = "avatar/" + user_id + "_avatar" + suffix ;
+        String fileName ="avatar/" + user_id + "_avatar" + "_origin" + suffix ;
+        String fileDir = uploadPath;
         //保存原图
         assert originalFilename != null;
         File tempFile = File.createTempFile(fileName,suffix);
@@ -53,9 +52,9 @@ public class SaveFileService {
         //删除临时文件
         tempFile.delete();
         smallerPhoto.delete();
-        //将头像路径保存到数据库中
-        String filePath = fileDir + thumbnailFileName;
-        userMapper.updateAvatar(user_id, filePath);
+        //将头像名称保存到数据库中
+        //String filePath = fileDir + thumbnailFileName;
+        userMapper.updateAvatar(user_id, thumbnailFileName);
         CompletableFuture.completedFuture(true);
     }
 

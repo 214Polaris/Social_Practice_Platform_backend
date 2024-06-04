@@ -32,8 +32,10 @@ public class CommentUtils {
         if (userInfo.get("username") != null) {
             result.put("user_name", userInfo.get("username"));
             if (userInfo.get("avatar_path") != null) {
+                //String path = "uploadfiles/avatar/" + userInfo.get("avatar_path");
+                String path = "/Users/a214/Documents/IntelliJ/practice_platform_backend/uploadfiles/" + userInfo.get("avatar_path");
                 // 获取头像图片
-                String fileString = imageUtils.getFileBytes(userInfo.get("avatar_path"));
+                String fileString = imageUtils.getFileBytes(path);
                 result.put("avatar", fileString);
             }
         }

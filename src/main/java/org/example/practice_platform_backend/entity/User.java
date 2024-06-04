@@ -11,6 +11,7 @@ public class User {
     private int phone_number;
     private String name;
     private String user_category;
+    private String avatar_path;
 
     public User(){
     }
