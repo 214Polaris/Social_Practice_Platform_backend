@@ -40,18 +40,18 @@ public class FruitUtils {
         JSONArray commentList = new JSONArray();
         result.put("address", fruit.getPosition());
         result.put("date", fruit.getDate());
-        result.put("res_info", fruit.getIntroduction());
-        result.put("like", fruit.getKudos_num());
-        result.put("comment", fruit.getComment_num());
+        result.put("res_intro", fruit.getIntroduction());
+        result.put("like", String.valueOf(fruit.getKudos_num()));
+        result.put("comment", String.valueOf(fruit.getComment_num()));
         for(FruitMedia fruitMedia : fruitMedias){
             JSONObject media = new JSONObject();
-            if(fruitMedia.getType().equals("图片") ||  fruitMedia.getType().equals("封面")){
+            if(fruitMedia.getType().equals("image") ||  fruitMedia.getType().equals("cover")){
                 media.put("img_flag", 0);
-                media.put("src", imageUtils.getFileBytes(fruitMedia.getPath()));
+                media.put("src", imageUtils.getThumbnail(fruitMedia.getPath()));
             }
             else{
                 media.put("img_flag", 1);
-                media.put("src", imageUtils.getFileBytes(fruitMedia.getPath()));
+                media.put("src", imageUtils.getThumbnail(fruitMedia.getPath()));
             }
             mediaList.add(media);
         }
@@ -59,7 +59,7 @@ public class FruitUtils {
         for(int i=0;i<2;i++){
             JSONObject comment = new JSONObject();
             Map<String, String> user_info = commentMapper.getAvatarPathByUserId(Comments[i].getUser_id());
-            comment.put("avatar", imageUtils.getFileBytes(user_info.get("avatar_path")));
+            comment.put("avatar", imageUtils.getThumbnail(user_info.get("avatar_path")));
             comment.put("date", Comments[i].getComment_time());
             comment.put("user_name", user_info.get("username"));
             comment.put("content", Comments[i].getContent());
