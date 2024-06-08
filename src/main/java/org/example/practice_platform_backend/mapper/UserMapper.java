@@ -20,8 +20,8 @@ public interface UserMapper {
     @Transactional
     void register(User user);
 
-    //验证 userid 是否存在
-    @Select("select name,username,phone_number,avatar_path as image from user where user_id=#{userId}")
+    //验证 userid 是否存在并返回个人信息
+    @Select("select name,username,phone_number,avatar_path as image,gender from user where user_id=#{userId}")
     HashMap<String,String> getUserById(@Param("userId")int userId);
 
     //保存上传的头像图片路径
@@ -42,6 +42,7 @@ public interface UserMapper {
             "<if test='user_name != null'>username = #{user_name},</if>" +
             "<if test='password != null'>passwd = #{password},</if>" +
             "<if test='phone_number != null'>phone_number = #{phone_number},</if>" +
+            "<if test='gender != null'>gender = #{gender}</if>" +
             "</set>" +
             "WHERE user_id = #{user_id}" +
             "</script>")

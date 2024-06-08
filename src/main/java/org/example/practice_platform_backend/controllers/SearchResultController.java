@@ -1,5 +1,6 @@
 package org.example.practice_platform_backend.controllers;
 
+import org.example.practice_platform_backend.mapper.MemberListMapper;
 import org.example.practice_platform_backend.mapper.SearchResultMapper;
 import org.example.practice_platform_backend.mapper.TagsMapper;
 import org.example.practice_platform_backend.utils.ImageUtils;
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.dao.DataAccessException;
 
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -31,6 +33,9 @@ public class SearchResultController {
     private SearchResultMapper searchResultMapper;
 
     @Autowired
+    private MemberListMapper memberListMapper;
+
+    @Autowired
     private ImageUtils imageUtils;
 
     @GetMapping(value = "search")
@@ -45,6 +50,7 @@ public class SearchResultController {
 
         SearchResult searchResult;
         List<String> tags;
+        Map<String,String> memberList;
 
         try {
             switch (category) {
@@ -54,6 +60,7 @@ public class SearchResultController {
                         return ResponseEntity.ok("没有找到匹配的结果");
                     }
                     tags = tagsMapper.searchFruitTags(searchResult.getId());
+                    memberList = memberListMapper.getCommunityAndTeamNameByNeedId(searchResult.getId());
                     break;
                 case "乡镇需求":
                     searchResult = searchResultMapper.searchNeed(address, text);
@@ -61,6 +68,7 @@ public class SearchResultController {
                         return ResponseEntity.ok("没有找到匹配的结果");
                     }
                     tags = tagsMapper.searchTags(searchResult.getId());
+                    memberList = memberListMapper.getCommunityNamesByNeedId(searchResult.getId());
                     break;
                 case "高校突击队":
                     searchResult = searchResultMapper.searchTeam(address, text);
@@ -68,6 +76,7 @@ public class SearchResultController {
                         return ResponseEntity.ok("没有找到匹配的结果");
                     }
                     tags = tagsMapper.searchTeamTags(searchResult.getId());
+                    memberList = memberListMapper.getCollegeByTeamNumber(searchResult.getId());
                     break;
                 case "结对成功墙":
                     searchResult = searchResultMapper.searchSuccessNeed(address, text);
@@ -75,6 +84,7 @@ public class SearchResultController {
                         return ResponseEntity.ok("没有找到匹配的结果");
                     }
                     tags = tagsMapper.searchTags(searchResult.getId());
+                    memberList = memberListMapper.getCommunityAndTeamNameByNeedId(searchResult.getId());
                     break;
                 default:
                     return ResponseEntity.badRequest().body("无效的搜索类别");
@@ -85,6 +95,7 @@ public class SearchResultController {
             // String path = "/Users/a214/Documents/IntelliJ/practice_platform_backend/uploadfiles/" + searchResult.getImage();
             searchResult.setImage(imageUtils.getThumbnail(path));
             searchResult.setTags(tags);
+            searchResult.setList(memberList);
             return ResponseEntity.ok(searchResult);
         } catch (DataAccessException e) {
             e.printStackTrace();

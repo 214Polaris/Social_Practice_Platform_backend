@@ -12,6 +12,7 @@ public class User {
     private String name;
     private String user_category;
     private String avatar_path;
+    private String gender;
 
     public User(){
     }

@@ -1,18 +1,19 @@
 package org.example.practice_platform_backend.entity;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.Setter;
-
 import java.util.List;
+import java.util.Map;
 
 @Getter
 @Setter
 public class SearchResult {
-    private String name;
-    private String image;
-    private List<String> tags;
     private Integer id;
+    private String name;
+    private List<String> tags;
+    // 涉及人员的 list
+    private Map<String,String> list;
+    private String image;
 
     SearchResult() {}
 

@@ -1,4 +1,5 @@
 package org.example.practice_platform_backend.controllers;
+
 import jakarta.servlet.http.HttpServletRequest;
 import org.example.practice_platform_backend.utils.ImageUtils;
 import org.springframework.beans.factory.annotation.Value;
@@ -72,6 +73,7 @@ public class UserController {
         String token = request.getHeader("token");
         int user_id = jwtUtils.getUserInfoFromToken(token,User.class).getUser_id();
         try{
+
             HashMap<String,String> user = userMapper.getUserById(user_id);
             String trueName = ImageUtils.getTrueName(user.get("image"));
             String suffix = ImageUtils.getSuffix(user.get("image"));

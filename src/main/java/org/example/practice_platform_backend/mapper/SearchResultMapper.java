@@ -45,5 +45,4 @@ public interface SearchResultMapper {
             "AND media.type = 'cover'")
     SearchResult searchFruit(@Param("location") String location, @Param("text") String text);
 
-
 }

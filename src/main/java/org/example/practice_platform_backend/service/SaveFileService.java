@@ -35,7 +35,6 @@ public class SaveFileService {
     public void savePhoto(MultipartFile file, int user_id) throws IOException {
         // 把传进来的 MultipartFile 文件转换成 File 并创建临时文件
         String originalFilename = file.getOriginalFilename();
-        //String suffix = ImageUtils.getSuffix(originalFilename);
         String suffix = ".jpg";
         String thumbnailFileName = "avatar/" + user_id + "_avatar" + suffix ;
         String fileName ="avatar/" + user_id + "_avatar" + "_origin" + suffix ;
@@ -53,7 +52,6 @@ public class SaveFileService {
         tempFile.delete();
         smallerPhoto.delete();
         //将头像名称保存到数据库中
-        //String filePath = fileDir + thumbnailFileName;
         userMapper.updateAvatar(user_id, thumbnailFileName);
         CompletableFuture.completedFuture(true);
     }
