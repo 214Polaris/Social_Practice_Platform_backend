@@ -27,4 +27,13 @@ public interface CommentMapper {
     //获取评论人的头像
     @Select("select avatar_path,username from user where user_id = #{user_id}")
     Map<String,String> getAvatarPathByUserId(@Param("user_id") int user_id);
+
+    /**
+     * 插入评论
+     * @param comment
+     */
+    @Insert("insert into comment(fruit_id,content,comment_time,user_id) values(#{fruit_id},#{content},#{comment_time},#{user_id})")
+    @Options(useGeneratedKeys = true, keyProperty = "comment_id")
+    void insertComment(Comment comment);
+
 }
