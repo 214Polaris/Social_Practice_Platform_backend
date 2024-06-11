@@ -5,6 +5,7 @@ import org.springframework.scheduling.annotation.Async;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.HashMap;
+import java.util.Map;
 
 @Mapper
 public interface UserMapper {
@@ -48,5 +49,11 @@ public interface UserMapper {
             "</script>")
     @Transactional
     void modifyInfo(User user);
+
+    /**
+     * 根据id 查询姓名和联系电话
+     */
+    @Select("select name,phone_number from user where user_id = #{user_id}")
+    Map<String, String>  getNameAndPhone(@Param("user_id")int user_id);
 
 }
