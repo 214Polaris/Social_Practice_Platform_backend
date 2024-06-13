@@ -1,6 +1,7 @@
 package org.example.practice_platform_backend.utils;
 
 import com.alibaba.fastjson.JSON;
+import com.google.gson.JsonArray;
 import lombok.Setter;
 import net.minidev.json.JSONArray;
 import net.minidev.json.JSONObject;
@@ -25,11 +26,14 @@ public class FruitUtils {
     @Autowired
     private CommentMapper commentMapper;
 
+    @Autowired
+    private FruitMapper fruitMapper;
+
     @Value("${uploadPath}")
 //    private String uploadPath = "D:/Desktop/Processing/终极实训/Social_Practice_Platform_backend/uploadfiles";
      private String uploadPath;
     /**
-     * 返回结果
+     * 返回成果查询结果
      * @param fruit
      * @param Comments
      * @param fruitMedias
@@ -44,12 +48,13 @@ public class FruitUtils {
         JSONArray commentList = new JSONArray();
         result.put("address", fruit.getPosition());
         result.put("date", fruit.getDate());
+        System.out.println(fruit.getDate());
         result.put("res_intro", fruit.getIntroduction());
         result.put("like", String.valueOf(fruit.getKudos_num()));
         result.put("comment", String.valueOf(fruit.getComment_num()));
         for(FruitMedia fruitMedia : fruitMedias){
             JSONObject media = new JSONObject();
-            if(fruitMedia.getType().equals("image") ||  fruitMedia.getType().equals("cover")){
+            if(fruitMedia.getType().equals("img") ||  fruitMedia.getType().equals("cover")){
                 media.put("img_flag", 0);
                 media.put("src", imageUtils.getThumbnail(uploadPath + "/" + fruitMedia.getPath()));
             }

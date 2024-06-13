@@ -1,7 +1,10 @@
 package org.example.practice_platform_backend.entity;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Getter;
 import lombok.Setter;
+
+import java.time.LocalDateTime;
 import java.util.Date;
 
 @Getter
@@ -12,7 +15,8 @@ public class Fruit {
     private String introduction;  //简介
     private String tutor;  //导师
     private String position; //地点
-    private Date date;   // 日期
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
+    private LocalDateTime date;   // 日期
     private int project_id;
     private int kudos_num; //点赞数
     private int comment_num; //评论数

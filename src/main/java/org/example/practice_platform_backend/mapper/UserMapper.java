@@ -51,9 +51,14 @@ public interface UserMapper {
     void modifyInfo(User user);
 
     /**
-     * 根据id 查询姓名和联系电话
+     * 根据id 查询姓名
      */
-    @Select("select name,phone_number from user where user_id = #{user_id}")
-    Map<String, String>  getNameAndPhone(@Param("user_id")int user_id);
+    @Select("select name from user where user_id = #{user_id}")
+    String  getNameById(@Param("user_id")int user_id);
 
+    /**
+     * 根据id 查询电话号码
+     */
+    @Select("select phone_number from user where user_id = #{user_id}")
+    String  getPhoneById(@Param("user_id")int user_id);
 }
