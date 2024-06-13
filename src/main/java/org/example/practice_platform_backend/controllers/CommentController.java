@@ -4,6 +4,8 @@ import org.example.practice_platform_backend.mapper.CommentMapper;
 import org.example.practice_platform_backend.entity.Comment;
 import org.example.practice_platform_backend.utils.CommentUtils;
 import org.example.practice_platform_backend.utils.ImageUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.scheduling.annotation.EnableAsync;
@@ -18,6 +20,9 @@ import java.util.Map;
 @EnableAsync
 @RequestMapping("/api")
 public class CommentController {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(CommentController.class);
+
     @Autowired
     CommentMapper commentMapper;
     @Autowired
@@ -42,7 +47,7 @@ public class CommentController {
             }
             return ResponseEntity.status(200).body(JSON.toJSONString(results));
         } catch (Exception e) {
-            e.printStackTrace();
+            LOGGER.error(e.getMessage());
             return ResponseEntity.status(400).body("查询错误");
         }
     }

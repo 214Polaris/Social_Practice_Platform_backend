@@ -4,6 +4,7 @@ import com.alibaba.fastjson2.JSONObject;
 import lombok.Setter;
 import org.example.practice_platform_backend.entity.Comment;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import java.io.IOException;
 import java.util.Map;
@@ -12,6 +13,10 @@ import java.util.Map;
 @Setter
 @Component
 public class CommentUtils {
+
+    @Value("${uploadPath}")
+    private String uploadPath;
+
     @Autowired
     private ImageUtils imageUtils;
 
@@ -33,7 +38,7 @@ public class CommentUtils {
             result.put("user_name", userInfo.get("username"));
             if (userInfo.get("avatar_path") != null) {
                 //String path = "uploadfiles/avatar/" + userInfo.get("avatar_path");
-                String path = "/Users/a214/Documents/IntelliJ/practice_platform_backend/uploadfiles/" + userInfo.get("avatar_path");
+                String path = uploadPath + userInfo.get("avatar_path");
                 // 获取头像图片
                 String fileString = imageUtils.getFileBytes(path);
                 result.put("avatar", fileString);
