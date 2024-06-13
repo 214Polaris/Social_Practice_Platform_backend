@@ -14,9 +14,9 @@ public interface UserMapper {
     User login(@Param("user_name")String user_name,@Param("passwd") String passwd);
 
     // 注册
-    @Insert("insert into user(name, username, passwd, phone_number, user_category, avatar_path) " +
+    @Insert("insert into user(name, username, passwd, phone_number, user_category, avatar_path,gender) " +
             "values(#{name}, #{user_name}, #{password}, #{phone_number}, #{user_category}, " +
-            "'/www/wwwroot/user/uploadfiles/avatar/default_avatar.jpeg')")
+            "'avatar/default_avatar.jpg', #{gender})")
     @Options(useGeneratedKeys = true, keyProperty = "user_id")
     @Transactional
     void register(User user);
