@@ -9,6 +9,8 @@ import java.io.File;
 import java.io.IOException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -39,9 +41,23 @@ public class UploadController {
         String token = request.getHeader("token");
         int user_id = jwtUtils.getUserInfoFromToken(token,User.class).getUser_id();
         // 异步调用保存文件的方法
-        saveFileService.savePhoto(file,user_id);
+        saveFileService.saveAvatar(file,user_id);
         //返回到 userInfo 路由
         // return "redirect:/userInfo";
         return "ok!";
+    }
+
+    // 处理上传图片的请求
+    @PostMapping(value = "/upload/image")
+    public ResponseEntity<String> uploadImage(@RequestParam(value="img") MultipartFile file,
+                              @RequestParam("type") Integer type,
+                              @RequestParam("id") Integer id,
+                              @RequestParam("isCover") boolean isCover,
+                              HttpServletRequest request){
+        ResponseEntity<String> res = saveFileService.privilegeCheck(type,id,false,request);
+        if(res.getStatusCode()== HttpStatus.FORBIDDEN){
+            return res;
+        }
+        return saveFileService.saveImage(file,id,type,isCover);
     }
 }

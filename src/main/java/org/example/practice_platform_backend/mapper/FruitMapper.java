@@ -80,4 +80,45 @@ public interface FruitMapper {
     @Update("update fruit_info set comment_num=comment_num-1 where fruit_id=#{fruit_id}")
     int subFruitCommentCount(@Param("fruit_id") int fruit_id);
 
+    /**
+     * 查询学生发布的成果，返回 id
+     */
+    @Select("SELECT f.fruit_id from fruit_info as f" +
+            "join succ_project as s on f.project_id=s.project_id " +
+            "join student as stu on stu.team_number=s.team_number " +
+            "where stu.user_id=#{user_id}")
+    int getFruitIdByUserId(@Param("user_id") int user_id);
+
+    //获取封面 id
+    @Select("SELECT media_id FROM fruit_media WHERE fruit_id = #{fruitId} AND type = 'cover'")
+    int existsFruitCover(@Param("fruitId") int fruitId);
+
+    //检查存在有多少张成果图片
+    @Select("SELECT COUNT(*) FROM fruit_media WHERE fruit_id = #{fruitId} AND type != 'video'")
+    int existsFruitImage(@org.apache.ibatis.annotations.Param("fruitId") int fruitId);
+
+    // 添加成果图片(非封面)
+    @Insert("insert into fruit_media(path,fruit_id,type) " +
+            "values(#{path},#{fruit_id},'image')")
+    boolean addFruitImage(@org.apache.ibatis.annotations.Param("path") String path, @org.apache.ibatis.annotations.Param("fruit_id") int fruit_id);
+
+    // 添加成果图片(封面)
+    @Insert("insert into fruit_media(path,fruit_id,type) " +
+            "values(#{path},#{fruit_id},'cover')")
+    boolean addFruitCover(@org.apache.ibatis.annotations.Param("path") String path, @org.apache.ibatis.annotations.Param("fruit_id") int fruit_id);
+
+
+    //检查是否存在成果视频
+    @Select("SELECT path FROM fruit_media WHERE fruit_id = #{fruitId} AND type = 'video'")
+    String existsFruitVideo(@org.apache.ibatis.annotations.Param("fruitId") int fruitId);
+
+    // 添加成果视频
+    @Insert("insert into fruit_media(path,fruit_id,type) " +
+            "values(#{path},#{fruit_id},'video')")
+    boolean addFruitVideo(@org.apache.ibatis.annotations.Param("path") String path, @org.apache.ibatis.annotations.Param("fruit_id") int fruit_id);
+
+    // 删除成果视频
+    @Delete("DELETE from fruit_media where fruit_id = #{id} and type = 'video'")
+    boolean deleteFruitVideo(@org.apache.ibatis.annotations.Param("id") int id);
+
 }

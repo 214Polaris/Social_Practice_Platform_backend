@@ -1,20 +1,27 @@
 package org.example.practice_platform_backend.controllers;
 
+import jakarta.servlet.http.HttpServletRequest;
+import org.example.practice_platform_backend.mapper.CommunityMapper;
+import org.example.practice_platform_backend.mapper.FruitMapper;
 import org.example.practice_platform_backend.service.SaveFileService;
+import org.example.practice_platform_backend.utils.JwtUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import org.example.practice_platform_backend.entity.User;
 
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Objects;
 
 @RestController
 @EnableAsync
@@ -27,6 +34,9 @@ public class VideoStreamController {
     @Autowired
     private SaveFileService saveFileService;
 
+    @Autowired
+    private JwtUtils jwtUtils;
+
     /**
      * 处理视频上传
      * @param file 上传的视频
@@ -38,7 +48,13 @@ public class VideoStreamController {
     public ResponseEntity<String> uploadVideo(@RequestParam("video") MultipartFile file,
                                               @RequestParam("type") Integer type,
                                               @RequestParam("id") Integer id,
-                                              @RequestParam("isModify") boolean isModify) throws IOException {
+                                              @RequestParam("isModify") boolean isModify,
+                                              HttpServletRequest request) throws IOException {
+
+        ResponseEntity<String> res = saveFileService.privilegeCheck(type,id,isModify,request);
+        if(res.getStatusCode()== HttpStatus.FORBIDDEN){
+            return res;
+        }
 
         if (file == null || file.isEmpty()) {
             return ResponseEntity.status(HttpStatus.NO_CONTENT.value()).build();
@@ -49,18 +65,13 @@ public class VideoStreamController {
         if (type>3||type<0){
             return ResponseEntity.status(400).body("错误的上传类型");
         }
-        boolean result;
         // 传入了isModify，则代表需要修改，要删除掉之前的视频
         if(isModify){
-            result = saveFileService.modifyVideo(file.getInputStream(),file.getOriginalFilename(),id,type);
+            return saveFileService.modifyVideo(file.getInputStream(),file.getOriginalFilename(),id,type);
         }
         else{
-            result = saveFileService.saveVideo(file.getInputStream(),file.getOriginalFilename(),id,type);
+            return saveFileService.saveVideo(file.getInputStream(),file.getOriginalFilename(),id,type);
         }
-        if(!result){
-            return ResponseEntity.status(400).body("视频上传出现错误或已存在视频");
-        }
-        return ResponseEntity.ok("视频上传成功");
     }
 
     /**
