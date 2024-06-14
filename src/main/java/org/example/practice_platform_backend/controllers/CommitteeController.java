@@ -52,7 +52,7 @@ public class CommitteeController {
             return ResponseEntity.ok().body(result);
         } catch (Exception e) {
             LOGGER.error(e.getMessage());
-            return ResponseEntity.status(400).body(e.getMessage());
+            return ResponseEntity.status(400).body("修改错误");
         }
     }
 }

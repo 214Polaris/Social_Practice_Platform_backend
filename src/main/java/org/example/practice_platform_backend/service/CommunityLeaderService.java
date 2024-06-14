@@ -3,10 +3,11 @@ package org.example.practice_platform_backend.service;
 import net.sourceforge.pinyin4j.format.exception.BadHanyuPinyinOutputFormatCombination;
 import org.example.practice_platform_backend.entity.CommunityLeader;
 import org.example.practice_platform_backend.entity.User;
+import org.example.practice_platform_backend.mapper.CommentMapper;
 import org.example.practice_platform_backend.mapper.CommitteeMapper;
+import org.example.practice_platform_backend.mapper.KudosMapper;
 import org.example.practice_platform_backend.mapper.UserMapper;
 import org.example.practice_platform_backend.utils.ImageUtils;
-import org.example.practice_platform_backend.utils.JwtUtils;
 import org.example.practice_platform_backend.utils.RandomGenerateUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -43,6 +44,10 @@ public class CommunityLeaderService {
 
     @Value("${uploadPath}")
     private String uploadPath;
+    @Autowired
+    private CommentMapper commentMapper;
+    @Autowired
+    private KudosMapper kudosMapper;
 
     public boolean checkIdentity(int userId) {
         return Objects.equals(committeeMapper.getUserCategory(userId), "committee");
@@ -76,9 +81,13 @@ public class CommunityLeaderService {
         user.setPhone_number(requestData.get("phone"));
         user.setUser_category("committee");
         userMapper.register(user);
-
-        boolean updateSuccessful = committeeMapper.updateCommunityLeader(Integer.parseInt(requestData.get("id")),user.getUser_id());
-        boolean deleteSuccessful = updateSuccessful && committeeMapper.deleteCommunityLeader(Integer.parseInt(requestData.get("id")));
+        int user_id = Integer.parseInt(requestData.get("id"));
+        boolean updateSuccessful = committeeMapper.updateCommunityLeader(user_id,user.getUser_id());
+        // 删除他所有的点赞评论
+        commentMapper.deleteCommentByUserId(user_id);
+        kudosMapper.deleteKudosByUserId(user_id);
+        // 删除这个人
+        boolean deleteSuccessful = updateSuccessful && committeeMapper.deleteCommunityLeader(user_id);
 
         if (updateSuccessful && deleteSuccessful) {
             Map<String, String> result = new HashMap<>();

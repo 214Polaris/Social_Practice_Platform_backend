@@ -36,4 +36,11 @@ public interface CommentMapper {
     @Options(useGeneratedKeys = true, keyProperty = "comment_id")
     void insertComment(Comment comment);
 
+    /**
+     * 删除指定用户的所有评论
+     * @param user_id 用户的 id
+     */
+    @Delete("DELETE from comment where user_id = #{user_id}")
+    void deleteCommentByUserId(@Param("user_id") int user_id);
+
 }
