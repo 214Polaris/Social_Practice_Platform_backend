@@ -1,11 +1,18 @@
 package org.example.practice_platform_backend.service;
 
-import org.example.practice_platform_backend.mapper.UserMapper;
-import org.example.practice_platform_backend.mapper.VideoMapper;
+import jakarta.servlet.http.HttpServletRequest;
+import org.example.practice_platform_backend.controllers.CommentController;
+import org.example.practice_platform_backend.entity.User;
+import org.example.practice_platform_backend.mapper.*;
 import org.example.practice_platform_backend.utils.FFmpegUtils;
 import org.example.practice_platform_backend.utils.ImageUtils;
+import org.example.practice_platform_backend.utils.JwtUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -16,6 +23,7 @@ import java.nio.file.*;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.concurrent.CompletableFuture;
 import java.util.function.BiFunction;
 import java.util.function.Function;
@@ -24,50 +32,82 @@ import static java.util.Arrays.asList;
 
 @Service
 public class SaveFileService {
-
+    private static final Logger LOGGER = LoggerFactory.getLogger(SaveFileService.class);
     // 上传的路径
     @Value("${uploadPath}")
     private String uploadPath;
 
     @Autowired
-    private VideoMapper videoMapper;
+    private JwtUtils jwtUtils;
 
     @Autowired
     private UserMapper userMapper;
 
     @Autowired
+    private FruitMapper fruitMapper;
+
+    @Autowired
+    private CommunityMapper communityMapper;
+
+    @Autowired
+    private NeedMapper needMapper;
+
+    @Autowired
     private ImageUtils imageUtils;
 
     private final List<String> typeMap = asList("community","need","fruit");
-
-    private final Map<String, Function<Integer, String>> existsMap;
+    private final Map<String, Function<Integer, String>> existsVideoMap;
     private final Map<String, BiFunction<String, Integer, Boolean>> addVideoMap;
     private final Map<String, BiFunction<String, Integer, Boolean>> ModifyVideoMap;
+    private final Map<String,Function<Integer, Integer>> existsImageMap;
+    private final Map<String, Function<Integer, Integer>> existsCoverMap;
+    private final Map<String, BiFunction<String, Integer, Boolean>> addImageMap;
+    private final Map<String, BiFunction<String, Integer, Boolean>> addCoverMap;
 
 
-    public SaveFileService(VideoMapper videoMapper) {
+    public SaveFileService(CommunityMapper communityMapper,NeedMapper needMapper, FruitMapper fruitMapper) {
         // 初始化映射，这部分依赖注入或在构造函数中设置
-        existsMap = Map.of(
-                "community", videoMapper::existsCommunityVideo,
-                "need", videoMapper::existsNeedVideo,
-                "fruit", videoMapper::existsFruitVideo
+        existsVideoMap = Map.of(
+                "community", communityMapper::existsCommunityVideo,
+                "need", needMapper::existsNeedVideo,
+                "fruit", fruitMapper::existsFruitVideo
         );
         addVideoMap = Map.of(
-                "community", videoMapper::addCommunityVideo,
-                "need", videoMapper::addNeedVideo,
-                "fruit", videoMapper::addFruitVideo
+                "community", communityMapper::addCommunityVideo,
+                "need", needMapper::addNeedVideo,
+                "fruit", fruitMapper::addFruitVideo
         );
         ModifyVideoMap = Map.of(
-                "community", (m3u8Path, id) -> videoMapper.addCommunityVideo(m3u8Path, id) && videoMapper.deleteCommunityVideo(id),
-                "need", (m3u8Path, id) -> videoMapper.addNeedVideo(m3u8Path, id) && videoMapper.deleteNeedVideo(id),
-                "fruit", (m3u8Path, id) -> videoMapper.addFruitVideo(m3u8Path, id) && videoMapper.deleteFruitVideo(id)
+                "community", (m3u8Path, id) -> communityMapper.addCommunityVideo(m3u8Path, id) && communityMapper.deleteCommunityVideo(id),
+                "need", (m3u8Path, id) -> needMapper.addNeedVideo(m3u8Path, id) && needMapper.deleteNeedVideo(id),
+                "fruit", (m3u8Path, id) -> fruitMapper.addFruitVideo(m3u8Path, id) && fruitMapper.deleteFruitVideo(id)
+        );
+        existsImageMap = Map.of(
+                "community", communityMapper::existsCommunityImage,
+                "need", needMapper::existsNeedImage,
+                "fruit", fruitMapper::existsFruitImage
+        );
+        existsCoverMap= Map.of(
+                "community", communityMapper::existsCommunityCover,
+                "need", needMapper::existsNeedCover,
+                "fruit", fruitMapper::existsFruitCover
+        );
+        addImageMap= Map.of(
+                "community", communityMapper::addCommunityImage,
+                "need", needMapper::addNeedImage,
+                "fruit", fruitMapper::addFruitImage
+        );
+        addCoverMap= Map.of(
+                "community", communityMapper::addCommunityCover,
+                "need", needMapper::addNeedCover,
+                "fruit", fruitMapper::addFruitCover
         );
     }
 
 
     // 处理保存操作
     @Async
-    public void savePhoto(MultipartFile file, int user_id) throws IOException {
+    public void saveAvatar(MultipartFile file, int user_id) throws IOException {
         // 把传进来的 MultipartFile 文件转换成 File 并创建临时文件
         String originalFilename = file.getOriginalFilename();
         String suffix = ".jpg";
@@ -78,11 +118,11 @@ public class SaveFileService {
         assert originalFilename != null;
         File tempFile = File.createTempFile(fileName,suffix);
         file.transferTo(tempFile);
-        saveFile(tempFile,fileDir,fileName,user_id);
+        saveThumbNails(tempFile,fileDir,fileName,user_id);
         //保存缩略图
         File smallerPhoto = File.createTempFile(originalFilename,suffix);  //创建缩略图的临时文件
         imageUtils.photoSmaller(tempFile,smallerPhoto);
-        saveFile(smallerPhoto,fileDir,thumbnailFileName,user_id);
+        saveThumbNails(smallerPhoto,fileDir,thumbnailFileName,user_id);
         //删除临时文件
         tempFile.delete();
         smallerPhoto.delete();
@@ -92,7 +132,7 @@ public class SaveFileService {
     }
 
     // 保存头像（缩略图）
-    public void saveFile(File sourceFile, String fileDir, String fileName, int user_id) {
+    public void saveThumbNails(File sourceFile, String fileDir, String fileName, int user_id) {
         try {
             File saveFile = new File(fileDir + fileName);
             // 确保目录存在
@@ -100,18 +140,55 @@ public class SaveFileService {
             // 将文件写入目标路径，确保能够覆盖文件
             Files.copy(sourceFile.toPath(), saveFile.toPath(),StandardCopyOption.REPLACE_EXISTING);
         } catch (IOException e) {
-            e.fillInStackTrace();
+            LOGGER.error(e.getMessage());
+        }
+    }
+
+    @Transactional
+    // 保存图片
+    public ResponseEntity<String> saveImage(MultipartFile file, int id, int index,boolean isCover){
+
+        String type = typeMap.get(index);
+
+        if(existsImageMap.get(type).apply(id)>6){
+            return ResponseEntity.status(400).body("图片超过限制");
+        }
+        if(isCover&&existsCoverMap.get(type).apply(id)>0){
+            return ResponseEntity.status(400).body("不能有多张封面");
+        }
+        try{
+            // 保存文件的逻辑
+            String filename = ImageUtils.getUUIDName(Objects.requireNonNull(file.getOriginalFilename()));
+            String imagePath = type + "_images/" + type + "_" + id + "/";
+            saveBytesFile(file.getInputStream(),uploadPath+imagePath,filename);
+            // 记录到数据库
+            if(!isCover){
+                if(!addImageMap.get(type).apply(imagePath+filename,id)){
+                    return ResponseEntity.status(400).body("添加图片失败");
+                }
+                return ResponseEntity.status(200).body("添加图片成功");
+            }
+            else{
+                if(!addCoverMap.get(type).apply(imagePath+filename,id)){
+                    return ResponseEntity.status(400).body("添加图片失败");
+                }
+                return ResponseEntity.status(200).body("添加图片成功");
+            }
+
+        } catch (IOException e) {
+            LOGGER.error(e.getMessage());
+            return ResponseEntity.status(200).body("出现异常");
         }
     }
 
     /**
-     * 保存临时视频
+     * 保存二进制文件
      * @param inputStream 视频的输入流
      * @param filepath 视频的路径
      * @param filename 视频的名字
      * @return 是否执行成功
      */
-    public boolean saveTempVideo(InputStream inputStream, String filepath, String filename) throws IOException {
+    public boolean saveBytesFile(InputStream inputStream, String filepath, String filename) throws IOException {
         File file = new File(filepath, filename);
 
         if (!file.getParentFile().exists() && !file.getParentFile().mkdirs()) {
@@ -158,7 +235,7 @@ public class SaveFileService {
         }
         // 视频文件的路径
         String videoPath = originPath  + "video/";
-        boolean isSave = saveTempVideo(inputStream,videoPath,videoName);
+        boolean isSave = saveBytesFile(inputStream,videoPath,videoName);
         if(!isSave){
             return null;
         }
@@ -179,20 +256,24 @@ public class SaveFileService {
      * @param index 说明是社区、需求还是成果
      * @return boolean 的事务执行结果
      */
-    public boolean saveVideo(InputStream inputStream, String filename, int id, Integer index) throws IOException {
+    @Transactional
+    public ResponseEntity<String> saveVideo(InputStream inputStream, String filename, int id, Integer index) throws IOException {
         String type = typeMap.get(index);
 
         // Check if video exists
-        if (existsMap.get(type).apply(id)!=null) {
-            return false;
+        if (existsVideoMap.get(type).apply(id)!=null) {
+            return ResponseEntity.status(400).body("已存在视频");
         }
         // Handle video processing
         String m3u8Path = handleVideo(inputStream, filename, id, type);
         if (m3u8Path == null || m3u8Path.isEmpty()) {
-            return false;
+            return ResponseEntity.status(400).body("已存在m3u8");
         }
         // Add video
-        return addVideoMap.get(type).apply(m3u8Path, id);
+        if(!addVideoMap.get(type).apply(m3u8Path, id)){
+            return ResponseEntity.status(400).body("添加视频失败");
+        }
+        return ResponseEntity.status(200).body("视频上传成功");
     }
 
     /**
@@ -204,10 +285,14 @@ public class SaveFileService {
      * @return boolean 事务执行结果
      */
     @Transactional
-    public boolean modifyVideo(InputStream inputStream, String filename, int id, Integer index) throws IOException {
+    public ResponseEntity<String> modifyVideo(InputStream inputStream, String filename, int id, Integer index) throws IOException {
         String type = typeMap.get(index);
         // 删掉视频的 m3u8 目录
-        String origin_path = uploadPath + existsMap.get(type).apply(id);
+        String absolutePath = existsVideoMap.get(type).apply(id);
+        if(absolutePath==null){
+            return ResponseEntity.status(400).body("不存在m3u8目录");
+        }
+        String origin_path = uploadPath + absolutePath;
         Path fullPath = Paths.get(origin_path);
         Path directoryPath = fullPath.getParent(); // 获取文件所在目录
         String parentDirectory = directoryPath.getParent().toString(); // 获取上级目录
@@ -217,9 +302,12 @@ public class SaveFileService {
         // 处理视频并获取新的m3u8路径
         String m3u8Path = handleVideo(inputStream, filename, id, type);
         if (m3u8Path == null || m3u8Path.isEmpty()) {
-            return false;
+            return ResponseEntity.status(400).body("更新m3u8目录失败");
         }
-        return ModifyVideoMap.getOrDefault(type, (p, i) -> false).apply(m3u8Path, id);
+        if(!ModifyVideoMap.getOrDefault(type, (p, i) -> false).apply(m3u8Path, id)){
+            return ResponseEntity.status(400).body("修改视频失败");
+        }
+        return ResponseEntity.status(200).body("视频上传成功");
     }
 
     /**
@@ -240,5 +328,38 @@ public class SaveFileService {
                         }
                     });
         }
+    }
+
+    public ResponseEntity<String> privilegeCheck(Integer type, Integer id, boolean isModify, HttpServletRequest request){
+        User user = jwtUtils.getUserInfoFromToken(request.getHeader("token"),User.class);
+        if(Objects.isNull(user)){
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+        }
+        int user_id = user.getUser_id();
+        String identity = user.getUser_category();
+
+        // 如果是学生或老师，只让他修改自己发布的成果
+        if((Objects.equals(identity, "student"))||(Objects.equals(identity, "teacher"))){
+            if(!isModify && type!=2){
+                return ResponseEntity.status(HttpStatus.FORBIDDEN).body("该身份只允许发布和修改成果");
+            }
+            if(isModify && id != fruitMapper.getFruitIdByUserId(user_id)){
+                return ResponseEntity.status(HttpStatus.FORBIDDEN).body("不是该用户发表的成果");
+            }
+        }
+
+        // 如果是社区负责人，只能修改他自己的社区视频或者修改他自己社区的需求
+        if(Objects.equals(identity, "community")){
+            if(!isModify && type == 2){
+                return ResponseEntity.status(HttpStatus.FORBIDDEN).body("该身份不允许发布成果");
+            }
+            if(isModify && type == 0 && id != communityMapper.findCommunityIdByUserId(user_id)){
+                return ResponseEntity.status(HttpStatus.FORBIDDEN).body("不是该用户所属的社区");
+            }
+            if(isModify && type==1&& id!= needMapper.selectNeedByUserId(user_id)){
+                return ResponseEntity.status(HttpStatus.FORBIDDEN).body("不是该用户发布的成果");
+            }
+        }
+        return ResponseEntity.status(200).build();
     }
 }
