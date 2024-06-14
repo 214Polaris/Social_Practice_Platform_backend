@@ -27,6 +27,12 @@ public interface FruitMapper {
     FruitMedia[] getFruitImg(int fruit_id);
 
     /**
+     * 判断是否存在该条点赞信息
+     */
+    @Select("select * from kudos where fruit_id=#{fruit_id} and user_id=#{user_id}")
+    Kudos getKudos(Kudos kudos);
+
+    /**
      * 新增点赞信息
      */
     @Insert("insert into kudos(fruit_id, user_id, kudos_time) values(#{fruit_id}, #{user_id}, #{kudos_time})")

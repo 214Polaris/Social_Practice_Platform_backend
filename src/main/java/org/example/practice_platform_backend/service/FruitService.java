@@ -15,13 +15,15 @@ public class FruitService {
 
     /**
      * 完成点赞事务
-     * @param kudos
      */
     @Transactional
     public void addKudos(Kudos kudos) {
+        Kudos flag = fruitMapper.getKudos(kudos);
         try {
-            fruitMapper.insertKudos(kudos);
-            fruitMapper.addFruitKudosCount(kudos.getFruit_id());
+            if(flag == null){
+                fruitMapper.insertKudos(kudos);
+                fruitMapper.addFruitKudosCount(kudos.getFruit_id());
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -30,9 +32,12 @@ public class FruitService {
 
     @Transactional
     public void deleteKudos(Kudos kudos) {
+        Kudos flag = fruitMapper.getKudos(kudos);
         try{
-            fruitMapper.deleteKudos(kudos);
-            fruitMapper.subFruitKudosCount(kudos.getFruit_id());
+            if(flag != null) {
+                fruitMapper.deleteKudos(kudos);
+                fruitMapper.subFruitKudosCount(kudos.getFruit_id());
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }

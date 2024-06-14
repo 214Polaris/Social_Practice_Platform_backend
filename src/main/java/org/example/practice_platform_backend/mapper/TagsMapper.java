@@ -5,9 +5,15 @@ import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
 
 import java.util.List;
+import java.util.Map;
 
 @Mapper
 public interface TagsMapper {
+
+    //查询所有tags信息
+    @Select("select * from need_category")
+    List<Map<String, String>> searchAllTags();
+
     // 通过需求 id 搜索 tags
     @Select("select category_name " +
             "from need_category " +

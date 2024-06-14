@@ -33,12 +33,13 @@ public class ProjectUtils {
     @Autowired
     private TagsMapper tagsMapper;
 
+    @Autowired
+    private TeamMapper  teamMapper;
+
     @Value("${uploadPath}")
     private String uploadPath;
     /**
      * 根据需求编号查询其相关媒体（视频未实现）
-     * @param need_id
-     * @return
      */
     public JSONArray getImgList(int need_id) throws IOException {
         JSONArray mediaList = new JSONArray();
@@ -57,9 +58,6 @@ public class ProjectUtils {
 
     /**
      * 获取近期成果列表 4
-     * @param project_id
-     * @return
-     * @throws IOException
      */
     public JSONArray getFruitList(int project_id) throws IOException {
         JSONArray fruitList = new JSONArray();
@@ -86,8 +84,6 @@ public class ProjectUtils {
 
     /**
      * 获取报道列表
-     * @param project_id
-     * @return
      */
     public JSONArray getReportList(int project_id) {
         JSONArray reportList = new JSONArray();
@@ -103,9 +99,6 @@ public class ProjectUtils {
 
     /**
      * 获取需求列表(gov_id)
-     * @param gov_id
-     * @return
-     * @throws IOException
      */
     public JSONArray getNeedList(int gov_id) throws IOException {
         JSONArray need_list = new JSONArray();
@@ -123,5 +116,27 @@ public class ProjectUtils {
             need_list.add(needJSON);
         }
         return need_list;
+    }
+
+    /**
+     * 获取结对项目列表
+     */
+    public JSONArray getProjectList(int gov_id) throws IOException {
+        Project[]  projects = projectMapper.getProjectListByCommunityId(gov_id);
+        JSONArray project_list = new JSONArray();
+        for(Project project : projects){
+            JSONObject projectJson = new JSONObject();
+            projectJson.put("proj_id", String.valueOf(project.getProject_id()));
+            projectJson.put("proj_title", projectMapper.getNeedTitleByProjectId(project.getProject_id()));
+            projectJson.put("proj_img", imageUtils.getThumbnail(uploadPath + mediaMapper.getCoverPath(project.getNeed_id())));
+            String team_name = teamMapper.getTeamNameByProjectId(project.getProject_id());
+            projectJson.put("team_name", team_name);
+            List<String> tag_list = tagsMapper.searchTags(project.getNeed_id());
+            JSONArray tag_array = new JSONArray();
+            tag_array.addAll(tag_list);
+            projectJson.put("tags", tag_array);
+            project_list.add(projectJson);
+        }
+        return project_list;
     }
 }

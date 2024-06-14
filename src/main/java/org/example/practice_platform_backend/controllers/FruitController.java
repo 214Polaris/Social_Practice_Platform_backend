@@ -63,8 +63,6 @@ public class FruitController {
 
     @PostMapping(value = "/res/update_like")
     public ResponseEntity<?> updateResLike(@RequestBody Kudos kudos){
-        System.out.println(kudos.isLike());
-        System.out.println(kudos.getFruit_id());
         try {
             if(kudos.isLike()){
                     fruitService.addKudos(kudos);

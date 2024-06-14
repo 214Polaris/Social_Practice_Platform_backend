@@ -78,4 +78,12 @@ public class ProjectService {
     public JSONArray getNeed_list(int gov_id) throws IOException {
         return projectUtils.getNeedList(gov_id);
     }
+
+    // 根据社区id 查询结对项目列表
+    public JSONObject getProject_list(int gov_id) throws IOException {
+        JSONObject result =  new JSONObject();
+        JSONArray proj_list =  projectUtils.getProjectList(gov_id);
+        result.put("proj_list", proj_list);
+        return result;
+    }
 }

@@ -53,4 +53,18 @@ public interface ProjectMapper {
             "(select user_id from community where community_id = " +
             "(select community_id from community_need where need_id = #{need_id})))")
     String getManagerByNeed(int need_id);
+
+    /**
+     * 根据社区id 查询对应的结对项目
+     */
+    @Select("select * from succ_project where need_id = " +
+            "(select need_id from  community_need where community_id = #{community_id})")
+    Project[] getProjectListByCommunityId(int community_id);
+
+    /**
+     * 根据项目id 查询对应的需求名
+     */
+    @Select("select title from community_need where need_id = " +
+            "(select need_id from succ_project where project_id = #{project_id})")
+    String getNeedTitleByProjectId(int project_id);
 }

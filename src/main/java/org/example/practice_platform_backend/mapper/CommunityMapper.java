@@ -3,6 +3,7 @@ package org.example.practice_platform_backend.mapper;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
 import org.example.practice_platform_backend.entity.Fruit;
+import org.example.practice_platform_backend.entity.Project;
 
 @Mapper
 public interface CommunityMapper {
