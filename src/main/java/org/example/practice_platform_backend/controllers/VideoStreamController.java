@@ -34,9 +34,6 @@ public class VideoStreamController {
     @Autowired
     private SaveFileService saveFileService;
 
-    @Autowired
-    private JwtUtils jwtUtils;
-
     /**
      * 处理视频上传
      * @param file 上传的视频

@@ -1,11 +1,14 @@
 package org.example.practice_platform_backend.service;
 
 import jakarta.servlet.http.HttpServletRequest;
+import org.example.practice_platform_backend.controllers.CommentController;
 import org.example.practice_platform_backend.entity.User;
 import org.example.practice_platform_backend.mapper.*;
 import org.example.practice_platform_backend.utils.FFmpegUtils;
 import org.example.practice_platform_backend.utils.ImageUtils;
 import org.example.practice_platform_backend.utils.JwtUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
@@ -29,7 +32,7 @@ import static java.util.Arrays.asList;
 
 @Service
 public class SaveFileService {
-
+    private static final Logger LOGGER = LoggerFactory.getLogger(SaveFileService.class);
     // 上传的路径
     @Value("${uploadPath}")
     private String uploadPath;
@@ -53,7 +56,6 @@ public class SaveFileService {
     private ImageUtils imageUtils;
 
     private final List<String> typeMap = asList("community","need","fruit");
-
     private final Map<String, Function<Integer, String>> existsVideoMap;
     private final Map<String, BiFunction<String, Integer, Boolean>> addVideoMap;
     private final Map<String, BiFunction<String, Integer, Boolean>> ModifyVideoMap;
@@ -138,10 +140,11 @@ public class SaveFileService {
             // 将文件写入目标路径，确保能够覆盖文件
             Files.copy(sourceFile.toPath(), saveFile.toPath(),StandardCopyOption.REPLACE_EXISTING);
         } catch (IOException e) {
-            e.fillInStackTrace();
+            LOGGER.error(e.getMessage());
         }
     }
 
+    @Transactional
     // 保存图片
     public ResponseEntity<String> saveImage(MultipartFile file, int id, int index,boolean isCover){
 
@@ -156,29 +159,36 @@ public class SaveFileService {
         try{
             // 保存文件的逻辑
             String filename = ImageUtils.getUUIDName(Objects.requireNonNull(file.getOriginalFilename()));
-            String imagePath = type + "_image/" + type + "_" + id + "/" + filename;
-            File img = new File(uploadPath + imagePath);
-            img.getParentFile().mkdirs();
-            file.transferTo(img);
+            String imagePath = type + "_images/" + type + "_" + id + "/";
+            saveBytesFile(file.getInputStream(),uploadPath+imagePath,filename);
             // 记录到数据库
-            if(!addImageMap.get(type).apply(imagePath,id)){
-                return ResponseEntity.status(400).body("添加图片失败");
+            if(!isCover){
+                if(!addImageMap.get(type).apply(imagePath+filename,id)){
+                    return ResponseEntity.status(400).body("添加图片失败");
+                }
+                return ResponseEntity.status(200).body("添加图片成功");
             }
-            return ResponseEntity.status(200).body("添加图片成功");
+            else{
+                if(!addCoverMap.get(type).apply(imagePath+filename,id)){
+                    return ResponseEntity.status(400).body("添加图片失败");
+                }
+                return ResponseEntity.status(200).body("添加图片成功");
+            }
+
         } catch (IOException e) {
-            e.fillInStackTrace();
+            LOGGER.error(e.getMessage());
             return ResponseEntity.status(200).body("出现异常");
         }
     }
 
     /**
-     * 保存临时视频
+     * 保存二进制文件
      * @param inputStream 视频的输入流
      * @param filepath 视频的路径
      * @param filename 视频的名字
      * @return 是否执行成功
      */
-    public boolean saveTempVideo(InputStream inputStream, String filepath, String filename) throws IOException {
+    public boolean saveBytesFile(InputStream inputStream, String filepath, String filename) throws IOException {
         File file = new File(filepath, filename);
 
         if (!file.getParentFile().exists() && !file.getParentFile().mkdirs()) {
@@ -225,7 +235,7 @@ public class SaveFileService {
         }
         // 视频文件的路径
         String videoPath = originPath  + "video/";
-        boolean isSave = saveTempVideo(inputStream,videoPath,videoName);
+        boolean isSave = saveBytesFile(inputStream,videoPath,videoName);
         if(!isSave){
             return null;
         }
