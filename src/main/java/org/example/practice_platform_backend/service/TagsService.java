@@ -32,4 +32,25 @@ public class TagsService {
         result.put("tags",  tagArray);
         return  result;
     }
+
+    /**
+     * 新增 tag 前端判断重名
+     */
+    public void addTags(String tagName){
+        tagsMapper.addTags(tagName);
+    }
+
+    /**
+     * 删除tag
+     */
+    public void deleteTags(int id){
+        tagsMapper.deleteTags(id);
+    }
+
+    /**
+     * 修改tag
+     */
+    public void updateTags(int id, String tagName){
+        tagsMapper.updateTags(tagName, id);
+    }
 }

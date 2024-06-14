@@ -1,6 +1,4 @@
 package org.example.practice_platform_backend.utils;
-
-import com.google.gson.JsonArray;
 import net.minidev.json.JSONArray;
 import net.minidev.json.JSONObject;
 import org.example.practice_platform_backend.entity.Fruit;
@@ -10,7 +8,6 @@ import org.example.practice_platform_backend.entity.Report;
 import org.example.practice_platform_backend.mapper.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.data.relational.core.sql.In;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
