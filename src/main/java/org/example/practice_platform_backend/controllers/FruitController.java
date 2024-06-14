@@ -43,7 +43,7 @@ public class FruitController {
     // jwt
     @Autowired
     private JwtUtils jwtUtils;
-    @GetMapping(value = "/res_detail")
+    @GetMapping(value = "/res/detail")
     public ResponseEntity<?> getResDetail(@RequestParam(value = "demand_id") String fruit_id,
                                           HttpServletRequest request) throws IOException {
         try {
@@ -61,7 +61,7 @@ public class FruitController {
         }
     }
 
-    @PostMapping(value = "/update_res_like")
+    @PostMapping(value = "/res/update_like")
     public ResponseEntity<?> updateResLike(@RequestBody Kudos kudos){
         System.out.println(kudos.isLike());
         System.out.println(kudos.getFruit_id());
@@ -77,7 +77,7 @@ public class FruitController {
             return ResponseEntity.status(400).body("更新失败");
         }
     }
-    @PostMapping(value = "/update_comment")
+    @PostMapping(value = "/res/update_comment")
     public ResponseEntity<?> updateComment(@RequestBody Comment comment){
         try {
             fruitService.addComment(comment);
@@ -87,7 +87,7 @@ public class FruitController {
             return ResponseEntity.status(400).body("更新失败");
         }
     }
-    @DeleteMapping(value = "/delete_comment")
+    @DeleteMapping(value = "/res/delete_comment")
     public ResponseEntity<?> deleteComment(@RequestBody Comment comment){
         try {
             fruitService.deleteComment(comment);

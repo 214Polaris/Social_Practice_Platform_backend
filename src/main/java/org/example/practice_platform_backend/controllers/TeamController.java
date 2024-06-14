@@ -21,7 +21,7 @@ public class TeamController {
     TeamUtils  teamUtils;
 
     //突击队详情信息get
-    @RequestMapping("/get_team_info")
+    @RequestMapping("/team/detail")
     public ResponseEntity<?> getTeamInfo(@Param("team_id") String team_id) {
         Team team = teamMapper.getTeamById(Integer.parseInt(team_id));
         //处理team

@@ -5,17 +5,16 @@ import net.minidev.json.JSONArray;
 import net.minidev.json.JSONObject;
 import org.example.practice_platform_backend.entity.Fruit;
 import org.example.practice_platform_backend.entity.FruitMedia;
+import org.example.practice_platform_backend.entity.Project;
 import org.example.practice_platform_backend.entity.Report;
-import org.example.practice_platform_backend.mapper.FruitMapper;
-import org.example.practice_platform_backend.mapper.MediaMapper;
-import org.example.practice_platform_backend.mapper.ProjectMapper;
-import org.example.practice_platform_backend.mapper.TeamMapper;
+import org.example.practice_platform_backend.mapper.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.relational.core.sql.In;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
+import java.util.List;
 
 @Component
 public class ProjectUtils {
@@ -31,8 +30,10 @@ public class ProjectUtils {
     @Autowired
     private MediaMapper  mediaMapper;
 
+    @Autowired
+    private TagsMapper tagsMapper;
+
     @Value("${uploadPath}")
-//    private String uploadPath = "D:/Desktop/Processing/终极实训/Social_Practice_Platform_backend/uploadfiles";
     private String uploadPath;
     /**
      * 根据需求编号查询其相关媒体（视频未实现）
@@ -98,5 +99,29 @@ public class ProjectUtils {
             reportList.add(reportJson);
         }
         return reportList;
+    }
+
+    /**
+     * 获取需求列表(gov_id)
+     * @param gov_id
+     * @return
+     * @throws IOException
+     */
+    public JSONArray getNeedList(int gov_id) throws IOException {
+        JSONArray need_list = new JSONArray();
+        Project[] needs = projectMapper.getNeedListByCommunityId(gov_id);
+        for(Project need : needs) {
+            JSONObject needJSON = new JSONObject();
+            needJSON.put("demand_id", String.valueOf(need.getNeed_id()));
+            needJSON.put("demand_name", need.getTitle());
+            List<String> tag_list = tagsMapper.searchTags(need.getNeed_id());
+            JSONArray tag_array = new JSONArray();
+            tag_array.addAll(tag_list);
+            needJSON.put("tags", tag_array);
+            String coverPath = uploadPath + mediaMapper.getCoverPath(need.getNeed_id());
+            needJSON.put("demand_img", imageUtils.getThumbnail(coverPath));
+            need_list.add(needJSON);
+        }
+        return need_list;
     }
 }

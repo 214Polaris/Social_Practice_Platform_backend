@@ -15,12 +15,16 @@ public interface FruitMapper {
 
     /**
      * 获取成果媒体信息
-     *
-     * @param fruit_id
-     * @return
      */
     @Select("select * from fruit_media where fruit_id=#{fruit_id}")
     FruitMedia[] getFruitMedia(int fruit_id);
+
+
+    /**
+     * 获取成果媒体信息,限图片
+     */
+    @Select("select * from fruit_media where fruit_id=#{fruit_id} and (type='img' or type='cover')")
+    FruitMedia[] getFruitImg(int fruit_id);
 
     /**
      * 新增点赞信息

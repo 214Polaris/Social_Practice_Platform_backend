@@ -1,15 +1,21 @@
 package org.example.practice_platform_backend.controllers;
 
+import com.alibaba.fastjson2.JSON;
 import jakarta.servlet.http.HttpServletRequest;
+import net.minidev.json.JSONArray;
 import org.example.practice_platform_backend.service.CommunityLeaderService;
 import org.example.practice_platform_backend.entity.CommunityLeader;
 import org.example.practice_platform_backend.entity.User;
+import org.example.practice_platform_backend.service.ProjectService;
 import org.example.practice_platform_backend.utils.JwtUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.repository.query.Param;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 
@@ -22,6 +28,9 @@ public class CommitteeController {
 
     @Autowired
     private CommunityLeaderService communityLeaderService;
+
+    @Autowired
+    private ProjectService projectService;
 
     @Autowired
     private JwtUtils jwtUtils;

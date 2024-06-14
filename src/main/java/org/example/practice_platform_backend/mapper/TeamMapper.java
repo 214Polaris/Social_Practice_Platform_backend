@@ -14,4 +14,9 @@ public interface TeamMapper {
 
     @Select("select avatar_path from college_team where team_number = #{team_number}")
     String getTeamAvatarPathByTeamNumber(int team_number);
+
+    @Select("select * from college_team where team_number = " +
+            " (select team_number from succ_project where project_id = " +
+            " (select project_id from fruit_info where fruit_id = #{fruit_id}))")
+    Team getTeamByFruitId(int fruit_id);
 }

@@ -4,10 +4,7 @@ import net.minidev.json.JSONArray;
 import net.minidev.json.JSONObject;
 import org.example.practice_platform_backend.entity.Project;
 import org.example.practice_platform_backend.entity.Team;
-import org.example.practice_platform_backend.mapper.CommunityMapper;
-import org.example.practice_platform_backend.mapper.ProjectMapper;
-import org.example.practice_platform_backend.mapper.TeamMapper;
-import org.example.practice_platform_backend.mapper.UserMapper;
+import org.example.practice_platform_backend.mapper.*;
 import org.example.practice_platform_backend.utils.ImageUtils;
 import org.example.practice_platform_backend.utils.ProjectUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +12,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
+import java.util.List;
 
 @Service
 public class ProjectService {
@@ -30,7 +28,6 @@ public class ProjectService {
 
     @Autowired
     private UserMapper  userMapper;
-
     @Autowired
     private ImageUtils  imageUtils;
     
@@ -67,7 +64,7 @@ public class ProjectService {
         JSONObject result = new JSONObject();
         result.put("address",need.getAddress());
         result.put("gov", communityMapper.getCommunityName(need.getCommunity_id()));
-        result.put("gov_manager", userMapper.getNameById(need.getUser_id()));
+        result.put("gov_manager", projectMapper.getManagerByNeed(need.getNeed_id()));
         result.put("gov_phone", userMapper.getPhoneById(need.getUser_id()));
         String community_avatar = imageUtils.getThumbnail(uploadPath + communityMapper.getCommunityAvatarPath(need.getCommunity_id()));
         result.put("gov_avatar",community_avatar);
@@ -75,5 +72,10 @@ public class ProjectService {
         JSONArray img_list = projectUtils.getImgList(need.getNeed_id());
         result.put("imgList", img_list);
         return result;
+    }
+
+    // 根据社区id 查需求清单
+    public JSONArray getNeed_list(int gov_id) throws IOException {
+        return projectUtils.getNeedList(gov_id);
     }
 }
