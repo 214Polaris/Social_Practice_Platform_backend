@@ -23,7 +23,7 @@ public interface FruitMapper {
     /**
      * 获取成果媒体信息,限图片
      */
-    @Select("select * from fruit_media where fruit_id=#{fruit_id} and (type='img' or type='cover')")
+    @Select("select * from fruit_media where fruit_id=#{fruit_id} and (type='image' or type='cover')")
     FruitMedia[] getFruitImg(int fruit_id);
 
     /**

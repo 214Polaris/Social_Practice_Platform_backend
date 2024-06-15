@@ -11,7 +11,7 @@ public interface CommunityMapper {
 
     //注册社区
     @Insert("INSERT into community(community_name,introduction,address,is_pass,avatar_path) " +
-            "values(#{community_name},#{introduction},#{address},0,'community_avatar/default_avatar.jpg')")
+            "values(#{community_name},#{introduction},#{address},0,'community_avatar/1775D1493E2547398D4FC613F8250219.jpeg')")
     @Options(useGeneratedKeys = true, keyProperty = "community_id")
     @Transactional
     void registerCommunity(Community community);
