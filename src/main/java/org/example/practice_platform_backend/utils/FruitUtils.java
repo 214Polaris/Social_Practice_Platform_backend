@@ -60,7 +60,7 @@ public class FruitUtils {
             }
             else{
                 media.put("img_flag", 1);
-                media.put("src", imageUtils.getThumbnail(uploadPath + "/" + fruitMedia.getPath()));
+                media.put("src",  fruitMedia.getPath());
             }
             mediaList.add(media);
         }

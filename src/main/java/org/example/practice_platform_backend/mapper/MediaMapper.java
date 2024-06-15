@@ -10,8 +10,6 @@ public interface MediaMapper {
     /**
      * need_media表中找到need_id为1且Type为cover的path字段，
      * 如果不存在则返回need_id为1的第一个Type为img的path字段
-     * @param needId
-     * @return
      */
     @Select("SELECT path " +
             "FROM ( " +
@@ -21,7 +19,7 @@ public interface MediaMapper {
             "  UNION " +
             "  SELECT path, media_id, 2 AS sort_order " +
             "  FROM need_media " +
-            "  WHERE need_id = #{needId} AND type = 'img' " +
+            "  WHERE need_id = #{needId} AND type = 'image' " +
             ") AS combined " +
             "ORDER BY sort_order ASC, media_id ASC " +
             "LIMIT 1")
@@ -29,8 +27,6 @@ public interface MediaMapper {
 
     /**
      * 根据need_id查找所有的media
-     * @param needId
-     * @return
      */
     @Select("Select * from need_media where need_id = #{needId}")
     FruitMedia[] getMediaByNeedId(int needId);
