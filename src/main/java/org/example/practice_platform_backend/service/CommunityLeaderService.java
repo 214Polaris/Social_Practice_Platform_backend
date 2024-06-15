@@ -79,7 +79,7 @@ public class CommunityLeaderService {
         user.setPassword(md5Pass);
         user.setGender(requestData.get("gender"));
         user.setPhone_number(requestData.get("phone"));
-        user.setUser_category("committee");
+        user.setUser_category("community");
         userMapper.register(user);
         int user_id = Integer.parseInt(requestData.get("id"));
         boolean updateSuccessful = committeeMapper.updateCommunityLeader(user_id,user.getUser_id());

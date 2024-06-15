@@ -1,7 +1,6 @@
 package org.example.practice_platform_backend.service;
 
 import jakarta.servlet.http.HttpServletRequest;
-import org.example.practice_platform_backend.controllers.CommentController;
 import org.example.practice_platform_backend.entity.User;
 import org.example.practice_platform_backend.mapper.*;
 import org.example.practice_platform_backend.utils.FFmpegUtils;
@@ -131,14 +130,16 @@ public class SaveFileService {
         CompletableFuture.completedFuture(true);
     }
 
-    // 保存头像（缩略图）
     public void saveThumbNails(File sourceFile, String fileDir, String fileName, int user_id) {
         try {
-            File saveFile = new File(fileDir + fileName);
+            Path directoryPath = Paths.get(fileDir);
+            Path path = Paths.get(fileDir+fileName);
             // 确保目录存在
-            sourceFile.getParentFile().mkdirs();
-            // 将文件写入目标路径，确保能够覆盖文件
-            Files.copy(sourceFile.toPath(), saveFile.toPath(),StandardCopyOption.REPLACE_EXISTING);
+            if (!Files.exists(path.getParent())) {
+                Files.createDirectories(path.getParent());
+            }
+            Path filePath = directoryPath.resolve(fileName);
+            Files.copy(sourceFile.toPath(), filePath, StandardCopyOption.REPLACE_EXISTING);
         } catch (IOException e) {
             LOGGER.error(e.getMessage());
         }

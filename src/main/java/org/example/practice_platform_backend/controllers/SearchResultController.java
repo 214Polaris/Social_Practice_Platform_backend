@@ -16,7 +16,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.dao.DataAccessException;
 
 import java.io.IOException;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -60,9 +59,9 @@ public class SearchResultController {
                         return ResponseEntity.ok("没有找到匹配的结果");
                     }
                     tags = tagsMapper.searchFruitTags(searchResult.getId());
-                    memberList = memberListMapper.getCommunityAndTeamNameByNeedId(searchResult.getId());
+                    memberList = memberListMapper.getCommunityAndTeamNameByFruitId(searchResult.getId());
                     break;
-                case "乡镇需求":
+                case "村镇需求":
                     searchResult = searchResultMapper.searchNeed(address, text);
                     if(Objects.isNull(searchResult)){
                         return ResponseEntity.ok("没有找到匹配的结果");
