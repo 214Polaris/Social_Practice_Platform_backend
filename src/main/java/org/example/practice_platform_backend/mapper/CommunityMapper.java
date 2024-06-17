@@ -10,8 +10,8 @@ import org.springframework.transaction.annotation.Transactional;
 public interface CommunityMapper {
 
     //注册社区
-    @Insert("INSERT into community(community_name,introduction,address,is_pass,avatar_path) " +
-            "values(#{community_name},#{introduction},#{address},0,'community_avatar/1775D1493E2547398D4FC613F8250219.jpeg')")
+    @Insert("INSERT into community(community_name,introduction,address,is_pass,user_id,avatar_path) " +
+            "values(#{community_name},#{introduction},#{address},0,#{user_id},'community_avatar/default_avatar.jpg')")
     @Options(useGeneratedKeys = true, keyProperty = "community_id")
     @Transactional
     void registerCommunity(Community community);
@@ -70,5 +70,9 @@ public interface CommunityMapper {
     // 删除社区视频
     @Delete("DELETE from community_media where community_id = #{id} and type = 'video'")
     boolean deleteCommunityVideo(@Param("id") int id);
+
+    //查询是否有相应 user_id 的社区
+    @Select("select COUNT(*) from community where user_id = #{user_id}")
+    int existsCommunityUser(@Param("user_id") int user_id);
 
 }

@@ -16,7 +16,7 @@ public interface UserMapper {
     // 注册
     @Insert("insert into user(name, username, passwd, phone_number, user_category, avatar_path,gender) " +
             "values(#{name}, #{user_name}, #{password}, #{phone_number}, #{user_category}, " +
-            "'avatar/1775D1493E2547398D4FC613F8250219.jpeg', #{gender})")
+            "'avatar/default_avatar.jpg', #{gender})")
     @Options(useGeneratedKeys = true, keyProperty = "user_id")
     @Transactional
     void register(User user);

@@ -67,18 +67,5 @@ public class CommitteeController {
         }
     }
 
-    // 注册社区信息，返回注册后的社区 id
-    @PostMapping("/register/community")
-    public ResponseEntity<?> registerCommunity(HttpServletRequest request, @RequestBody Community requestBody) {
-        if(isValid(request)){
-            return ResponseEntity.status(400).body("该用户不是校团委");
-        }
-        if(communityMapper.findCommunityIdByName(requestBody.getCommunity_name())>0){
-            return ResponseEntity.status(400).body("社区名重复");
-        }
-        communityMapper.registerCommunity(requestBody);
-        return ResponseEntity.status(200).header("id",requestBody.getCommunity_id()).body("注册成功");
-    }
-
 }
 

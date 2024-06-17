@@ -28,7 +28,7 @@ public interface MemberListMapper {
             "join community_need as need on need.need_id = succ_project.need_id " +
             "join community on community.community_id = need.community_id " +
             "join college_team as team on team.team_number = succ_project.team_number " +
-            "where succ_project.need_id = #{id} LIMIT 1" )
+            "where fruit.fruit_id = #{id} LIMIT 1" )
     Map<String,String> getCommunityAndTeamNameByFruitId(@Param("id") int id);
 
     //通过高校队伍 id 搜索

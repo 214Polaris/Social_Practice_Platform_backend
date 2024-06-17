@@ -53,11 +53,18 @@ public class CommunityLeaderService {
         return Objects.equals(committeeMapper.getUserCategory(userId), "committee");
     }
 
+    public boolean checkLeader(int userId) {
+        return Objects.equals(committeeMapper.getUserCategory(userId), "community");
+    }
+
     // 获取所有社区负责人
-    public List<CommunityLeader> getCommunityLeaders() throws IOException {
+    public List<CommunityLeader> getCommunityLeaders(){
         List<CommunityLeader> leaders = committeeMapper.getCommunityLeader();
         return leaders.stream().peek(leader -> {
             try {
+                if(leader.getCommunity() == null || leader.getCommunity().isEmpty()){
+                    leader.setCommunity("暂未添加社区");
+                }
                 String path = uploadPath + leader.getImg();
                 leader.setImg(imageUtils.getFileBytes(path));
             } catch (IOException e) {

@@ -1,6 +1,7 @@
 package org.example.practice_platform_backend.controllers;
 
 import jakarta.servlet.http.HttpServletRequest;
+import org.example.practice_platform_backend.service.CommunityLeaderService;
 import org.example.practice_platform_backend.utils.ImageUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
@@ -16,6 +17,7 @@ import org.springframework.dao.*;
 
 import java.sql.SQLIntegrityConstraintViolationException;
 import java.util.HashMap;
+import java.util.Objects;
 
 @RestController
 @EnableAsync
@@ -34,6 +36,8 @@ public class UserController {
     // jwt
     @Autowired
     private JwtUtils jwtUtils;
+    @Autowired
+    private CommunityLeaderService communityLeaderService;
 
     // 处理登录请求
     @PostMapping(value = "/login")
@@ -50,8 +54,23 @@ public class UserController {
     }
 
     @PostMapping(value="/register")
-    public ResponseEntity<?> registerUser(@RequestBody User user){
+    public ResponseEntity<?> registerUser(@RequestBody User user,HttpServletRequest request){
         try {
+            String category = user.getUser_category();
+            // 处理社区负责人的注册情况
+            if(Objects.equals(category, "community")){
+                if(request.getHeader("token")==null||request.getHeader("token").isEmpty()){
+                    return ResponseEntity.status(HttpStatus.FORBIDDEN).body("该用户不是校团委");
+                }
+                int committeeId = jwtUtils.getUserInfoFromToken(request.getHeader("token"),User.class).getUser_id();
+                if(!communityLeaderService.checkIdentity(committeeId)){
+                    return ResponseEntity.status(HttpStatus.FORBIDDEN).body("该用户不是校团委");
+                }
+            }
+            if(!Objects.equals(category, "student")&&!Objects.equals(category, "teacher")){
+                return ResponseEntity.status(400).body("无效的注册类别");
+            }
+            // 正常注册
             userMapper.register(user);
             return ResponseEntity.ok().body("注册成功");
         } catch (DataIntegrityViolationException e) {
