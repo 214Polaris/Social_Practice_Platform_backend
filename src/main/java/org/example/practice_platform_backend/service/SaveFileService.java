@@ -117,11 +117,11 @@ public class SaveFileService {
         assert originalFilename != null;
         File tempFile = File.createTempFile(fileName,suffix);
         file.transferTo(tempFile);
-        saveThumbNails(tempFile,fileDir,fileName,user_id);
+        saveThumbNails(tempFile,fileDir,fileName);
         //保存缩略图
         File smallerPhoto = File.createTempFile(originalFilename,suffix);  //创建缩略图的临时文件
         imageUtils.photoSmaller(tempFile,smallerPhoto);
-        saveThumbNails(smallerPhoto,fileDir,thumbnailFileName,user_id);
+        saveThumbNails(smallerPhoto,fileDir,thumbnailFileName);
         //删除临时文件
         tempFile.delete();
         smallerPhoto.delete();
@@ -130,7 +130,7 @@ public class SaveFileService {
         CompletableFuture.completedFuture(true);
     }
 
-    public void saveThumbNails(File sourceFile, String fileDir, String fileName, int user_id) {
+    public void saveThumbNails(File sourceFile, String fileDir, String fileName) {
         try {
             Path directoryPath = Paths.get(fileDir);
             Path path = Paths.get(fileDir+fileName);

@@ -61,4 +61,10 @@ public interface UserMapper {
      */
     @Select("select phone_number from user where user_id = #{user_id}")
     String  getPhoneById(@Param("user_id")int user_id);
+
+    /**
+     * 查询是否已存在姓名
+     */
+    @Select("select COUNT(*) from user where user_name = #{user_name}")
+    int existUsername(@Param("user_name")String user_name);
 }
