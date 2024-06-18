@@ -4,10 +4,7 @@ package org.example.practice_platform_backend.controllers;
 import com.alibaba.fastjson2.JSON;
 import jakarta.servlet.http.HttpServletRequest;
 import net.minidev.json.JSONObject;
-import org.example.practice_platform_backend.entity.Fruit;
-import org.example.practice_platform_backend.entity.FruitMedia;
-import org.example.practice_platform_backend.entity.Comment;
-import org.example.practice_platform_backend.entity.Kudos;
+import org.example.practice_platform_backend.entity.*;
 import org.example.practice_platform_backend.mapper.CommentMapper;
 import org.example.practice_platform_backend.mapper.FruitMapper;
 import org.example.practice_platform_backend.mapper.UserMapper;
@@ -47,12 +44,15 @@ public class FruitController {
     public ResponseEntity<?> getResDetail(@RequestParam(value = "demand_id") String fruit_id,
                                           HttpServletRequest request) throws IOException {
         try {
-//        String token = request.getHeader("token");
-//        int user_id = jwtUtils.getUserInfoFromToken(token, User.class).getUser_id();
+            String token = request.getHeader("token");
+            int user_id = jwtUtils.getUserInfoFromToken(token, User.class).getUser_id();
             Fruit fruit = fruitMapper.getFruit(Integer.parseInt(fruit_id));
             FruitMedia[] fruitMedias = fruitMapper.getFruitMedia(Integer.parseInt(fruit_id));
             Comment[] comments = commentMapper.getCommentByCommentId(Integer.parseInt(fruit_id), null);
-            boolean is_like = false; //未完成，等后续登录后再补充逻辑
+            Kudos kudos = new Kudos();
+            kudos.setFruit_id(Integer.parseInt(fruit_id));
+            kudos.setUser_id(user_id);
+            boolean is_like = fruitMapper.getKudos(kudos);
             JSONObject result = fruitUtils.getFruitInfo(fruit, comments, fruitMedias, is_like);
             return ResponseEntity.status(200).body(JSON.toJSONString(result));
         }catch (Exception e){

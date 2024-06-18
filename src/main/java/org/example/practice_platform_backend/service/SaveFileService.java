@@ -212,9 +212,9 @@ public class SaveFileService {
      */
     public String handleVideo(InputStream inputStream, String filename, int id, String type) throws IOException {
         // 相对路径（需要返回这个，避免暴露服务器的文件结构）
-        String absolutePath = type + "_video/" + type + "_" + id + "/";
+        String relatedPath = type + "_video/" + type + "_" + id + "/";
         // 视频文件保存的绝对路径
-        String originPath = uploadPath + absolutePath;
+        String originPath = uploadPath + relatedPath;
         // 生成的随机名字
         String videoName = ImageUtils.getUUIDName(filename);
         //获取到原视频名字的后缀
@@ -245,7 +245,7 @@ public class SaveFileService {
         if(!isConvert){
             return null;
         }
-        return absolutePath + "m3u8/" + m3u8Name;
+        return relatedPath + "m3u8/" + m3u8Name;
     }
 
     /**
