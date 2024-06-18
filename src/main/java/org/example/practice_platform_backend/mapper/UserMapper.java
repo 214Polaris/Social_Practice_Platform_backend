@@ -10,7 +10,10 @@ import java.util.Map;
 @Mapper
 public interface UserMapper {
     //登录
-    @Select("select * from user where username=#{user_name} and passwd=#{passwd}")
+    @Select("""
+            select username as user_name, phone_number, name, user_category, avatar_path ,gender
+            from user where username=#{user_name} and passwd=#{passwd}
+            """)
     User login(@Param("user_name")String user_name,@Param("passwd") String passwd);
 
     // 注册
