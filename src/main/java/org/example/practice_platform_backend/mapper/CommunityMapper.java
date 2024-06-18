@@ -6,6 +6,9 @@ import org.example.practice_platform_backend.entity.Fruit;
 import org.example.practice_platform_backend.entity.Project;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.HashMap;
+import java.util.List;
+
 @Mapper
 public interface CommunityMapper {
 
@@ -74,5 +77,19 @@ public interface CommunityMapper {
     //查询是否有相应 user_id 的社区
     @Select("select COUNT(*) from community where user_id = #{user_id}")
     int existsCommunityUser(@Param("user_id") int user_id);
+
+    //统计各个市的社区
+    @Select("""
+            SELECT
+                CONCAT(SUBSTRING_INDEX(address, '市', 1), '市') as city,
+                COUNT(*) AS sum
+            FROM
+                community_need
+            JOIN
+                succ_project ON community_need.need_id = succ_project.need_id
+            GROUP BY
+                SUBSTRING_INDEX(address, '市', 1);
+            """)
+    List<HashMap<String,Integer>> getCommunityCountsByAddress();
 
 }

@@ -1,12 +1,9 @@
 package org.example.practice_platform_backend.controllers;
 
 import jakarta.servlet.http.HttpServletRequest;
-import org.example.practice_platform_backend.entity.Community;
-import org.example.practice_platform_backend.mapper.CommunityMapper;
 import org.example.practice_platform_backend.service.CommunityLeaderService;
 import org.example.practice_platform_backend.entity.CommunityLeader;
 import org.example.practice_platform_backend.entity.User;
-import org.example.practice_platform_backend.service.SaveFileService;
 import org.example.practice_platform_backend.utils.JwtUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -15,6 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 @RestController
 @RequestMapping("/api/committee")
@@ -28,13 +26,11 @@ public class CommitteeController {
 
     @Autowired
     private JwtUtils jwtUtils;
-    @Autowired
-    private CommunityMapper communityMapper;
 
     // 解析 token 判断是否是校团委
     private boolean isValid(HttpServletRequest request){
-        int userId = jwtUtils.getUserInfoFromToken(request.getHeader("token"), User.class).getUser_id();
-        return !communityLeaderService.checkIdentity(userId);
+        String user_category = jwtUtils.getUserInfoFromToken(request.getHeader("token"), User.class).getUser_category();
+        return Objects.equals(user_category, "committee");
     }
 
     // 获取所有负责人

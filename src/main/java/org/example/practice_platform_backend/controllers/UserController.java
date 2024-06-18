@@ -1,8 +1,10 @@
 package org.example.practice_platform_backend.controllers;
 
 import jakarta.servlet.http.HttpServletRequest;
+import net.sourceforge.pinyin4j.format.exception.BadHanyuPinyinOutputFormatCombination;
 import org.example.practice_platform_backend.service.CommunityLeaderService;
 import org.example.practice_platform_backend.utils.ImageUtils;
+import org.example.practice_platform_backend.utils.RandomGenerateUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -39,18 +41,21 @@ public class UserController {
     @Autowired
     private CommunityLeaderService communityLeaderService;
 
+    @Autowired
+    private RandomGenerateUtils randomGenerateUtils;
+
     // 处理登录请求
     @PostMapping(value = "/login")
-    public ResponseEntity<?> loginUser(@RequestParam("user_name") String name, @RequestParam("passwd") String password) {
+    public ResponseEntity<?> loginUser(@RequestParam("user_name") String name, @RequestParam("passwd") String password,@RequestParam("user_category") String user_category) {
         User loggedInUser = userMapper.login(name, password);
-        if (loggedInUser != null) {
-            // 生成 token 并返回
-            HttpHeaders headers = new HttpHeaders();
-            headers.add("token", jwtUtils.generateToken(loggedInUser));
-            return ResponseEntity.ok().headers(headers).body("登录成功");
-        } else {
-            return ResponseEntity.status(400).body("用户名或密码错误");
+        if(!Objects.equals(loggedInUser.getUser_category(), user_category)){
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("用户类别不正确");
         }
+        // 生成 token 并返回
+        HttpHeaders headers = new HttpHeaders();
+        loggedInUser.setPassword(null);
+        headers.add("token", jwtUtils.generateToken(loggedInUser));
+        return ResponseEntity.ok().headers(headers).body("登录成功");
     }
 
     @PostMapping(value="/register")
@@ -69,6 +74,9 @@ public class UserController {
             }
             if(!Objects.equals(category, "student")&&!Objects.equals(category, "teacher")){
                 return ResponseEntity.status(400).body("无效的注册类别");
+            }
+            if(userMapper.existUsername(user.getUser_name())>0){
+                return ResponseEntity.status(400).body("用户名已存在");
             }
             // 正常注册
             userMapper.register(user);
@@ -120,6 +128,16 @@ public class UserController {
             return ResponseEntity.status(200).body("修改成功");
         } catch (Exception e){
             return ResponseEntity.status(400).body("修改失败");
+        }
+    }
+
+    @GetMapping(value = "/get/random/name")
+    public ResponseEntity<?> getRandomName(@RequestParam("Name") String name) {
+        try {
+            String randomName = randomGenerateUtils.generateRandomUserName(name, 4);
+            return ResponseEntity.ok(randomName);
+        } catch (BadHanyuPinyinOutputFormatCombination e) {
+            return ResponseEntity.status(400).body("请确保传入中文名");
         }
     }
 
