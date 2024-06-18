@@ -18,9 +18,9 @@ public class FruitService {
      */
     @Transactional
     public void addKudos(Kudos kudos) {
-        Kudos flag = fruitMapper.getKudos(kudos);
+        boolean flag = fruitMapper.getKudos(kudos);
         try {
-            if(flag == null){
+            if(!flag){
                 fruitMapper.insertKudos(kudos);
                 fruitMapper.addFruitKudosCount(kudos.getFruit_id());
             }
@@ -32,9 +32,9 @@ public class FruitService {
 
     @Transactional
     public void deleteKudos(Kudos kudos) {
-        Kudos flag = fruitMapper.getKudos(kudos);
+        boolean flag = fruitMapper.getKudos(kudos);
         try{
-            if(flag != null) {
+            if(flag) {
                 fruitMapper.deleteKudos(kudos);
                 fruitMapper.subFruitKudosCount(kudos.getFruit_id());
             }

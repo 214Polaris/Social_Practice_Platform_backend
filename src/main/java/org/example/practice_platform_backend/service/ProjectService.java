@@ -34,6 +34,9 @@ public class ProjectService {
     @Autowired
     private ProjectUtils  projectUtils;
 
+    @Autowired
+    private  TagsMapper tagsMapper;
+
     @Value("${uploadPath}")
     String uploadPath;
     public JSONObject getProject_info(Project project) throws IOException {
@@ -56,6 +59,10 @@ public class ProjectService {
         result.put("img_list", img_list);
         JSONArray report_list = projectUtils.getReportList(project.getProject_id());
         result.put("report_list", report_list);
+        List<String> tags = tagsMapper.searchTags(need.getNeed_id());
+        JSONArray tags_list = new JSONArray();
+        tags_list.addAll(tags_list);
+        result.put("tag_list", tags_list);
         return result;
     }
 

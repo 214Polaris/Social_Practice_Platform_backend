@@ -29,8 +29,8 @@ public interface FruitMapper {
     /**
      * 判断是否存在该条点赞信息
      */
-    @Select("select * from kudos where fruit_id=#{fruit_id} and user_id=#{user_id}")
-    Kudos getKudos(Kudos kudos);
+    @Select("SELECT EXISTS (SELECT 1 FROM kudos WHERE fruit_id = #{fruit_id} AND user_id = #{user_id})")
+    boolean getKudos(Kudos kudos);
 
     /**
      * 新增点赞信息
