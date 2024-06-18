@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Map;
 
 @Service
 public class ProjectService {
@@ -71,13 +72,15 @@ public class ProjectService {
         JSONObject result = new JSONObject();
         result.put("address",need.getAddress());
         result.put("gov", communityMapper.getCommunityName(need.getCommunity_id()));
-        result.put("gov_manager", projectMapper.getManagerByNeed(need.getNeed_id()));
-        result.put("gov_phone", userMapper.getPhoneById(need.getUser_id()));
+        Map<String, String> manager_info = projectMapper.getManagerByNeed(need.getNeed_id());
+        result.put("gov_manager", manager_info.get("name"));
+        result.put("gov_phone", manager_info.get("phone_number"));
         String community_avatar = imageUtils.getThumbnail(uploadPath + communityMapper.getCommunityAvatarPath(need.getCommunity_id()));
         result.put("gov_avatar",community_avatar);
         result.put("demand_intro", need.getIntroduction());
         JSONArray img_list = projectUtils.getImgList(need.getNeed_id());
         result.put("imgList", img_list);
+        result.put("teamed_flag", projectMapper.isTeamed(need.getNeed_id()));
         return result;
     }
 

@@ -5,6 +5,9 @@ import org.apache.ibatis.annotations.Select;
 import org.example.practice_platform_backend.entity.Fruit;
 import org.example.practice_platform_backend.entity.Project;
 import org.example.practice_platform_backend.entity.Report;
+import org.springframework.data.repository.query.Param;
+
+import java.util.Map;
 
 
 // 与需求，结对项目相关
@@ -28,6 +31,12 @@ public interface ProjectMapper {
     Project getNeedByNeedId(int need_id);
 
     /**
+     * 查询是否已经结对
+     */
+    @Select("Select Exists (select 1 from succ_project where need_id = #{need_id})")
+    boolean isTeamed(@Param("need_id") int need_id);
+
+    /**
      * 查询近期4个成果
      */
     @Select("select * from fruit_info where project_id = #{project_id} order by fruit_id desc limit 4")
@@ -48,11 +57,12 @@ public interface ProjectMapper {
     /**
      * 根据需求id 查询对应负责人
      */
-    @Select("select name from +" +
-            "(select name from user_info where user_id = " +
-            "(select user_id from community where community_id = " +
-            "(select community_id from community_need where need_id = #{need_id})))")
-    String getManagerByNeed(int need_id);
+    @Select("SELECT u.name, u.phone_number " +
+            "FROM user u " +
+            "JOIN community c ON u.user_id = c.user_id " +
+            "JOIN community_need cn ON c.community_id = cn.community_id " +
+            "WHERE cn.need_id = #{need_id}")
+    Map<String, String> getManagerByNeed(@Param("need_id")int need_id);
 
     /**
      * 根据社区id 查询对应的结对项目
