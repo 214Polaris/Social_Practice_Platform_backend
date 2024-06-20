@@ -47,12 +47,12 @@ public class CommunityService {
             FruitMedia[]  fruitMedia = fruitMapper.getFruitImg(fruit.getFruit_id());
             JSONArray fruit_img = new JSONArray();
             for (FruitMedia fruitMedia1 : fruitMedia){
-                fruit_img.add(imageUtils.getThumbnail(uploadPath + fruitMedia1.getPath()));
+                fruit_img.add(imageUtils.getFileBytes(uploadPath + fruitMedia1.getPath()));
             }
             fruitJSON.put("post_img", fruit_img);
             Team team = teamMapper.getTeamByFruitId(fruit.getFruit_id());
             fruitJSON.put("team_name",  team.getTeam_name());
-            String team_avatar = imageUtils.getThumbnail(uploadPath + team.getAvatar_path());
+            String team_avatar = imageUtils.getFileBytes(uploadPath + team.getAvatar_path());
             fruitJSON.put("team_avatar",team_avatar);
             result.add(fruitJSON);
         }

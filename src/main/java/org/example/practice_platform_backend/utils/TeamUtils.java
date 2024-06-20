@@ -62,7 +62,7 @@ public class TeamUtils {
         }
         result.put("member_cnt", String.valueOf(team.getMember_cnt()));
         result.put("team_intro", team.getIntroduction());
-        String team_avatar = imageUtils.getThumbnail(uploadPath + team.getAvatar_path());
+        String team_avatar = imageUtils.getFileBytes(uploadPath + team.getAvatar_path());
         result.put("team_avatar",team_avatar);
         result.put("team_name", team.getTeam_name());
         result.put("team_manager", userMapper.getNameById(team.getTeam_manager()));

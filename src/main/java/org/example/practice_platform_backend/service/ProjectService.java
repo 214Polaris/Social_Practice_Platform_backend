@@ -47,9 +47,9 @@ public class ProjectService {
         result.put("address",need.getAddress());
         result.put("team_cnt", String.valueOf(team.getMember_cnt()));
         result.put("gov",communityMapper.getCommunityName(need.getCommunity_id()));
-        String community_avatar = imageUtils.getThumbnail(uploadPath + communityMapper.getCommunityAvatarPath(need.getCommunity_id()));
+        String community_avatar = imageUtils.getFileBytes(uploadPath + communityMapper.getCommunityAvatarPath(need.getCommunity_id()));
         result.put("gov_head",community_avatar);
-        String team_avatar = imageUtils.getThumbnail(uploadPath + teamMapper.getTeamAvatarPathByTeamNumber(project.getTeam_number()));
+        String team_avatar = imageUtils.getFileBytes(uploadPath + teamMapper.getTeamAvatarPathByTeamNumber(project.getTeam_number()));
         result.put("team_head",team_avatar);
         result.put("team_stu", userMapper.getNameById(team.getTeam_manager()));
         result.put("team_tea", userMapper.getNameById(teamMapper.getTeacherIdByTeamNumber(team.getTeam_number())));
@@ -75,7 +75,7 @@ public class ProjectService {
         Map<String, String> manager_info = projectMapper.getManagerByNeed(need.getNeed_id());
         result.put("gov_manager", manager_info.get("name"));
         result.put("gov_phone", manager_info.get("phone_number"));
-        String community_avatar = imageUtils.getThumbnail(uploadPath + communityMapper.getCommunityAvatarPath(need.getCommunity_id()));
+        String community_avatar = imageUtils.getFileBytes(uploadPath + communityMapper.getCommunityAvatarPath(need.getCommunity_id()));
         result.put("gov_avatar",community_avatar);
         result.put("demand_intro", need.getIntroduction());
         JSONArray img_list = projectUtils.getImgList(need.getNeed_id());
@@ -95,5 +95,9 @@ public class ProjectService {
         JSONArray proj_list =  projectUtils.getProjectList(gov_id);
         result.put("proj_list", proj_list);
         return result;
+    }
+
+    public JSONObject getUnpairedNeed(){
+        return null;
     }
 }
