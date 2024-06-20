@@ -27,11 +27,6 @@ public class CommitteeController {
     @Autowired
     private JwtUtils jwtUtils;
 
-    // 解析 token 判断是否是校团委
-    private Boolean isValid(HttpServletRequest request){
-        String user_category = jwtUtils.getUserInfoFromToken(request.getHeader("token"), User.class).getUser_category();
-        return Objects.equals(user_category, "committee");
-    }
 
     // 获取所有负责人
     @GetMapping(value="/community/leaders")
@@ -49,9 +44,6 @@ public class CommitteeController {
     @PostMapping("/modify/community/leader")
     public ResponseEntity<?> deleteCommunityLeader(HttpServletRequest request, @RequestBody Map<String,String> requestBody) {
         try {
-            if(!isValid(request)){
-                return ResponseEntity.status(400).body("该用户不是校团委");
-            }
             Map<String, String> result = communityLeaderService.modifyCommunityLeader(requestBody);
             return ResponseEntity.ok().body(result);
         } catch (Exception e) {
