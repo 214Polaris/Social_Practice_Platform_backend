@@ -28,7 +28,7 @@ public class CommitteeController {
     private JwtUtils jwtUtils;
 
     // 解析 token 判断是否是校团委
-    private boolean isValid(HttpServletRequest request){
+    private Boolean isValid(HttpServletRequest request){
         String user_category = jwtUtils.getUserInfoFromToken(request.getHeader("token"), User.class).getUser_category();
         return Objects.equals(user_category, "committee");
     }
@@ -37,9 +37,6 @@ public class CommitteeController {
     @GetMapping(value="/community/leaders")
     public ResponseEntity<?> getCommunityLeaders(HttpServletRequest request) {
         try {
-            if(!isValid(request)){
-                return ResponseEntity.status(400).body("该用户不是校团委");
-            }
             List<CommunityLeader> communityLeaders = communityLeaderService.getCommunityLeaders();
             return ResponseEntity.ok(communityLeaders);
         } catch (Exception e) {
