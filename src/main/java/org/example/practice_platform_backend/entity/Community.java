@@ -2,6 +2,9 @@ package org.example.practice_platform_backend.entity;
 
 import lombok.*;
 
+import java.util.HashMap;
+import java.util.List;
+
 @Getter
 @Setter
 public class Community {
@@ -13,5 +16,6 @@ public class Community {
     private String fail_interpretation;
     //负责人的 user_id
     private int user_id;
+    private List<HashMap<String,String>> mediaList;
     public Community(){};
 }

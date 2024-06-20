@@ -23,6 +23,14 @@ public interface CommunityMapper {
     @Select("SELECT count(*) from community where community_name = #{community_name}")
     int findCommunityIdByName(String community_name);
 
+    //社区 id 获取社区基本信息
+    @Select("select community_id,community_name,introduction,address,user_id from community where community_id=#{community_id}")
+    Community getCommunityById(int community_id);
+
+    //获取社区的所有媒体列表
+    @Select("select path,type from community_media where community_id = #{community_id}")
+    List<HashMap<String,String>> getCommunityMedia(int community_id);
+
     //社区id 查社区名
     @Select("select community_name from community where community_id = #{community_id}")
     String getCommunityName(int community_id);

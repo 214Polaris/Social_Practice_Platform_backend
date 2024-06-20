@@ -3,6 +3,7 @@ package org.example.practice_platform_backend.controllers;
 import com.alibaba.fastjson2.JSON;
 import net.minidev.json.JSONArray;
 import net.minidev.json.JSONObject;
+import org.example.practice_platform_backend.entity.Community;
 import org.example.practice_platform_backend.service.CommunityService;
 import org.example.practice_platform_backend.service.ProjectService;
 import org.slf4j.Logger;
@@ -29,6 +30,16 @@ public class CommunityController {
 
     @Autowired
     private CommunityService  communityService;
+
+    //加载社区
+    @GetMapping("")
+    public ResponseEntity<?> getCommunity(@RequestParam("id") int community_id){
+        Community community = communityService.getCommunity(community_id);
+        if(community==null){
+            return ResponseEntity.status(400).body("未找到社区");
+        }
+        return ResponseEntity.ok().body(community);
+    }
 
     //需求清单get
     @GetMapping("/need_list")
