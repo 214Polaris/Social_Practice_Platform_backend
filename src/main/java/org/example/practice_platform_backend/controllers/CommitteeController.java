@@ -28,10 +28,12 @@ public class CommitteeController {
     private JwtUtils jwtUtils;
 
 
+
     // 获取所有负责人
     @GetMapping(value="/community/leaders")
     public ResponseEntity<?> getCommunityLeaders(HttpServletRequest request) {
         try {
+
             List<CommunityLeader> communityLeaders = communityLeaderService.getCommunityLeaders();
             return ResponseEntity.ok(communityLeaders);
         } catch (Exception e) {
@@ -44,6 +46,7 @@ public class CommitteeController {
     @PostMapping("/modify/community/leader")
     public ResponseEntity<?> deleteCommunityLeader(HttpServletRequest request, @RequestBody Map<String,String> requestBody) {
         try {
+
             Map<String, String> result = communityLeaderService.modifyCommunityLeader(requestBody);
             return ResponseEntity.ok().body(result);
         } catch (Exception e) {
