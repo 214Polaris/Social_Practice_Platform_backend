@@ -1,6 +1,7 @@
 package org.example.practice_platform_backend.controllers;
 
 import com.alibaba.fastjson2.JSON;
+import lombok.Getter;
 import net.minidev.json.JSONArray;
 import net.minidev.json.JSONObject;
 import org.example.practice_platform_backend.entity.Project;
@@ -42,6 +43,17 @@ public class ProjectController {
     public ResponseEntity<?>  getNeedDetail(@Param("need_id") String need_id) throws IOException {
         try{
             JSONObject result = projectService.getNeed_info(Integer.parseInt(need_id));
+            return ResponseEntity.status(200).body(JSON.toJSONString(result));
+        }catch (Exception e){
+            e.printStackTrace();
+            return ResponseEntity.status(400).body("查询失败");
+        }
+    }
+
+    @GetMapping("/need/unpaired")
+    public ResponseEntity<?>  getUnpairedNeed() throws IOException {
+        try{
+            JSONObject result = projectService.getUnpairedNeed();
             return ResponseEntity.status(200).body(JSON.toJSONString(result));
         }catch (Exception e){
             e.printStackTrace();

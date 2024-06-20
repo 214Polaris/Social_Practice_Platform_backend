@@ -67,7 +67,7 @@ public interface ProjectMapper {
     /**
      * 根据社区id 查询对应的结对项目
      */
-    @Select("select * from succ_project where need_id = " +
+    @Select("select * from succ_project where need_id in " +
             "(select need_id from  community_need where community_id = #{community_id})")
     Project[] getProjectListByCommunityId(int community_id);
 

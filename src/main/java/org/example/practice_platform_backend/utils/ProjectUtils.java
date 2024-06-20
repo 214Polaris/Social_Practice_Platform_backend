@@ -108,7 +108,11 @@ public class ProjectUtils {
             JSONArray tag_array = new JSONArray();
             tag_array.addAll(tag_list);
             needJSON.put("tags", tag_array);
-            String coverPath = uploadPath + mediaMapper.getCoverPath(need.getNeed_id());
+            String cover = mediaMapper.getCoverPath(need.getNeed_id());
+            if(cover == null){ //判断这个需求有无封面，没有则不会返回
+                continue;
+            }
+            String coverPath = uploadPath + cover;
             needJSON.put("demand_img", imageUtils.getThumbnail(coverPath));
             need_list.add(needJSON);
         }
