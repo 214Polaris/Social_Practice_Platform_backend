@@ -56,7 +56,7 @@ public class FruitUtils {
             JSONObject media = new JSONObject();
             if(fruitMedia.getType().equals("img") ||  fruitMedia.getType().equals("cover")){
                 media.put("img_flag", 0);
-                media.put("src", imageUtils.getThumbnail(uploadPath + "/" + fruitMedia.getPath()));
+                media.put("src", imageUtils.getFileBytes(uploadPath + "/" + fruitMedia.getPath()));
             }
             else{
                 media.put("img_flag", 1);
@@ -68,7 +68,7 @@ public class FruitUtils {
         for(int i=0;i<2;i++){
             JSONObject comment = new JSONObject();
             Map<String, String> user_info = commentMapper.getAvatarPathByUserId(Comments[i].getUser_id());
-            comment.put("avatar", imageUtils.getThumbnail(uploadPath + "/" + user_info.get("avatar_path")));
+            comment.put("avatar", imageUtils.getFileBytes(uploadPath + "/" + user_info.get("avatar_path")));
             comment.put("date", Comments[i].getComment_time());
             comment.put("user_name", user_info.get("username"));
             comment.put("content", Comments[i].getContent());

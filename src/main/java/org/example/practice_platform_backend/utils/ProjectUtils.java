@@ -45,7 +45,7 @@ public class ProjectUtils {
             JSONObject mediaJson = new JSONObject();
             if(media.getType().equals("image") || media.getType().equals("cover")){
                 String path =  uploadPath + media.getPath();
-                mediaJson.put("src",imageUtils.getThumbnail(path));
+                mediaJson.put("src",imageUtils.getFileBytes(path));
                 mediaJson.put("img_flag",0);
                 mediaList.add(mediaJson);
             }
