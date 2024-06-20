@@ -64,15 +64,11 @@ public class UserController {
             String category = user.getUser_category();
             // 处理社区负责人的注册情况
             if(Objects.equals(category, "community")){
-                if(request.getHeader("token")==null||request.getHeader("token").isEmpty()){
-                    return ResponseEntity.status(HttpStatus.FORBIDDEN).body("该用户不是校团委");
-                }
-                int committeeId = jwtUtils.getUserInfoFromToken(request.getHeader("token"),User.class).getUser_id();
-                if(!communityLeaderService.checkIdentity(committeeId)){
+                if(!communityLeaderService.checkIdentity(request)){
                     return ResponseEntity.status(HttpStatus.FORBIDDEN).body("该用户不是校团委");
                 }
             }
-            if(!Objects.equals(category, "student")&&!Objects.equals(category, "teacher")){
+            if(!Objects.equals(category, "student")&&!Objects.equals(category, "teacher")&&!Objects.equals(category,"community")){
                 return ResponseEntity.status(400).body("无效的注册类别");
             }
             if(userMapper.existUsername(user.getUser_name())>0){
@@ -100,12 +96,11 @@ public class UserController {
         String token = request.getHeader("token");
         int user_id = jwtUtils.getUserInfoFromToken(token,User.class).getUser_id();
         try{
-
             HashMap<String,String> user = userMapper.getUserById(user_id);
             String trueName = ImageUtils.getTrueName(user.get("image"));
             String suffix = ImageUtils.getSuffix(user.get("image"));
             String path = uploadPath + trueName + "_origin" + suffix;
-            user.put("image",imageUtils.getThumbnail(path));
+            user.put("image",imageUtils.getFileBytes(path));
             return ResponseEntity.ok(user);
         } catch (Exception e){
             e.printStackTrace();
@@ -131,8 +126,8 @@ public class UserController {
         }
     }
 
-    @GetMapping(value = "/get/random/name")
-    public ResponseEntity<?> getRandomName(@RequestParam("Name") String name) {
+    @PostMapping(value = "/get/random/name")
+    public ResponseEntity<?> getRandomName(@RequestParam("name") String name) {
         try {
             String randomName = randomGenerateUtils.generateRandomUserName(name, 4);
             return ResponseEntity.ok(randomName);

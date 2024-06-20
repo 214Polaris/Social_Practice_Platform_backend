@@ -11,7 +11,7 @@ import java.util.Map;
 public interface UserMapper {
     //登录
     @Select("""
-            select username as user_name, phone_number, name, user_category, avatar_path ,gender
+            select user_id, username as user_name, phone_number, name, user_category, avatar_path ,gender
             from user where username=#{user_name} and passwd=#{passwd}
             """)
     User login(@Param("user_name")String user_name,@Param("passwd") String passwd);
@@ -68,6 +68,6 @@ public interface UserMapper {
     /**
      * 查询是否已存在姓名
      */
-    @Select("select COUNT(*) from user where user_name = #{user_name}")
+    @Select("select COUNT(*) from user where username = #{user_name}")
     int existUsername(@Param("user_name")String user_name);
 }

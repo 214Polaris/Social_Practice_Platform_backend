@@ -245,7 +245,7 @@ public class SaveFileService {
         if(!isConvert){
             return null;
         }
-        return relatedPath + "m3u8/" + m3u8Name;
+        return m3u8Name;
     }
 
     /**

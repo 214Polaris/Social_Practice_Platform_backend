@@ -1,9 +1,27 @@
 package org.example.practice_platform_backend.mapper;
 
 import org.apache.ibatis.annotations.*;
+import org.example.practice_platform_backend.entity.CommunityNeed;
+
+import java.util.HashMap;
+import java.util.List;
 
 @Mapper
 public interface NeedMapper {
+
+    // 根据需求 id 获取详细需求
+    @Select("select title, post_time, introduction, resource from community_need " +
+            "where is_pass = 1 and need_id = #{need_id}")
+    CommunityNeed getNeedByNeedId(@Param("need_id") int need_id);
+
+    // 根据需求 id 获取图片和视频的 list
+    @Select("select path,type from need_media where need_id = #{need_id}")
+    List<HashMap<String,String>> getMediaByNeedId(@Param("need_id") int need_id);
+
+    //注册新的需求
+    @Insert("INSERT into community_need(title, post_time, introduction, resource, is_pass, is_pair, address, community_id)\n" +
+            "value(#{title},#{post_time},#{introduction},#{resource},#{is_pass},#{is_pair},#{address},#{community_id})")
+    Boolean registerNeed(CommunityNeed communityNeed);
 
     //返回封面 id
     @Select("SELECT media_id FROM need_media WHERE need_id = #{needId} AND type = 'cover'")

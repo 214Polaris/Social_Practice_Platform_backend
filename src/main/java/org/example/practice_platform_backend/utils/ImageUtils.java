@@ -4,6 +4,9 @@ import lombok.Setter;
 import org.springframework.stereotype.Component;
 import org.apache.tomcat.util.codec.binary.Base64;
 import net.coobird.thumbnailator.Thumbnails;
+
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
 import java.io.*;
 import java.util.Objects;
 import java.util.Random;
@@ -23,7 +26,7 @@ public class ImageUtils {
      */
     public static String getRealName(String name) {
         //获取最后一个"/"
-        int index = name.lastIndexOf("\\");
+        int index = name.lastIndexOf("/");
         return name.substring(index + 1);
     }
 
@@ -96,16 +99,18 @@ public class ImageUtils {
      * @return base64加密后的字节类型缩略图
      */
     public String getThumbnail(String filePath) throws IOException {
-
-        try (FileInputStream fileInputStream = new FileInputStream(filePath);) {
-            ByteArrayOutputStream bos = new ByteArrayOutputStream();
-            Thumbnails.of(filePath)
-                    .size(400, 400)
-                    .outputQuality(0.5)
-                    .toOutputStream(bos);
-            byte[] data = bos.toByteArray();
-            return new String(Objects.requireNonNull(Base64.encodeBase64(data,true)));
-        }
+        ByteArrayOutputStream bos = new ByteArrayOutputStream();
+        File file = new File(filePath);
+        // 读取图片文件
+        BufferedImage originalImage = ImageIO.read(file);
+        int width = originalImage.getWidth();
+        int height = originalImage.getHeight();
+        Thumbnails.of(file)
+                .size(width,height)
+                .outputQuality(0.7)
+                .toOutputStream(bos);
+        byte[] data = bos.toByteArray();
+        return new String(Objects.requireNonNull(Base64.encodeBase64(data,true)));
     }
 
     /**

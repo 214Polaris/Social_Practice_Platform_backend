@@ -37,7 +37,7 @@ public class CommitteeController {
     @GetMapping(value="/community/leaders")
     public ResponseEntity<?> getCommunityLeaders(HttpServletRequest request) {
         try {
-            if(isValid(request)){
+            if(!isValid(request)){
                 return ResponseEntity.status(400).body("该用户不是校团委");
             }
             List<CommunityLeader> communityLeaders = communityLeaderService.getCommunityLeaders();
@@ -52,7 +52,7 @@ public class CommitteeController {
     @PostMapping("/modify/community/leader")
     public ResponseEntity<?> deleteCommunityLeader(HttpServletRequest request, @RequestBody Map<String,String> requestBody) {
         try {
-            if(isValid(request)){
+            if(!isValid(request)){
                 return ResponseEntity.status(400).body("该用户不是校团委");
             }
             Map<String, String> result = communityLeaderService.modifyCommunityLeader(requestBody);

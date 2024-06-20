@@ -1,5 +1,6 @@
 package org.example.practice_platform_backend.service;
 
+import jakarta.servlet.http.HttpServletRequest;
 import net.sourceforge.pinyin4j.format.exception.BadHanyuPinyinOutputFormatCombination;
 import org.example.practice_platform_backend.entity.CommunityLeader;
 import org.example.practice_platform_backend.entity.User;
@@ -8,6 +9,7 @@ import org.example.practice_platform_backend.mapper.CommitteeMapper;
 import org.example.practice_platform_backend.mapper.KudosMapper;
 import org.example.practice_platform_backend.mapper.UserMapper;
 import org.example.practice_platform_backend.utils.ImageUtils;
+import org.example.practice_platform_backend.utils.JwtUtils;
 import org.example.practice_platform_backend.utils.RandomGenerateUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -40,6 +42,9 @@ public class CommunityLeaderService {
     private ImageUtils imageUtils;
 
     @Autowired
+    private JwtUtils jwtUtils;
+
+    @Autowired
     private RandomGenerateUtils randomGenerateUtils;
 
     @Value("${uploadPath}")
@@ -49,12 +54,20 @@ public class CommunityLeaderService {
     @Autowired
     private KudosMapper kudosMapper;
 
-    public boolean checkIdentity(int userId) {
-        return Objects.equals(committeeMapper.getUserCategory(userId), "committee");
+    public boolean checkIdentity(HttpServletRequest request) {
+        String user_category = jwtUtils.getUserInfoFromToken(request.getHeader("token"),User.class).getUser_category();
+        if(user_category==null||user_category.isEmpty()){
+            return false;
+        }
+        return Objects.equals(user_category, "committee");
     }
 
-    public boolean checkLeader(int userId) {
-        return Objects.equals(committeeMapper.getUserCategory(userId), "community");
+    public boolean checkLeader(HttpServletRequest request) {
+        String user_category = jwtUtils.getUserInfoFromToken(request.getHeader("token"),User.class).getUser_category();
+        if(user_category==null||user_category.isEmpty()){
+            return false;
+        }
+        return Objects.equals(user_category, "community");
     }
 
     // 获取所有社区负责人

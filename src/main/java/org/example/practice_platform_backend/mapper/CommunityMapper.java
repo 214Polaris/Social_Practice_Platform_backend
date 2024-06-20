@@ -40,7 +40,7 @@ public interface CommunityMapper {
 
     //负责人 id 查找社区
     @Select("select community_id from community where user_id = #{user_id}")
-    int findCommunityIdByUserId(@Param("user_id") int user_id);
+    Integer findCommunityIdByUserId(@Param("user_id") int user_id);
 
     // 获取封面 id
     @Select("SELECT media_id FROM community_media WHERE community_id = #{communityId} AND type = 'cover'")

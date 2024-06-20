@@ -29,6 +29,7 @@ public class CommunityController {
 
     @Autowired
     private CommunityService  communityService;
+
     //需求清单get
     @GetMapping("/need_list")
     public ResponseEntity<?> getNeedList(@Param("gov_id") String gov_id) throws IOException {

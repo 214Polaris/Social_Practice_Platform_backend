@@ -1,38 +1,51 @@
 package org.example.practice_platform_backend.controllers;
 
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
 import jakarta.servlet.http.HttpServletRequest;
-import org.example.practice_platform_backend.mapper.CommunityMapper;
-import org.example.practice_platform_backend.mapper.FruitMapper;
 import org.example.practice_platform_backend.service.SaveFileService;
-import org.example.practice_platform_backend.utils.JwtUtils;
+import org.example.practice_platform_backend.service.SendFileService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.HttpStatusCode;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-import org.example.practice_platform_backend.entity.User;
 
-import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
-import java.nio.file.Path;
-import java.nio.file.Paths;
+import java.lang.reflect.Array;
+import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 
 @RestController
 @EnableAsync
-@RequestMapping("/api/video")
-public class VideoStreamController {
-
-    @Value("${uploadPath}")
-    private String uploadPath;
+@RequestMapping("/api/media")
+public class MediaController {
 
     @Autowired
     private SaveFileService saveFileService;
+
+    @Autowired
+    private SendFileService sendFileService;
+
+
+    // 获取缩略图的 list（70%）
+    @GetMapping(value="/get/image/thumbnail")
+    public ResponseEntity<?> getImageThumbnail(@RequestParam("images") List<String> images,
+                                               @RequestParam("id") int id,
+                                               @RequestParam("type") int type){
+        List<String> result = new java.util.ArrayList<>();
+        images.forEach(image->{
+            try {
+                result.add(sendFileService.sendImage(image,type,id));
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        });
+        return ResponseEntity.status(200).body(result);
+    }
 
     /**
      * 处理视频上传
@@ -41,7 +54,7 @@ public class VideoStreamController {
      * @param id 对应的 id
      * @param isModify 是否为修改原有视频
      */
-    @PostMapping("/upload")
+    @PostMapping("/video/upload")
     public ResponseEntity<String> uploadVideo(@RequestParam("video") MultipartFile file,
                                               @RequestParam("type") Integer type,
                                               @RequestParam("id") Integer id,
@@ -73,21 +86,15 @@ public class VideoStreamController {
 
     /**
      * 获取 m3u8 播放目录
-     * @param filepath m3u8的文件位置
+     * @param fileName m3u8文件名
      */
-    @GetMapping("/m3u8")
-    public ResponseEntity<byte[]> getM3U8Content(@RequestParam String filepath) {
+    @GetMapping("/video/m3u8")
+    public ResponseEntity<byte[]> getM3U8Content(@RequestParam String fileName,@RequestParam int type,@RequestParam int id) {
         try {
-            File file = new File(uploadPath+filepath);
-            if (!file.exists()) {
+            byte[] data = sendFileService.sendM3u8File(fileName,type,id);
+            if(data==null){
                 return ResponseEntity.notFound().build();
             }
-            // 读取M3U8文件内容
-            FileInputStream fileInputStream = new FileInputStream(file);
-            byte[] data = new byte[(int) file.length()];
-            fileInputStream.read(data);
-            fileInputStream.close();
-
             // 设置响应头为M3U8类型
             return ResponseEntity.ok()
                     .contentType(MediaType.valueOf("application/vnd.apple.mpegurl"))
@@ -101,33 +108,22 @@ public class VideoStreamController {
     /**
      * 获取 ts 视频文件
      * @param filename ts 文件名
-     * @param filepath m3u8文件的路径
      */
-    @GetMapping("/{filename}")
-    public ResponseEntity<byte[]> getTSContent(@PathVariable String filename,@RequestParam String filepath) {
+    @GetMapping("/video/{filename}")
+    public ResponseEntity<byte[]> getTSContent(@PathVariable String filename,@RequestParam int type,@RequestParam int id) {
         try {
-
-            Path path = Paths.get(uploadPath+filepath).getParent();
-
-            File file = new File(String.valueOf(path), filename);
-
-            if (file.exists()) {
-                // 读取TS文件内容
-                FileInputStream fileInputStream = new FileInputStream(file);
-                byte[] data = new byte[(int) file.length()];
-                fileInputStream.read(data);
-                fileInputStream.close();
-
-                // 设置响应头为TS文件类型
-                return ResponseEntity.ok()
-                        .contentType(MediaType.valueOf("video/mp2t"))
-                        .body(data);
-            } else {
+            byte[] data = sendFileService.sendM3u8File(filename,type,id);
+            if(data==null){
                 return ResponseEntity.notFound().build();
             }
+            // 设置响应头为TS文件类型
+            return ResponseEntity.ok()
+                    .contentType(MediaType.valueOf("video/mp2t"))
+                    .body(data);
+
         } catch (IOException e) {
             e.fillInStackTrace();
-            return null;
+            return ResponseEntity.notFound().build();
         }
     }
 
