@@ -6,6 +6,9 @@ import org.example.practice_platform_backend.entity.Fruit;
 import org.example.practice_platform_backend.entity.FruitMedia;
 import org.example.practice_platform_backend.entity.Kudos;
 import org.springframework.data.repository.query.Param;
+import org.springframework.security.core.parameters.P;
+
+import java.util.List;
 
 @Mapper
 public interface FruitMapper {
@@ -83,11 +86,11 @@ public interface FruitMapper {
     /**
      * 查询学生发布的成果，返回 id
      */
-    @Select("SELECT f.fruit_id from fruit_info as f" +
+    @Select("SELECT f.fruit_id from fruit_info as f " +
             "join succ_project as s on f.project_id=s.project_id " +
             "join student as stu on stu.team_number=s.team_number " +
             "where stu.user_id=#{user_id}")
-    int getFruitIdByUserId(@Param("user_id") int user_id);
+    List<Integer> getFruitIdByUserId(@Param("user_id") int user_id);
 
     //获取封面 id
     @Select("SELECT media_id FROM fruit_media WHERE fruit_id = #{fruitId} AND type = 'cover'")

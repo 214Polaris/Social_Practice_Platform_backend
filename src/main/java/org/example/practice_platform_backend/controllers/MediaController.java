@@ -1,7 +1,5 @@
 package org.example.practice_platform_backend.controllers;
 
-import com.alibaba.fastjson.JSONArray;
-import com.alibaba.fastjson.JSONObject;
 import jakarta.servlet.http.HttpServletRequest;
 import org.example.practice_platform_backend.service.SaveFileService;
 import org.example.practice_platform_backend.service.SendFileService;
@@ -14,10 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
-import java.lang.reflect.Array;
 import java.util.List;
-import java.util.Map;
-import java.util.Objects;
 
 @RestController
 @EnableAsync

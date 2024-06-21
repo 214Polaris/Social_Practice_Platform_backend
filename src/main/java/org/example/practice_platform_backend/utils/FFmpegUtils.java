@@ -6,6 +6,10 @@ import org.springframework.stereotype.Component;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Component
 public class FFmpegUtils {
@@ -19,7 +23,7 @@ public class FFmpegUtils {
      * @return boolean 判断是否转换成功
      */
 
-    public static boolean convert(String srcPathname, String destPathname) {
+    public static boolean convert(String srcPathname, String destPathname,int type,int id) {
         try {
             ProcessBuilder processBuilder = new ProcessBuilder("ffmpeg", "-i", srcPathname, "-c:v", "libx264", "-hls_time", "30",
                     "-hls_list_size", "0", "-c:a", "aac", "-strict", "-2", "-f", "hls", destPathname);
@@ -34,6 +38,12 @@ public class FFmpegUtils {
 
             int exitCode = process.waitFor();
             System.out.println("FFmpeg process exited with code: " + exitCode);
+            // Modify the .m3u8 file to add query parameters to .ts files
+            List<String> lines = Files.readAllLines(Paths.get(destPathname));
+            lines = lines.stream()
+                    .map(l -> l.endsWith(".ts") ? l + "?id=" + id + "&type=" + type : l)
+                    .collect(Collectors.toList());
+            Files.write(Paths.get(destPathname), lines);
             return true;
         } catch (IOException | InterruptedException e) {
             LOGGER.error(e.getMessage());

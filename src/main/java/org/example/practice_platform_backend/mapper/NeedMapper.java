@@ -58,5 +58,5 @@ public interface NeedMapper {
     @Select("select n.need_id from community_need as n " +
             "join community as c on n.community_id = c.community_id " +
             "where c.user_id = #{user_id}")
-    int selectNeedByUserId(@Param("user_id") int user_id);
+    List<Integer> selectNeedByUserId(@Param("user_id") int user_id);
 }

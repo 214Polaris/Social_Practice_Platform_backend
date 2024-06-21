@@ -77,9 +77,9 @@ public class SaveFileService {
                 "fruit", fruitMapper::addFruitVideo
         );
         ModifyVideoMap = Map.of(
-                "community", (m3u8Path, id) -> communityMapper.addCommunityVideo(m3u8Path, id) && communityMapper.deleteCommunityVideo(id),
-                "need", (m3u8Path, id) -> needMapper.addNeedVideo(m3u8Path, id) && needMapper.deleteNeedVideo(id),
-                "fruit", (m3u8Path, id) -> fruitMapper.addFruitVideo(m3u8Path, id) && fruitMapper.deleteFruitVideo(id)
+                "community", (m3u8Path, id) -> communityMapper.deleteCommunityVideo(id) && communityMapper.addCommunityVideo(m3u8Path, id),
+                "need", (m3u8Path, id) -> needMapper.deleteNeedVideo(id) && needMapper.addNeedVideo(m3u8Path, id),
+                "fruit", (m3u8Path, id) -> fruitMapper.deleteFruitVideo(id) && fruitMapper.addFruitVideo(m3u8Path, id)
         );
         existsImageMap = Map.of(
                 "community", communityMapper::existsCommunityImage,
@@ -210,7 +210,7 @@ public class SaveFileService {
     /**
      * 保存m3u8视频的完整操作
      */
-    public String handleVideo(InputStream inputStream, String filename, int id, String type) throws IOException {
+    public String handleVideo(InputStream inputStream, String filename, int id, String type,int typeIndex) throws IOException {
         // 相对路径（需要返回这个，避免暴露服务器的文件结构）
         String relatedPath = type + "_video/" + type + "_" + id + "/";
         // 视频文件保存的绝对路径
@@ -241,7 +241,7 @@ public class SaveFileService {
             return null;
         }
         // 转换成m3u8
-        boolean isConvert = FFmpegUtils.convert(videoPath+videoName,m3u8Path);
+        boolean isConvert = FFmpegUtils.convert(videoPath+videoName,m3u8Path,id,typeIndex);
         if(!isConvert){
             return null;
         }
@@ -266,7 +266,7 @@ public class SaveFileService {
             return ResponseEntity.status(400).body("已存在视频");
         }
         // Handle video processing
-        String m3u8Path = handleVideo(inputStream, filename, id, type);
+        String m3u8Path = handleVideo(inputStream, filename, id, type,index);
         if (m3u8Path == null || m3u8Path.isEmpty()) {
             return ResponseEntity.status(400).body("已存在m3u8");
         }
@@ -275,6 +275,12 @@ public class SaveFileService {
             return ResponseEntity.status(400).body("添加视频失败");
         }
         return ResponseEntity.status(200).body("视频上传成功");
+    }
+
+    public void deleteVideo(String path) throws IOException {
+        Path fullPath = Paths.get(path);
+        Path directoryPath = fullPath.getParent(); // 获取文件所在目录
+        cleanDirectoryContents(directoryPath);
     }
 
     /**
@@ -293,15 +299,10 @@ public class SaveFileService {
         if(absolutePath==null){
             return ResponseEntity.status(400).body("不存在m3u8目录");
         }
-        String origin_path = uploadPath + absolutePath;
-        Path fullPath = Paths.get(origin_path);
-        Path directoryPath = fullPath.getParent(); // 获取文件所在目录
-        String parentDirectory = directoryPath.getParent().toString(); // 获取上级目录
-        Path siblingDirectory = Paths.get(parentDirectory, "video"); // 假设另一个目录是
-        cleanDirectoryContents(directoryPath);
-        cleanDirectoryContents(siblingDirectory);
+        String origin_path = uploadPath + type + "_video/" + type + "_" + id + "/" + absolutePath;
+        deleteVideo(origin_path);
         // 处理视频并获取新的m3u8路径
-        String m3u8Path = handleVideo(inputStream, filename, id, type);
+        String m3u8Path = handleVideo(inputStream, filename, id, type,index);
         if (m3u8Path == null || m3u8Path.isEmpty()) {
             return ResponseEntity.status(400).body("更新m3u8目录失败");
         }
@@ -344,7 +345,8 @@ public class SaveFileService {
             if(!isModify && type!=2){
                 return ResponseEntity.status(HttpStatus.FORBIDDEN).body("该身份只允许发布和修改成果");
             }
-            if(isModify && id != fruitMapper.getFruitIdByUserId(user_id)){
+
+            if(isModify && !fruitMapper.getFruitIdByUserId(user_id).contains(id)){
                 return ResponseEntity.status(HttpStatus.FORBIDDEN).body("不是该用户发表的成果");
             }
         }
@@ -354,11 +356,11 @@ public class SaveFileService {
             if(!isModify && type == 2){
                 return ResponseEntity.status(HttpStatus.FORBIDDEN).body("该身份不允许发布成果");
             }
-            if(isModify && type == 0 && id != communityMapper.findCommunityIdByUserId(user_id)){
+            if(isModify && type == 0 && !Objects.equals(id, communityMapper.findCommunityIdByUserId(user_id))){
                 return ResponseEntity.status(HttpStatus.FORBIDDEN).body("不是该用户所属的社区");
             }
-            if(isModify && type==1&& id!= needMapper.selectNeedByUserId(user_id)){
-                return ResponseEntity.status(HttpStatus.FORBIDDEN).body("不是该用户发布的成果");
+            if(isModify && type==1&&!needMapper.selectNeedByUserId(user_id).contains(id)){
+                return ResponseEntity.status(HttpStatus.FORBIDDEN).body("不是该用户发布的需求");
             }
         }
         return ResponseEntity.status(200).build();
