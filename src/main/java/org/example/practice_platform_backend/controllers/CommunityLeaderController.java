@@ -7,6 +7,7 @@ import org.example.practice_platform_backend.entity.User;
 import org.example.practice_platform_backend.mapper.CommunityMapper;
 import org.example.practice_platform_backend.mapper.NeedMapper;
 import org.example.practice_platform_backend.service.CommunityLeaderService;
+import org.example.practice_platform_backend.service.MapService;
 import org.example.practice_platform_backend.utils.JwtUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -42,9 +43,12 @@ public class CommunityLeaderController {
         if(communityMapper.existsCommunityUser(user_id)>0){
             return ResponseEntity.status(400).body("该社区负责人已有社区");
         }
+        if(!MapService.checkValidAddress(requestBody.getAddress())){
+            return ResponseEntity.status(400).body("地址格式不合法");
+        }
         requestBody.setUser_id(user_id);
         communityMapper.registerCommunity(requestBody);
-        return ResponseEntity.status(200).header("id",requestBody.getCommunity_id()).body("注册成功");
+        return ResponseEntity.status(200).header("id", String.valueOf(requestBody.getCommunity_id())).body("注册成功");
     }
 
     // 注册社区需求

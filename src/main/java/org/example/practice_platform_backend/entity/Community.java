@@ -8,7 +8,7 @@ import java.util.List;
 @Getter
 @Setter
 public class Community {
-    private String community_id;
+    private int community_id;
     private String community_name;
     private String address;
     private String introduction;

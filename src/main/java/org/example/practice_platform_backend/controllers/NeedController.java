@@ -1,15 +1,16 @@
 package org.example.practice_platform_backend.controllers;
 
+import jakarta.servlet.http.HttpServletRequest;
 import org.apache.ibatis.annotations.Param;
 import org.example.practice_platform_backend.entity.CommunityNeed;
+import org.example.practice_platform_backend.entity.User;
 import org.example.practice_platform_backend.mapper.NeedMapper;
 import org.example.practice_platform_backend.utils.ImageUtils;
+import org.example.practice_platform_backend.utils.JwtUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
 import java.util.List;
@@ -21,6 +22,8 @@ public class NeedController {
 
     @Autowired
     private NeedMapper needMapper;
+    @Autowired
+    private JwtUtils jwtUtils;
 
     // 获取单个需求
     @GetMapping("/get/need")
@@ -43,6 +46,21 @@ public class NeedController {
         });
         communityNeed.setMediaList(mediaList);
         return ResponseEntity.status(200).body(communityNeed);
+    }
+
+    // 修改需求
+    @PostMapping("/modify/need")
+    public ResponseEntity<?> modifyNeed(HttpServletRequest request, @RequestBody CommunityNeed communityNeed){
+        //鉴权，确定是当前用户发布的需求
+        User user = jwtUtils.getUserInfoFromToken(request.getHeader("token"), User.class);
+        if(!Objects.equals(user.getUser_category(), "community")){
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("当前用户不是社区负责人");
+        }
+        if(!needMapper.selectNeedByUserId(user.getUser_id()).contains(communityNeed.getNeed_id())){
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("当前用户并未发布过该需求");
+        }
+        needMapper.modifyNeed(communityNeed);
+        return ResponseEntity.ok().body("修改成功");
     }
 
 }

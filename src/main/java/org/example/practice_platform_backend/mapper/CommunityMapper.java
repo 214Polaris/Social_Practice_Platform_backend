@@ -2,8 +2,10 @@ package org.example.practice_platform_backend.mapper;
 
 import org.apache.ibatis.annotations.*;
 import org.example.practice_platform_backend.entity.Community;
+import org.example.practice_platform_backend.entity.CommunityNeed;
 import org.example.practice_platform_backend.entity.Fruit;
 import org.example.practice_platform_backend.entity.Project;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.HashMap;
@@ -18,6 +20,20 @@ public interface CommunityMapper {
     @Options(useGeneratedKeys = true, keyProperty = "community_id")
     @Transactional
     void registerCommunity(Community community);
+
+    //修改社区基本信息（mybatis动态修改）
+    @Async
+    @Update("<script>" +
+            "UPDATE community" +
+            "<set>" +
+            "<if test='community_name != null'>community_name = #{community_name},</if>" +
+            "<if test='introduction != null'>introduction = #{introduction},</if>" +
+            "<if test='address != null'>address = #{address},</if>" +
+            "</set>" +
+            "WHERE community_id = #{community_id}" +
+            "</script>")
+    @Transactional
+    void modifyCommunity(Community community);
 
     //判断社区是否已经存在，不能重名
     @Select("SELECT count(*) from community where community_name = #{community_name}")

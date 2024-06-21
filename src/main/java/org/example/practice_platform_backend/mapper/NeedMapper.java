@@ -2,6 +2,9 @@ package org.example.practice_platform_backend.mapper;
 
 import org.apache.ibatis.annotations.*;
 import org.example.practice_platform_backend.entity.CommunityNeed;
+import org.example.practice_platform_backend.entity.User;
+import org.springframework.scheduling.annotation.Async;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.HashMap;
 import java.util.List;
@@ -59,4 +62,18 @@ public interface NeedMapper {
             "join community as c on n.community_id = c.community_id " +
             "where c.user_id = #{user_id}")
     List<Integer> selectNeedByUserId(@Param("user_id") int user_id);
+
+    //修改社区需求基本信息（mybatis动态修改）
+    @Async
+    @Update("<script>" +
+            "UPDATE community_need" +
+            "<set>" +
+            "<if test='title != null'>title = #{title},</if>" +
+            "<if test='introduction != null'>introduction = #{introduction},</if>" +
+            "<if test='resource != null'>resource = #{resource},</if>" +
+            "</set>" +
+            "WHERE need_id = #{need_id}" +
+            "</script>")
+    @Transactional
+    void modifyNeed(CommunityNeed communityNeed);
 }
