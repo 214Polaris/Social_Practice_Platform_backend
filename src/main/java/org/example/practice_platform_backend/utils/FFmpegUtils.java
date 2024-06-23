@@ -41,7 +41,7 @@ public class FFmpegUtils {
             // Modify the .m3u8 file to add query parameters to .ts files
             List<String> lines = Files.readAllLines(Paths.get(destPathname));
             lines = lines.stream()
-                    .map(l -> l.endsWith(".ts") ? l + "?id=" + id + "&type=" + type : l)
+                    .map(l -> l.endsWith(".ts") ? "ts/"+ l + "?id=" + id + "&type=" + type : l)
                     .collect(Collectors.toList());
             Files.write(Paths.get(destPathname), lines);
             return true;

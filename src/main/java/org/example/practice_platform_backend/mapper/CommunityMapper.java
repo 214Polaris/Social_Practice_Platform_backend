@@ -44,7 +44,7 @@ public interface CommunityMapper {
     Community getCommunityById(int community_id);
 
     //获取社区的所有媒体列表
-    @Select("select path,type from community_media where community_id = #{community_id}")
+    @Select("select media_id, path,type from community_media where community_id = #{community_id}")
     List<HashMap<String,String>> getCommunityMedia(int community_id);
 
     //社区id 查社区名
@@ -67,7 +67,7 @@ public interface CommunityMapper {
     Integer findCommunityIdByUserId(@Param("user_id") int user_id);
 
     // 获取封面 id
-    @Select("SELECT media_id FROM community_media WHERE community_id = #{communityId} AND type = 'cover'")
+    @Select("SELECT COUNT(*) FROM community_media WHERE community_id = #{communityId} AND type = 'cover'")
     int existsCommunityCover(@Param("communityId") int communityId);
 
     // 检查社区图片是否超过限制
@@ -115,5 +115,13 @@ public interface CommunityMapper {
                 SUBSTRING_INDEX(address, '市', 1);
             """)
     List<HashMap<String,Integer>> getCommunityCountsByAddress();
+
+    //媒体 id 查媒体名字
+    @Select("SELECT path from community_media where media_id = #{media_id}")
+    String getCommunityMediaPathByMediaId(int media_id);
+
+    //删除图片
+    @Delete("DELETE from community_media where media_id = #{media_id}")
+    boolean deleteCommunityImage(@Param("media_id") int media_id);
 
 }

@@ -62,6 +62,8 @@ public class SaveFileService {
     private final Map<String, Function<Integer, Integer>> existsCoverMap;
     private final Map<String, BiFunction<String, Integer, Boolean>> addImageMap;
     private final Map<String, BiFunction<String, Integer, Boolean>> addCoverMap;
+    private final Map<String, Function<Integer, Boolean>> deleteImageMap;
+    private final Map<String, Function<Integer, String>> searchImageMap;
 
 
     public SaveFileService(CommunityMapper communityMapper,NeedMapper needMapper, FruitMapper fruitMapper) {
@@ -100,6 +102,16 @@ public class SaveFileService {
                 "community", communityMapper::addCommunityCover,
                 "need", needMapper::addNeedCover,
                 "fruit", fruitMapper::addFruitCover
+        );
+        deleteImageMap = Map.of(
+                "community", communityMapper::deleteCommunityImage,
+                "need", needMapper::deleteNeedImage,
+                "fruit", fruitMapper::deleteFruitImage
+        );
+        searchImageMap = Map.of(
+                "community", communityMapper::getCommunityMediaPathByMediaId,
+                "need", needMapper::getNeedMediaPathByMediaId,
+                "fruit", fruitMapper::getFruitMediaPathByMediaId
         );
     }
 
@@ -167,19 +179,44 @@ public class SaveFileService {
                 if(!addImageMap.get(type).apply(imagePath+filename,id)){
                     return ResponseEntity.status(400).body("添加图片失败");
                 }
-                return ResponseEntity.status(200).body("添加图片成功");
             }
             else{
                 if(!addCoverMap.get(type).apply(imagePath+filename,id)){
                     return ResponseEntity.status(400).body("添加图片失败");
                 }
-                return ResponseEntity.status(200).body("添加图片成功");
             }
+            return ResponseEntity.status(200).body("添加图片成功");
 
         } catch (IOException e) {
             LOGGER.error(e.getMessage());
             return ResponseEntity.status(200).body("出现异常");
         }
+    }
+
+    @Transactional
+    public Boolean deleteImage(int id,int media_id,int index) throws IOException {
+        String type = typeMap.get(index);
+        String fileName = searchImageMap.get(type).apply(media_id);
+        if(fileName!=null){
+            deleteImageMap.get(type).apply(media_id);
+            fileName = ImageUtils.getRealName(fileName);
+            String filePath = uploadPath + type + "_images/" + type + "_" + id + "/" + fileName;
+            // 将字符串路径转换为 Path 对象
+            Path path = Paths.get(filePath);
+            // 删除文件
+            Files.delete(path);
+            return true;
+        }
+        return false;
+    }
+
+    @Transactional
+    // 修改图片
+    public ResponseEntity<String> modifyImage(MultipartFile file, int id, int media_id, int index, Boolean isCover) throws IOException {
+        if(!deleteImage(id,media_id,index)){
+            return ResponseEntity.status(400).body("图片删除失败，不存在目标图片");
+        }
+        return saveImage(file,id,index,isCover);
     }
 
     /**

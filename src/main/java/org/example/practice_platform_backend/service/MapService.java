@@ -28,9 +28,7 @@ public class MapService {
      */
     public static Boolean checkValidAddress(String address){
         // 正则表达式，匹配以“xx省xx市”开头的字符串
-        // 这里假设“省”和“市”之间的名称为汉字，且长度为1到多个
-        String regex = "^[\\u4E00-\\u9FA5]{1,}省[\\u4E00-\\u9FA5]{1,}市";
-
+        String regex = "^[\\u4E00-\\u9FA5]+省[\\u4E00-\\u9FA5]+市.*";
         // 使用String的matches方法检查字符串是否符合正则表达式
         return address != null && address.matches(regex);
     }

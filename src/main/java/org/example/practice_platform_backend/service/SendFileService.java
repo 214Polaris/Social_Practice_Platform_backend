@@ -36,6 +36,25 @@ public class SendFileService {
         this.imageUtils = imageUtils;
     }
 
+    /**
+     * 发送高清原图
+     * @param fileName 图片名字
+     * @param type 类型，社区、需求、成果
+     * @param id 对应的类型的 id
+     * @return 图片
+     */
+    public String sendOriginalImage(@RequestParam String fileName, @RequestParam int type, @RequestParam int id)throws IOException{
+        String path = uploadPath + imagePathMap.get(type) + "_" + id + "/" + fileName;
+        return imageUtils.getFileBytes(path);
+    }
+
+    /**
+     * 发送缩略图
+     * @param fileName 图片名字
+     * @param type 类型，社区、需求、成果
+     * @param id 对应的类型的 id
+     * @return 图片
+     */
     public String sendImage(@RequestParam String fileName, @RequestParam int type, @RequestParam int id)throws IOException{
         String path = uploadPath + imagePathMap.get(type) + "_" + id + "/" + fileName;
         return imageUtils.getThumbnail(path);

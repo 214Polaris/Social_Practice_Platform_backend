@@ -93,7 +93,7 @@ public interface FruitMapper {
     List<Integer> getFruitIdByUserId(@Param("user_id") int user_id);
 
     //获取封面 id
-    @Select("SELECT media_id FROM fruit_media WHERE fruit_id = #{fruitId} AND type = 'cover'")
+    @Select("SELECT COUNT(*) FROM fruit_media WHERE fruit_id = #{fruitId} AND type = 'cover'")
     int existsFruitCover(@Param("fruitId") int fruitId);
 
     //检查存在有多少张成果图片
@@ -123,5 +123,13 @@ public interface FruitMapper {
     // 删除成果视频
     @Delete("DELETE from fruit_media where fruit_id = #{id} and type = 'video'")
     boolean deleteFruitVideo(@org.apache.ibatis.annotations.Param("id") int id);
+
+    //媒体 id 查媒体名字
+    @Select("SELECT path from fruit_media where media_id = #{media_id}")
+    String getFruitMediaPathByMediaId(int media_id);
+
+    //删除图片
+    @Delete("DELETE from fruit_media where media_id = #{media_id}")
+    boolean deleteFruitImage(@Param("media_id") int media_id);
 
 }

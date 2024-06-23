@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.List;
 
 @RestController
@@ -40,6 +41,69 @@ public class MediaController {
             }
         });
         return ResponseEntity.status(200).body(result);
+    }
+
+    //获取图片高清大图
+    @GetMapping(value = "/get/image")
+    public ResponseEntity<?> getImage(@RequestParam("image") String image_name,
+                                      @RequestParam("id") int id,
+                                      @RequestParam("type") int type) throws IOException {
+        String image = sendFileService.sendOriginalImage(image_name,id,type);
+        if(image==null){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("找不到图片");
+        }
+        return ResponseEntity.status(200).body(image);
+    }
+
+    //删除图片
+    @DeleteMapping(value="/delete/image")
+    public ResponseEntity<?> DeleteImage(HttpServletRequest request,
+                                         @RequestParam("id")Integer id, @RequestParam("media_id") Integer media_id,
+                                         @RequestParam("type") Integer type) throws IOException {
+        ResponseEntity<String> res = saveFileService.privilegeCheck(type,id,true,request);
+        if(res.getStatusCode()== HttpStatus.FORBIDDEN){
+            return res;
+        }
+        if (media_id == null || media_id < 0 || id == null ||id <0) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST.value()).build();
+        }
+        if(type == null){
+            return ResponseEntity.status(400).body("未指定类型");
+        }
+        if (type>3||type<0){
+            return ResponseEntity.status(400).body("错误的上传类型");
+        }
+        //TODO：封面验证，不让它删掉封面，否则无法正常显示
+        if(saveFileService.deleteImage(id,media_id,type)){
+            return ResponseEntity.status(200).body("图片删除成功");
+        }
+        return ResponseEntity.status(400).body("图片删除失败");
+    }
+
+    //修改图片
+    @PostMapping(value="/modify/image")
+    public ResponseEntity<?> modifyImage(@RequestParam("image") MultipartFile image,
+                                         HttpServletRequest request,
+                                         @RequestParam("id")Integer id, @RequestParam("media_id") Integer media_id,
+                                         @RequestParam("type") Integer type,
+                                         @RequestParam("isCover") Boolean isCover) throws IOException {
+        ResponseEntity<String> res = saveFileService.privilegeCheck(type,id,true,request);
+        if(res.getStatusCode()== HttpStatus.FORBIDDEN){
+            return res;
+        }
+        if (image == null || image.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NO_CONTENT.value()).build();
+        }
+        if (media_id == null || media_id < 0 || id == null ||id <0) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST.value()).build();
+        }
+        if(type == null){
+            return ResponseEntity.status(400).body("未指定类型");
+        }
+        if (type>3||type<0){
+            return ResponseEntity.status(400).body("错误的上传类型");
+        }
+        return saveFileService.modifyImage(image,id,media_id,type,isCover);
     }
 
     /**
@@ -83,8 +147,8 @@ public class MediaController {
      * 获取 m3u8 播放目录
      * @param fileName m3u8文件名
      */
-    @GetMapping("/video/m3u8")
-    public ResponseEntity<byte[]> getM3U8Content(@RequestParam String fileName,@RequestParam int type,@RequestParam int id) {
+    @GetMapping("/video/{fileName}")
+    public ResponseEntity<byte[]> getM3U8Content(@PathVariable String fileName,@RequestParam int type,@RequestParam int id) {
         try {
             byte[] data = sendFileService.sendM3u8File(fileName,type,id);
             if(data==null){
@@ -104,7 +168,7 @@ public class MediaController {
      * 获取 ts 视频文件
      * @param filename ts 文件名
      */
-    @GetMapping("/video/{filename}")
+    @GetMapping("/video/ts/{filename}")
     public ResponseEntity<byte[]> getTSContent(@PathVariable String filename,@RequestParam int type,@RequestParam int id) {
         try {
             byte[] data = sendFileService.sendM3u8File(filename,type,id);

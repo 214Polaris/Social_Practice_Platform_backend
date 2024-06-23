@@ -18,7 +18,7 @@ public interface NeedMapper {
     CommunityNeed getNeedByNeedId(@Param("need_id") int need_id);
 
     // 根据需求 id 获取图片和视频的 list
-    @Select("select path,type from need_media where need_id = #{need_id}")
+    @Select("select media_id, path,type from need_media where need_id = #{need_id}")
     List<HashMap<String,String>> getMediaByNeedId(@Param("need_id") int need_id);
 
     //注册新的需求
@@ -27,7 +27,7 @@ public interface NeedMapper {
     Boolean registerNeed(CommunityNeed communityNeed);
 
     //返回封面 id
-    @Select("SELECT media_id FROM need_media WHERE need_id = #{needId} AND type = 'cover'")
+    @Select("SELECT COUNT(*) FROM need_media WHERE need_id = #{needId} AND type = 'cover'")
     int existsNeedCover(@Param("needId") int needId);
 
     //检查有多少需求图片
@@ -76,4 +76,12 @@ public interface NeedMapper {
             "</script>")
     @Transactional
     void modifyNeed(CommunityNeed communityNeed);
+
+    //媒体 id 查媒体名字
+    @Select("SELECT path from need_media where media_id = #{media_id}")
+    String getNeedMediaPathByMediaId(int media_id);
+
+    //删除需求图片
+    @Delete("DELETE from need_media where media_id = #{media_id}")
+    boolean deleteNeedImage(@Param("media_id") int media_id);
 }
