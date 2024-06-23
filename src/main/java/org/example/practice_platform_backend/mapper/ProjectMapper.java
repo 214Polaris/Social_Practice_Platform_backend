@@ -1,12 +1,15 @@
 package org.example.practice_platform_backend.mapper;
 
+import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Options;
 import org.apache.ibatis.annotations.Select;
 import org.example.practice_platform_backend.entity.Fruit;
 import org.example.practice_platform_backend.entity.Project;
 import org.example.practice_platform_backend.entity.Report;
 import org.springframework.data.repository.query.Param;
 
+import java.util.List;
 import java.util.Map;
 
 
@@ -77,4 +80,19 @@ public interface ProjectMapper {
     @Select("select title from community_need where need_id = " +
             "(select need_id from succ_project where project_id = #{project_id})")
     String getNeedTitleByProjectId(int project_id);
+
+    /**
+     * 查询未结对的需求 offset
+     */
+    @Select("select * from community_need where is_pair = 0 " +
+            " LIMIT 8 OFFSET #{offset}")
+    List<Project> getUnpairedNeed(@Param("offset") int offset);
+
+    /**
+     * 新增结对项目，等待审核
+     */
+    @Insert("insert into succ_project (need_id, tutor, team_number, is_pass) values" +
+            "(#{need_id}, #{tutor}, #{team_number}, #{is_pass})")
+    @Options(useGeneratedKeys = true, keyProperty = "project_id")
+    void addProject(Project project);
 }
