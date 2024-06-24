@@ -1,7 +1,9 @@
 package org.example.practice_platform_backend.service;
 
+import com.alibaba.fastjson.JSON;
 import net.minidev.json.JSONArray;
 import net.minidev.json.JSONObject;
+import org.example.practice_platform_backend.entity.Audit;
 import org.example.practice_platform_backend.entity.Project;
 import org.example.practice_platform_backend.entity.Team;
 import org.example.practice_platform_backend.mapper.*;
@@ -10,8 +12,10 @@ import org.example.practice_platform_backend.utils.ProjectUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.io.IOException;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
 
@@ -38,6 +42,12 @@ public class ProjectService {
     @Autowired
     private  TagsMapper tagsMapper;
 
+    @Autowired
+    private MediaMapper  mediaMapper;
+
+    @Autowired
+    private AuditMapper  auditMapper;
+
     @Value("${uploadPath}")
     String uploadPath;
     public JSONObject getProject_info(Project project) throws IOException {
@@ -49,6 +59,7 @@ public class ProjectService {
         result.put("gov",communityMapper.getCommunityName(need.getCommunity_id()));
         String community_avatar = imageUtils.getFileBytes(uploadPath + communityMapper.getCommunityAvatarPath(need.getCommunity_id()));
         result.put("gov_head",community_avatar);
+        result.put("gov_id", need.getCommunity_id());
         String team_avatar = imageUtils.getFileBytes(uploadPath + teamMapper.getTeamAvatarPathByTeamNumber(project.getTeam_number()));
         result.put("team_head",team_avatar);
         result.put("team_stu", userMapper.getNameById(team.getTeam_manager()));
@@ -97,7 +108,53 @@ public class ProjectService {
         return result;
     }
 
-    public JSONObject getUnpairedNeed(){
-        return null;
+    /**
+     * 查询未结对项目列表
+     */
+    public JSONObject getUnpairedNeed(int offset) throws IOException {
+        JSONObject result = new JSONObject();
+        JSONArray list = new JSONArray();
+        List<Project> need_list = projectMapper.getUnpairedNeed(offset);
+        for(Project need : need_list){
+             JSONObject item = new JSONObject();
+             item.put("demand_id", String.valueOf(need.getNeed_id()));
+             item.put("demand_title", need.getTitle());
+             item.put("demand_gov", communityMapper.getCommunityById(need.getCommunity_id()));
+             item.put("demand_time", need.getPost_time());
+             item.put("demand_locate", need.getAddress());
+             String coverPath = mediaMapper.getCoverPath(need.getNeed_id());
+             if(coverPath == null){
+                 continue;
+             }
+             String cover = imageUtils.getFileBytes(uploadPath + coverPath);
+             item.put("demand_img", cover);
+             list.add(item);
+        }
+        result.put("demand_list", list);
+        return result;
+    }
+
+    /**
+     * 新增结对
+     */
+    @Transactional
+    public void pairNeed(int need_id, int manger_id){
+        //根据队长id 查队伍id
+        int team_id = teamMapper.getTeamIdByUser(manger_id);
+        Project new_proj = new Project();
+        new_proj.setIs_pass(0);
+        new_proj.setTutor(userMapper.getNameById(teamMapper.getTeacherIdByTeamNumber(team_id)));
+        new_proj.setNeed_id(need_id);
+        new_proj.setTeam_number(team_id);
+        projectMapper.addProject(new_proj);
+
+        Audit audit = new Audit();
+        audit.setProject_id(new_proj.getProject_id());
+        audit.setNew_id(new_proj.getProject_id());
+        audit.setApply_user_id(manger_id);
+        audit.setApply_time(LocalDateTime.now());
+        audit.setIs_pass(0);
+        audit.setIs_notice(0);
+        auditMapper.newProjAudit(audit);
     }
 }

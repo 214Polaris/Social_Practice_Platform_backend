@@ -3,6 +3,7 @@ package org.example.practice_platform_backend.mapper;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
 import org.example.practice_platform_backend.entity.Team;
+import org.springframework.data.repository.query.Param;
 
 @Mapper
 public interface TeamMapper {
@@ -28,4 +29,8 @@ public interface TeamMapper {
     @Select("select team_name from college_team where team_number = " +
             "(select team_number from succ_project where project_id = #{project_id})")
     String getTeamNameByProjectId(int project_id);
+
+    // 根据用户id获取团队id
+    @Select("select team_number from student where user_id = #{user_id}")
+    int getTeamIdByUser(@Param("user_id")int user_id);
 }
