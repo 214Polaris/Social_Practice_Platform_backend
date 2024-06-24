@@ -12,7 +12,6 @@ import org.springframework.stereotype.Component;
 
 import java.io.IOException;
 import java.util.List;
-import java.util.Map;
 
 @Setter
 @Component
@@ -55,7 +54,11 @@ public class TeamUtils {
             projectJson.put("proj_title", need.getTitle());
             projectJson.put("tags", tagArray);
             projectJson.put("proj_gov", communityMapper.getCommunityName(need.getCommunity_id()));
-            String img = imageUtils.getThumbnail(uploadPath + mediaMapper.getCoverPath(need.getNeed_id()));
+            String img_path = mediaMapper.getNeedCoverPath(need.getNeed_id());
+            if(img_path == null){
+                continue;
+            }
+            String img = imageUtils.getThumbnail(uploadPath + img_path);
             projectJson.put("proj_img", img);
             projectJson.put("proj_id", String.valueOf(project.getProject_id()));
             teamList.add(projectJson);

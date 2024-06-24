@@ -49,6 +49,11 @@ public class ProjectUtils {
                 mediaJson.put("img_flag",0);
                 mediaList.add(mediaJson);
             }
+            else{
+                mediaJson.put("src",media.getPath());
+                mediaJson.put("img_flag",1);
+                mediaList.add(mediaJson);
+            }
         }
         return mediaList;
     }
@@ -108,7 +113,7 @@ public class ProjectUtils {
             JSONArray tag_array = new JSONArray();
             tag_array.addAll(tag_list);
             needJSON.put("tags", tag_array);
-            String cover = mediaMapper.getCoverPath(need.getNeed_id());
+            String cover = mediaMapper.getNeedCoverPath(need.getNeed_id());
             if(cover == null){ //判断这个需求有无封面，没有则不会返回
                 continue;
             }
@@ -129,7 +134,7 @@ public class ProjectUtils {
             JSONObject projectJson = new JSONObject();
             projectJson.put("proj_id", String.valueOf(project.getProject_id()));
             projectJson.put("proj_title", projectMapper.getNeedTitleByProjectId(project.getProject_id()));
-            projectJson.put("proj_img", imageUtils.getThumbnail(uploadPath + mediaMapper.getCoverPath(project.getNeed_id())));
+            projectJson.put("proj_img", imageUtils.getThumbnail(uploadPath + mediaMapper.getNeedCoverPath(project.getNeed_id())));
             String team_name = teamMapper.getTeamNameByProjectId(project.getProject_id());
             projectJson.put("team_name", team_name);
             List<String> tag_list = tagsMapper.searchTags(project.getNeed_id());

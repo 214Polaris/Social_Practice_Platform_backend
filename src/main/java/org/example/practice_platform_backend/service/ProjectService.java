@@ -1,6 +1,5 @@
 package org.example.practice_platform_backend.service;
 
-import com.alibaba.fastjson.JSON;
 import net.minidev.json.JSONArray;
 import net.minidev.json.JSONObject;
 import org.example.practice_platform_backend.entity.Audit;
@@ -87,6 +86,7 @@ public class ProjectService {
         result.put("gov_manager", manager_info.get("name"));
         result.put("gov_phone", manager_info.get("phone_number"));
         String community_avatar = imageUtils.getFileBytes(uploadPath + communityMapper.getCommunityAvatarPath(need.getCommunity_id()));
+        result.put("gov_id", String.valueOf(need.getCommunity_id()));
         result.put("gov_avatar",community_avatar);
         result.put("demand_intro", need.getIntroduction());
         JSONArray img_list = projectUtils.getImgList(need.getNeed_id());
@@ -122,7 +122,7 @@ public class ProjectService {
              item.put("demand_gov", communityMapper.getCommunityById(need.getCommunity_id()));
              item.put("demand_time", need.getPost_time());
              item.put("demand_locate", need.getAddress());
-             String coverPath = mediaMapper.getCoverPath(need.getNeed_id());
+             String coverPath = mediaMapper.getNeedCoverPath(need.getNeed_id());
              if(coverPath == null){
                  continue;
              }

@@ -4,9 +4,11 @@ import org.apache.ibatis.annotations.*;
 import org.example.practice_platform_backend.entity.Comment;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
+import org.example.practice_platform_backend.entity.Kudos;
 import org.springframework.scheduling.annotation.Async;
 
 import java.util.Map;
+import java.util.List;
 
 @Mapper
 public interface CommentMapper {
@@ -42,5 +44,4 @@ public interface CommentMapper {
      */
     @Delete("DELETE from comment where user_id = #{user_id}")
     void deleteCommentByUserId(@Param("user_id") int user_id);
-
 }
