@@ -7,6 +7,8 @@ import org.example.practice_platform_backend.entity.FruitMedia;
 import org.example.practice_platform_backend.entity.Kudos;
 import org.springframework.data.repository.query.Param;
 
+import java.sql.Time;
+import java.sql.Timestamp;
 import java.util.List;
 
 @Mapper
@@ -133,4 +135,59 @@ public interface FruitMapper {
     @Delete("DELETE from fruit_media where media_id = #{media_id}")
     boolean deleteFruitImage(@Param("media_id") int media_id);
 
+    /**
+     * 根据社区负责人id 查所有成果id
+     */
+    @Select("SELECT fi.fruit_id " +
+            "FROM fruit_info fi " +
+            "JOIN succ_project sp ON fi.project_id = sp.project_id " +
+            "JOIN community_need cn ON sp.need_id = cn.need_id " +
+            "JOIN community c ON cn.community_id = c.community_id " +
+            "WHERE c.user_id = #{user_id}")
+    List<Integer> getFruitIds_com(@Param("user_id") int user_id);
+
+    /**
+     * 根据队伍id 查所有成果id
+     */
+    @Select("SELECT fi.fruit_id " +
+            "FROM fruit_info fi " +
+            "JOIN succ_project sp ON fi.project_id = sp.project_id " +
+            "WHERE sp.team_number = #{team_id}")
+    List<Integer> getFruitIds_team(@Param("team_id") int team_id);
+
+    /**
+     * 根据id列表 查相关评论
+     */
+    @Select({
+            "<script>",
+            "SELECT user_id, content, comment_time as time, fruit_id FROM comment WHERE comment_time &lt; #{time} AND fruit_id IN ",
+            "<foreach item='fruitId' collection='fruitIds' open='(' separator=',' close=')'>",
+            "#{fruitId}",
+            "</foreach>",
+            " ORDER BY comment_time DESC LIMIT 5 OFFSET #{offset}",
+            "</script>"
+    })
+    List<Comment.Activity> getCommentsByFruitIds(@Param("fruitIds") List<Integer> fruitIds,
+                                                 @Param("time") Timestamp time, @Param("offset") int offset);
+
+    /**
+     * 根据id列表 查相关点赞信息
+     */
+    @Select({
+            "<script>",
+            "SELECT user_id, kudos_time as time, fruit_id FROM kudos WHERE kudos_time &lt; #{time} AND fruit_id IN ",
+            "<foreach item='fruitId' collection='fruitIds' open='(' separator=',' close=')'>",
+            "#{fruitId}",
+            "</foreach>",
+            " ORDER BY kudos_time DESC LIMIT 5 OFFSET #{offset}",
+            "</script>"
+    })
+    List<Comment.Activity> getKudosByFruitIds(@Param("fruitIds") List<Integer> fruitIds,
+                                              @Param("time") Timestamp time, @Param("offset") int offset);
+
+    /**
+     * 根据成果id 查成果名
+     */
+    @Select("SELECT title FROM fruit_info WHERE fruit_id = #{fruit_id}")
+    String getFruitTitleByFruitId(int fruit_id);
 }

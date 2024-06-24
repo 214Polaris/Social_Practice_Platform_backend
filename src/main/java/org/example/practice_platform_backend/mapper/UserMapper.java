@@ -70,4 +70,17 @@ public interface UserMapper {
      */
     @Select("select COUNT(*) from user where username = #{user_name}")
     int existUsername(@Param("user_name")String user_name);
+
+    /**
+     * 根据学生id 查对应队伍id
+     */
+    @Select("select team_number from student where user_id = #{user_id}")
+    int getTeamIdByStudentId(@Param("user_id")int user_id);
+
+    /**
+     * 根据老师id 查对应队伍id
+     */
+    @Select("select team_number from college_team_teacher where user_id = #{user_id}")
+    int  getTeamIdByTeacherId(@Param("user_id")int user_id);
 }
+

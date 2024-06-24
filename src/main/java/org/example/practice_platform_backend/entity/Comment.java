@@ -28,4 +28,19 @@ public class Comment {
 
     public Comment(){};
 
+    @Getter
+    @Setter
+    public static class Activity implements Comparable<Activity>{
+        private String user_id;
+        @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
+        private LocalDateTime time;
+        private String content;
+        private int fruit_id;
+
+        @Override
+        public int compareTo(Activity other) {
+            return other.getTime().compareTo(this.getTime());
+        }
+    }
+
 }

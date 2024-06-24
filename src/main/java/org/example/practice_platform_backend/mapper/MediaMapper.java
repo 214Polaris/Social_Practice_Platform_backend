@@ -8,8 +8,8 @@ import org.example.practice_platform_backend.entity.FruitMedia;
 public interface MediaMapper {
 
     /**
-     * need_media表中找到need_id为1且Type为cover的path字段，
-     * 如果不存在则返回need_id为1的第一个Type为img的path字段
+     * need_media表中找到need_id为?且Type为cover的path字段，
+     * 如果不存在则返回need_id为?的第一个Type为img的path字段
      */
     @Select("SELECT path " +
             "FROM ( " +
@@ -23,11 +23,28 @@ public interface MediaMapper {
             ") AS combined " +
             "ORDER BY sort_order ASC, media_id ASC " +
             "LIMIT 1")
-    String getCoverPath(int needId);
+    String getNeedCoverPath(int needId);
 
     /**
      * 根据need_id查找所有的media
      */
     @Select("Select * from need_media where need_id = #{needId}")
     FruitMedia[] getMediaByNeedId(int needId);
+
+    /**
+     * 根据fruit_id 查封面
+     */
+    @Select("SELECT path " +
+            "FROM ( " +
+            "  SELECT path, media_id, 1 AS sort_order " +
+            "  FROM fruit_media " +
+            "  WHERE fruit_id = #{fruitId} AND type = 'cover' " +
+            "  UNION " +
+            "  SELECT path, media_id, 2 AS sort_order " +
+            "  FROM fruit_media " +
+            "  WHERE fruit_id = #{fruit} AND type = 'image' " +
+            ") AS combined " +
+            "ORDER BY sort_order ASC, media_id ASC " +
+            "LIMIT 1")
+    String getFruitCoverPath(int needId);
 }
