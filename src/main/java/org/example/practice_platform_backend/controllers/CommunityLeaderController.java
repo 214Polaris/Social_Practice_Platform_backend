@@ -11,6 +11,7 @@ import org.example.practice_platform_backend.service.MapService;
 import org.example.practice_platform_backend.utils.JwtUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -48,11 +49,13 @@ public class CommunityLeaderController {
         }
         requestBody.setUser_id(user_id);
         communityMapper.registerCommunity(requestBody);
+
         return ResponseEntity.status(200).header("id", String.valueOf(requestBody.getCommunity_id())).body("注册成功");
     }
 
     // 注册社区需求
     @PostMapping("/register/need")
+    @Transactional
     public ResponseEntity<?> registerNeed(HttpServletRequest request, @RequestBody CommunityNeed communityNeed){
         if(!communityLeaderService.checkLeader(request)){
             return ResponseEntity.status(400).body("该用户不是社区负责人");
@@ -65,10 +68,11 @@ public class CommunityLeaderController {
         communityNeed.setIs_pair(0);
         communityNeed.setIs_pass(0);
         communityNeed.setCommunity_id(community_id);
-        Boolean result = needMapper.registerNeed(communityNeed);
+        boolean result = needMapper.registerNeed(communityNeed);
+        Integer media_id = needMapper.addNeedCover("need_images/default.jpg",communityNeed.getNeed_id());
         if(!result){
             return ResponseEntity.status(400).body("注册社区失败");
         }
-        return ResponseEntity.status(200).body("注册社区成功");
+        return ResponseEntity.status(200).header("id", String.valueOf(media_id)).body("注册社区成功");
     }
 }

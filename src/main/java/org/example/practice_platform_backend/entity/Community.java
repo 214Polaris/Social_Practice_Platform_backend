@@ -8,6 +8,13 @@ import java.util.List;
 @Getter
 @Setter
 public class Community {
+    @Getter
+    @Setter
+    public static class media{
+        Integer media_id;
+        String path;
+        String type;
+    }
     private int community_id;
     private String community_name;
     private String address;
@@ -16,6 +23,6 @@ public class Community {
     private String fail_interpretation;
     //负责人的 user_id
     private int user_id;
-    private List<HashMap<String,String>> mediaList;
+    private List<media> mediaList;
     public Community(){};
 }

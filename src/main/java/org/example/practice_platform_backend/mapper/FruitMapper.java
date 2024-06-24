@@ -110,7 +110,8 @@ public interface FruitMapper {
     // 添加成果图片(封面)
     @Insert("insert into fruit_media(path,fruit_id,type) " +
             "values(#{path},#{fruit_id},'cover')")
-    boolean addFruitCover(@org.apache.ibatis.annotations.Param("path") String path, @org.apache.ibatis.annotations.Param("fruit_id") int fruit_id);
+    @Options(useGeneratedKeys = true, keyProperty = "id")
+    Integer addFruitCover(@org.apache.ibatis.annotations.Param("path") String path, @org.apache.ibatis.annotations.Param("fruit_id") int fruit_id);
 
 
     //检查是否存在成果视频
