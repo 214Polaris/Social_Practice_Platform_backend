@@ -73,6 +73,6 @@ public class CommunityLeaderController {
         if(!result){
             return ResponseEntity.status(400).body("注册社区失败");
         }
-        return ResponseEntity.status(200).body("注册社区成功");
+        return ResponseEntity.status(200).header("id", String.valueOf(media_id)).body("注册社区成功");
     }
 }

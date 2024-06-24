@@ -278,7 +278,7 @@ public class SaveFileService {
             return null;
         }
         // 转换成m3u8
-        boolean isConvert = FFmpegUtils.convert(videoPath+videoName,m3u8Path,id,typeIndex);
+        boolean isConvert = FFmpegUtils.convert(videoPath+videoName,m3u8Path,typeIndex,id);
         if(!isConvert){
             return null;
         }

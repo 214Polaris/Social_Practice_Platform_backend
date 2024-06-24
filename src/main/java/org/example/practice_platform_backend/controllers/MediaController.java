@@ -28,7 +28,7 @@ public class MediaController {
 
 
     // 获取缩略图的 list（70%）
-    @GetMapping(value="/get/image/thumbnail")
+    @PostMapping(value="/get/image/thumbnail")
     public ResponseEntity<?> getImageThumbnail(@RequestParam("images") List<String> images,
                                                @RequestParam("id") int id,
                                                @RequestParam("type") int type){

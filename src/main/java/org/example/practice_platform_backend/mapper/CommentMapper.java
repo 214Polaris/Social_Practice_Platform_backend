@@ -25,7 +25,6 @@ public interface CommentMapper {
 
     /**
      * 插入评论
-     * @param comment
      */
     @Insert("insert into comment(fruit_id,content,comment_time,user_id) values(#{fruit_id},#{content},#{comment_time},#{user_id})")
     @Options(useGeneratedKeys = true, keyProperty = "comment_id")
