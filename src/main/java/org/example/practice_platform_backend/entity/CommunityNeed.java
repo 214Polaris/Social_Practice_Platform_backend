@@ -26,5 +26,13 @@ public class CommunityNeed {
     private int community_id;
     private List<HashMap<String,String>> mediaList;
 
+    @Getter
+    @Setter
+    public static class media{
+        int media_id;
+        String path;
+        int need_id;
+    }
+
     public CommunityNeed(){};
 }

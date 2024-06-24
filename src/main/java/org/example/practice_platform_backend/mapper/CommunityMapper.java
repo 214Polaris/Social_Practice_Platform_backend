@@ -2,10 +2,7 @@ package org.example.practice_platform_backend.mapper;
 
 import org.apache.ibatis.annotations.*;
 import org.example.practice_platform_backend.entity.Community;
-import org.example.practice_platform_backend.entity.CommunityNeed;
 import org.example.practice_platform_backend.entity.Fruit;
-import org.example.practice_platform_backend.entity.Project;
-import org.example.practice_platform_backend.service.CommunityService;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -41,7 +38,7 @@ public interface CommunityMapper {
     int findCommunityIdByName(String community_name);
 
     //社区 id 获取社区基本信息
-    @Select("select community_id,community_name,introduction,address,user_id from community where community_id=#{community_id}")
+    @Select("select community_id,community_name,introduction,address,user_id,avatar_path from community where community_id=#{community_id}")
     Community getCommunityById(int community_id);
 
     //获取社区的所有媒体列表
@@ -78,13 +75,14 @@ public interface CommunityMapper {
     // 添加社区图片（非封面）
     @Insert("insert into community_media(path,community_id,type) " +
             "values(#{path},#{community_id},'image')")
-    boolean addCommunityImage(@Param("path") String path, @Param("community_id") int community_id);
+    @Options(useGeneratedKeys = true, keyProperty = "media_id")
+    void addCommunityImage(Community.media m);
 
     // 添加社区图片（封面）
     @Insert("insert into community_media(path,community_id,type) " +
             "values(#{path},#{community_id},'image')")
-    @Options(useGeneratedKeys = true, keyProperty = "id")
-    Integer addCommunityCover(@Param("path") String path, @Param("community_id") int community_id);
+    @Options(useGeneratedKeys = true, keyProperty = "media_id")
+    void addCommunityCover(Community.media m);
 
 
     // 检查是否存在社区视频

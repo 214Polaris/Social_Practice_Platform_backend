@@ -68,11 +68,15 @@ public class CommunityLeaderController {
         communityNeed.setIs_pair(0);
         communityNeed.setIs_pass(0);
         communityNeed.setCommunity_id(community_id);
-        boolean result = needMapper.registerNeed(communityNeed);
-        Integer media_id = needMapper.addNeedCover("need_images/default.jpg",communityNeed.getNeed_id());
-        if(!result){
-            return ResponseEntity.status(400).body("注册社区失败");
+        needMapper.registerNeed(communityNeed);
+        CommunityNeed.media media = new CommunityNeed.media();
+        media.setNeed_id(communityNeed.getNeed_id());
+        media.setPath("need_images/default.jpg");
+        needMapper.addNeedCover(media);
+        Integer media_id = media.getMedia_id();
+        if(media_id==0){
+            return ResponseEntity.status(400).body("注册社区需求失败");
         }
-        return ResponseEntity.status(200).header("id", String.valueOf(media_id)).body("注册社区成功");
+        return ResponseEntity.status(200).header("id", String.valueOf(media_id)).body("注册社区需求成功");
     }
 }

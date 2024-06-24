@@ -1,8 +1,6 @@
 package org.example.practice_platform_backend.service;
 
 import org.example.practice_platform_backend.utils.ImageUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -34,6 +32,16 @@ public class SendFileService {
 
     public SendFileService(ImageUtils imageUtils) {
         this.imageUtils = imageUtils;
+    }
+
+    /**
+     * 发送头像
+     * @param filePath 文件路径
+     * @return base64编码后的头像
+     */
+    public String sendAvatar(@RequestParam String filePath) throws IOException {
+        String path = uploadPath + filePath;
+        return imageUtils.getFileBytes(path);
     }
 
     /**

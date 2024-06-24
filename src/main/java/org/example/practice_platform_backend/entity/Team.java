@@ -10,7 +10,7 @@ public class Team {
     private String team_name;
     private String introduction;
     private String academy;
-    private String collage;
+    private String college;
     private int team_manager;
     private int member_cnt;
     private String address;

@@ -6,7 +6,6 @@ import org.example.practice_platform_backend.entity.Fruit;
 import org.example.practice_platform_backend.entity.FruitMedia;
 import org.example.practice_platform_backend.entity.Kudos;
 import org.springframework.data.repository.query.Param;
-import org.springframework.security.core.parameters.P;
 
 import java.util.List;
 
@@ -103,13 +102,14 @@ public interface FruitMapper {
     // 添加成果图片(非封面)
     @Insert("insert into fruit_media(path,fruit_id,type) " +
             "values(#{path},#{fruit_id},'image')")
-    boolean addFruitImage(@org.apache.ibatis.annotations.Param("path") String path, @org.apache.ibatis.annotations.Param("fruit_id") int fruit_id);
+    @Options(useGeneratedKeys = true, keyProperty = "media_id")
+    void addFruitImage(FruitMedia fruitMedia);
 
     // 添加成果图片(封面)
     @Insert("insert into fruit_media(path,fruit_id,type) " +
             "values(#{path},#{fruit_id},'cover')")
-    @Options(useGeneratedKeys = true, keyProperty = "id")
-    Integer addFruitCover(@org.apache.ibatis.annotations.Param("path") String path, @org.apache.ibatis.annotations.Param("fruit_id") int fruit_id);
+    @Options(useGeneratedKeys = true, keyProperty = "media_id")
+    void addFruitCover(FruitMedia fruitMedia);
 
 
     //检查是否存在成果视频

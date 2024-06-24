@@ -48,7 +48,7 @@ public class MediaController {
     public ResponseEntity<?> getImage(@RequestParam("image") String image_name,
                                       @RequestParam("id") int id,
                                       @RequestParam("type") int type) throws IOException {
-        String image = sendFileService.sendOriginalImage(image_name,id,type);
+        String image = sendFileService.sendOriginalImage(image_name,type,id);
         if(image==null){
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("找不到图片");
         }

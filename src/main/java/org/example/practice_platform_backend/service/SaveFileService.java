@@ -1,6 +1,9 @@
 package org.example.practice_platform_backend.service;
 
 import jakarta.servlet.http.HttpServletRequest;
+import org.example.practice_platform_backend.entity.Community;
+import org.example.practice_platform_backend.entity.CommunityNeed;
+import org.example.practice_platform_backend.entity.FruitMedia;
 import org.example.practice_platform_backend.entity.User;
 import org.example.practice_platform_backend.mapper.*;
 import org.example.practice_platform_backend.utils.FFmpegUtils;
@@ -54,14 +57,16 @@ public class SaveFileService {
     @Autowired
     private ImageUtils imageUtils;
 
+
     private final List<String> typeMap = asList("community","need","fruit");
+
     private final Map<String, Function<Integer, String>> existsVideoMap;
     private final Map<String, BiFunction<String, Integer, Boolean>> addVideoMap;
     private final Map<String, BiFunction<String, Integer, Boolean>> ModifyVideoMap;
     private final Map<String,Function<Integer, Integer>> existsImageMap;
     private final Map<String, Function<Integer, Integer>> existsCoverMap;
-    private final Map<String, BiFunction<String, Integer, Boolean>> addImageMap;
-    private final Map<String, BiFunction<String, Integer, Integer>> addCoverMap;
+//    private final Map<String, BiFunction<String, Integer, Boolean>> addImageMap;
+//    private final Map<String, BiFunction<String, Integer, Object>> addCoverMap;
     private final Map<String, Function<Integer, Boolean>> deleteImageMap;
     private final Map<String, Function<Integer, String>> searchImageMap;
 
@@ -93,16 +98,17 @@ public class SaveFileService {
                 "need", needMapper::existsNeedCover,
                 "fruit", fruitMapper::existsFruitCover
         );
-        addImageMap= Map.of(
-                "community", communityMapper::addCommunityImage,
-                "need", needMapper::addNeedImage,
-                "fruit", fruitMapper::addFruitImage
-        );
-        addCoverMap= Map.of(
-                "community", communityMapper::addCommunityCover,
-                "need", needMapper::addNeedCover,
-                "fruit", fruitMapper::addFruitCover
-        );
+
+//        addImageMap= Map.of(
+//                "community", communityMapper::addCommunityImage,
+//                "need", needMapper::addNeedImage,
+//                "fruit", fruitMapper::addFruitImage
+//        );
+//        addCoverMap= Map.of(
+//                "community", communityMapper::addCommunityCover,
+//                "need", needMapper::addNeedCover,
+//                "fruit", fruitMapper::addFruitCover
+//        );
         deleteImageMap = Map.of(
                 "community", communityMapper::deleteCommunityImage,
                 "need", needMapper::deleteNeedImage,
@@ -175,21 +181,64 @@ public class SaveFileService {
             String imagePath = type + "_images/" + type + "_" + id + "/";
             saveBytesFile(file.getInputStream(),uploadPath+imagePath,filename);
             // 记录到数据库
+            int media_id=0;
             if(!isCover){
-                if(!addImageMap.get(type).apply(imagePath+filename,id)){
+                if(index==0){
+                    Community.media media = new Community.media();
+                    media.setPath(imagePath+filename);
+                    media.setCommunity_id(id);
+                    communityMapper.addCommunityImage(media);
+                    media_id = media.getMedia_id();
+                }
+                if(index==1){
+                    CommunityNeed.media media = new CommunityNeed.media();
+                    media.setPath(imagePath+filename);
+                    media.setNeed_id(id);
+                    needMapper.addNeedImage(media);
+                    media_id = media.getMedia_id();
+                }
+                if(index==2){
+                    FruitMedia media = new FruitMedia();
+                    media.setPath(imagePath+filename);
+                    media.setFruit_id(id);
+                    fruitMapper.addFruitImage(media);
+                    media_id = media.getMedia_id();
+                }
+                if(media_id == 0){
                     return ResponseEntity.status(400).body("添加图片失败");
                 }
             }
             else{
-                if(addCoverMap.get(type).apply(imagePath+filename,id)==null){
-                    return ResponseEntity.status(400).body("添加图片失败");
+                if(index==0){
+                    Community.media media = new Community.media();
+                    media.setPath(imagePath+filename);
+                    media.setCommunity_id(id);
+                    communityMapper.addCommunityCover(media);
+                    media_id = media.getMedia_id();
+                }
+                if(index==1){
+                    CommunityNeed.media media = new CommunityNeed.media();
+                    media.setPath(imagePath+filename);
+                    media.setNeed_id(id);
+                    needMapper.addNeedCover(media);
+                    media_id = media.getMedia_id();
+                }
+                if(index==2){
+                    FruitMedia media = new FruitMedia();
+                    media.setPath(imagePath+filename);
+                    media.setFruit_id(id);
+                    fruitMapper.addFruitCover(media);
+                    media_id = media.getMedia_id();
+                }
+                if(media_id == 0){
+                    return ResponseEntity.status(400).body("添加封面失败");
                 }
             }
-            return ResponseEntity.status(200).body("添加图片成功");
+            return ResponseEntity.status(200).header("id", String.valueOf(media_id)).body("添加图片成功");
 
         } catch (IOException e) {
             LOGGER.error(e.getMessage());
-            return ResponseEntity.status(200).body("出现异常");
+            return ResponseEntity.status(400).body("出现异常");
         }
     }
 

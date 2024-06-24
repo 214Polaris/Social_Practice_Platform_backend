@@ -1,5 +1,7 @@
 package org.example.practice_platform_backend.entity;
 
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
 import lombok.*;
 
 import java.util.HashMap;
@@ -13,6 +15,7 @@ public class Community {
     public static class media{
         Integer media_id;
         String path;
+        int community_id;
         String type;
     }
     private int community_id;
@@ -24,5 +27,6 @@ public class Community {
     //负责人的 user_id
     private int user_id;
     private List<media> mediaList;
-    public Community(){};
+    private String avatar_path;
+    Community(){};
 }

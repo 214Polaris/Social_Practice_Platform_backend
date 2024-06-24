@@ -1,6 +1,7 @@
 package org.example.practice_platform_backend.entity;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import jakarta.persistence.Entity;
 import lombok.Getter;
 import lombok.Setter;
 

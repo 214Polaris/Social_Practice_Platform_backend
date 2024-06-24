@@ -2,7 +2,6 @@ package org.example.practice_platform_backend.mapper;
 
 import org.apache.ibatis.annotations.*;
 import org.example.practice_platform_backend.entity.CommunityNeed;
-import org.example.practice_platform_backend.entity.User;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -24,7 +23,8 @@ public interface NeedMapper {
     //注册新的需求
     @Insert("INSERT into community_need(title, post_time, introduction, resource, is_pass, is_pair, address, community_id)\n" +
             "value(#{title},#{post_time},#{introduction},#{resource},#{is_pass},#{is_pair},#{address},#{community_id})")
-    Boolean registerNeed(CommunityNeed communityNeed);
+    @Options(useGeneratedKeys = true, keyProperty = "need_id")
+    void registerNeed(CommunityNeed communityNeed);
 
     //返回封面 id
     @Select("SELECT COUNT(*) FROM need_media WHERE need_id = #{needId} AND type = 'cover'")
@@ -37,13 +37,14 @@ public interface NeedMapper {
     // 添加需求视频(非封面)
     @Insert("insert into need_media(path,need_id,type) " +
             "values(#{path},#{need_id},'image')")
-    boolean addNeedImage(@Param("path") String path, @Param("need_id") int need_id);
+    @Options(useGeneratedKeys = true, keyProperty = "media_id")
+    void addNeedImage(CommunityNeed.media m);
 
     // 添加需求视频(封面)
     @Insert("insert into need_media(path,need_id,type) " +
-            "values(#{path},#{need_id},'cover')")
-    @Options(useGeneratedKeys = true, keyProperty = "id")
-    Integer addNeedCover(@Param("path") String path, @Param("need_id") int need_id);
+            "values(#{path},#{need_id},'cover'); ")
+    @Options(useGeneratedKeys = true, keyProperty = "need_id")
+    void addNeedCover(CommunityNeed.media m);
 
     //检查是否存在需求视频
     @Select("SELECT path FROM need_media WHERE need_id = #{needId} AND type = 'video'")

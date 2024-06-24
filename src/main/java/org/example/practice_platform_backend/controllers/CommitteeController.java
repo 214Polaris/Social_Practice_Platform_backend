@@ -1,6 +1,8 @@
 package org.example.practice_platform_backend.controllers;
 
 import jakarta.servlet.http.HttpServletRequest;
+import org.example.practice_platform_backend.entity.Audit;
+import org.example.practice_platform_backend.service.AuditService;
 import org.example.practice_platform_backend.service.CommunityLeaderService;
 import org.example.practice_platform_backend.entity.CommunityLeader;
 import org.example.practice_platform_backend.entity.User;
@@ -26,6 +28,9 @@ public class CommitteeController {
 
     @Autowired
     private JwtUtils jwtUtils;
+
+    @Autowired
+    private AuditService auditService;
 
     // 解析 token 判断是否是校团委
     private Boolean isValid(HttpServletRequest request){
@@ -62,6 +67,33 @@ public class CommitteeController {
             return ResponseEntity.status(400).body("修改错误");
         }
     }
+
+    //获取社区的审核列表
+    @GetMapping("/audit/community")
+    public ResponseEntity<?> getAuditCommunityList(HttpServletRequest request) {
+        if(!isValid(request)){
+            return ResponseEntity.status(400).body("该用户不是校团委");
+        }
+        List<Audit.CommunityAudit> communityAuditList = auditService.getCommunityAudits();
+        if(communityAuditList.isEmpty()){
+            return ResponseEntity.status(200).body("审核列表为空");
+        }
+        return ResponseEntity.ok(communityAuditList);
+    }
+
+    //获取队伍的审核列表
+    @GetMapping("/audit/team")
+    public ResponseEntity<?> getAuditTeamList(HttpServletRequest request) {
+        if(!isValid(request)){
+            return ResponseEntity.status(400).body("该用户不是校团委");
+        }
+        List<Audit.TeamAudit> teamAuditList = auditService.getTeamAudits();
+        if(teamAuditList.isEmpty()){
+            return ResponseEntity.status(200).body("审核列表为空");
+        }
+        return ResponseEntity.ok(teamAuditList);
+    }
+
 
 }
 
