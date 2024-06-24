@@ -14,6 +14,9 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import com.alibaba.fastjson2.*;
 import org.springframework.web.bind.annotation.RequestParam;
+
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.Map;
 
 @Controller
@@ -32,10 +35,12 @@ public class CommentController {
 
     // 获取成果的评论
     @GetMapping(value="/load_comment")
-    public ResponseEntity<?> loadComment(@RequestParam("demand_id") int fruit_id, @RequestParam(value = "comment_no",required = false) Integer comment_id) {
+    public ResponseEntity<?> loadComment(@RequestParam("demand_id") int fruit_id,
+                                         @RequestParam("time_stamp") String time_stamp ) {
         try{
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
             JSONArray results = new JSONArray();
-            Comment[] comments = commentMapper.getCommentByCommentId(fruit_id,comment_id);
+            Comment[] comments = commentMapper.getCommentByCommentId(fruit_id, sdf.parse(time_stamp));
             //获取头像
             for(Comment comment : comments) {
                 // 获取头像的路径和用户名

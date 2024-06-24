@@ -42,7 +42,8 @@ public interface NeedMapper {
     // 添加需求视频(封面)
     @Insert("insert into need_media(path,need_id,type) " +
             "values(#{path},#{need_id},'cover')")
-    boolean addNeedCover(@Param("path") String path, @Param("need_id") int need_id);
+    @Options(useGeneratedKeys = true, keyProperty = "id")
+    Integer addNeedCover(@Param("path") String path, @Param("need_id") int need_id);
 
     //检查是否存在需求视频
     @Select("SELECT path FROM need_media WHERE need_id = #{needId} AND type = 'video'")

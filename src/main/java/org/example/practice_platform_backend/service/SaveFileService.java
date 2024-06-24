@@ -61,7 +61,7 @@ public class SaveFileService {
     private final Map<String,Function<Integer, Integer>> existsImageMap;
     private final Map<String, Function<Integer, Integer>> existsCoverMap;
     private final Map<String, BiFunction<String, Integer, Boolean>> addImageMap;
-    private final Map<String, BiFunction<String, Integer, Boolean>> addCoverMap;
+    private final Map<String, BiFunction<String, Integer, Integer>> addCoverMap;
     private final Map<String, Function<Integer, Boolean>> deleteImageMap;
     private final Map<String, Function<Integer, String>> searchImageMap;
 
@@ -181,7 +181,7 @@ public class SaveFileService {
                 }
             }
             else{
-                if(!addCoverMap.get(type).apply(imagePath+filename,id)){
+                if(addCoverMap.get(type).apply(imagePath+filename,id)==null){
                     return ResponseEntity.status(400).body("添加图片失败");
                 }
             }

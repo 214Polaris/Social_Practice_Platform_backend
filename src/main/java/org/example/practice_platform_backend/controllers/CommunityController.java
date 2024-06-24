@@ -69,7 +69,7 @@ public class CommunityController {
 
     //需求清单get
     @GetMapping("/need_list")
-    public ResponseEntity<?> getNeedList(@Param("gov_id") String gov_id) throws IOException {
+    public ResponseEntity<?> getNeedList(@Param("gov_id") String gov_id){
         try{
             JSONArray result = projectService.getNeed_list(Integer.parseInt(gov_id));
             return ResponseEntity.status(200).body(JSON.toJSONString(result));

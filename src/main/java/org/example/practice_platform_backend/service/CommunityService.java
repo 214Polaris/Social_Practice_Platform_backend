@@ -1,5 +1,7 @@
 package org.example.practice_platform_backend.service;
 
+import lombok.Getter;
+import lombok.Setter;
 import net.minidev.json.JSONArray;
 import net.minidev.json.JSONObject;
 import org.example.practice_platform_backend.entity.Community;
@@ -13,6 +15,7 @@ import org.example.practice_platform_backend.utils.ImageUtils;
 import org.example.practice_platform_backend.utils.JwtUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.relational.core.sql.In;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
@@ -37,16 +40,14 @@ public class CommunityService {
 
     @Value("${uploadPath}")
     private String uploadPath;
-    @Autowired
-    private JwtUtils jwtUtils;
 
     //加载社区信息
     public Community getCommunity(int id){
         Community community = communityMapper.getCommunityById(id);
-        List<HashMap<String,String>> mediaList = communityMapper.getCommunityMedia(id);
+        List<Community.media> mediaList = communityMapper.getCommunityMedia(id);
         mediaList.forEach(media->{
-            if(!Objects.equals(media.get("type"), "video")){
-                media.put("path",ImageUtils.getRealName(media.get("path")));
+            if(!Objects.equals(media.getType(), "video")){
+                media.setPath(ImageUtils.getRealName(media.getPath()));
             }
         });
         community.setMediaList(mediaList);
