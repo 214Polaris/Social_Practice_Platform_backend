@@ -16,6 +16,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
+import java.util.List;
 import java.util.Objects;
 
 @RestController
@@ -85,6 +86,18 @@ public class ProjectController {
             e.printStackTrace();
             return ResponseEntity.status(400).body("配对失败");
         }
+    }
+
+    //获取当前队伍所有已结队的需求
+    @GetMapping("/get/team/needs")
+    public ResponseEntity<?> getTeamNeeds(@RequestParam("team_id") int team_id) {
+        List<Integer> NeedIdList = projectMapper.getNeedIdByTeamNumber(team_id);
+        if(NeedIdList.isEmpty()){
+            return ResponseEntity.ok("暂无已结队需求");
+        }
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("Needs", NeedIdList);
+        return ResponseEntity.ok(jsonObject);
     }
 }
 

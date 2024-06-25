@@ -95,4 +95,10 @@ public interface ProjectMapper {
             "(#{need_id}, #{tutor}, #{team_number}, #{is_pass})")
     @Options(useGeneratedKeys = true, keyProperty = "project_id")
     void addProject(Project project);
+
+    /**
+     * 根据队伍 id 查询所有已结队的需求
+     */
+    @Select("select need_id from succ_project where team_number=#{team_number}")
+    List<Integer> getNeedIdByTeamNumber(@Param("team_number") int team_number);
 }
