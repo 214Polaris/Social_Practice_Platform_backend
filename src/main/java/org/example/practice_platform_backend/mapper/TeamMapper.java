@@ -1,5 +1,6 @@
 package org.example.practice_platform_backend.mapper;
 
+import net.minidev.json.JSONObject;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
 import org.example.practice_platform_backend.entity.Team;
@@ -37,4 +38,12 @@ public interface TeamMapper {
     // 获取团队队长 id
     @Select("select team_manager from college_team where team_number = #{team_number}")
     Integer getLeaderIdByTeamNumber(int team_number);
+
+    //获取队伍指导老师的 id
+    @Select("""
+            select c.user_id, u.name from college_team_teacher as c
+            join user as u on u.user_id = c.user_id
+            where c.team_number= #{team_number}
+            """)
+    JSONObject getTeacherInfoByTeamNumber(int team_number);
 }
