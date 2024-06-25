@@ -82,7 +82,7 @@ public class TeamUtils {
         JSONObject teacher = teamMapper.getTeacherInfoByTeamNumber(team_id);
         result.put("name", team.getTeam_name());
         result.put("introduction", team.getIntroduction());
-        result.put("college", team.getCollege());
+        result.put("academy", team.getAcademy());
         result.put("teacher", teacher.get("name"));
         result.put("teacherID", teacher.get("user_id"));
         return result;
