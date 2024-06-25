@@ -127,6 +127,19 @@ public class UserController {
         }
     }
 
+    // 修改密码
+    @GetMapping(value="/modify/passwd")
+    public ResponseEntity<?> modifyPasswd(HttpServletRequest request,@RequestParam("passwd") String passwd, @RequestParam("new_passwd") String new_passwd){
+        String token = request.getHeader("token");
+        int user_id = jwtUtils.getUserInfoFromToken(token,User.class).getUser_id();
+        int checkResult = userMapper.checkUser(user_id,passwd);
+        if(checkResult<=0){
+            return ResponseEntity.status(400).body("原密码错误");
+        }
+        userMapper.modifyPasswd(new_passwd,user_id);
+        return ResponseEntity.ok("修改成功");
+    }
+
     @PostMapping(value = "/get/random/name")
     public ResponseEntity<?> getRandomName(@RequestParam("name") String name) {
         try {

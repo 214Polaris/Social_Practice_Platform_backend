@@ -16,6 +16,10 @@ public interface UserMapper {
             """)
     User login(@Param("user_name")String user_name,@Param("passwd") String passwd);
 
+    //验证密码是否正确
+    @Select("select COUNT(*) from user where user_id=#{user_id} AND passwd=#{passwd}")
+    int checkUser(@Param("user_id")int user_id,@Param("passwd")String passwd);
+
     // 注册
     @Insert("insert into user(name, username, passwd, phone_number, user_category, avatar_path,gender) " +
             "values(#{name}, #{user_name}, #{password}, #{phone_number}, #{user_category}, " +
@@ -44,7 +48,6 @@ public interface UserMapper {
             "<set>" +
             "<if test='name != null'>name = #{name},</if>" +
             "<if test='user_name != null'>username = #{user_name},</if>" +
-            "<if test='password != null'>passwd = #{password},</if>" +
             "<if test='phone_number != null'>phone_number = #{phone_number},</if>" +
             "<if test='gender != null'>gender = #{gender}</if>" +
             "</set>" +
@@ -52,6 +55,11 @@ public interface UserMapper {
             "</script>")
     @Transactional
     void modifyInfo(User user);
+
+    //修改密码
+    @Async
+    @Update("UPDATE user set passwd=#{passwd} where user_id = #{user_id}")
+    void modifyPasswd(String passwd, int user_id);
 
     /**
      * 根据id 查询姓名
