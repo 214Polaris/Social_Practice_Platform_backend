@@ -1,11 +1,15 @@
 package org.example.practice_platform_backend.controllers;
 
+import com.alibaba.fastjson2.JSONObject;
 import jakarta.servlet.http.HttpServletRequest;
 import net.sourceforge.pinyin4j.format.exception.BadHanyuPinyinOutputFormatCombination;
+import org.example.practice_platform_backend.mapper.CommunityMapper;
+import org.example.practice_platform_backend.mapper.TeamMapper;
 import org.example.practice_platform_backend.service.CommunityLeaderService;
-import org.example.practice_platform_backend.utils.ImageUtils;
+import org.example.practice_platform_backend.service.UserService;
 import org.example.practice_platform_backend.utils.RandomGenerateUtils;
-import org.springframework.beans.factory.annotation.Value;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,7 +21,6 @@ import org.springframework.web.bind.annotation.*;
 import org.example.practice_platform_backend.utils.JwtUtils;
 import org.springframework.dao.*;
 
-import java.io.File;
 import java.sql.SQLIntegrityConstraintViolationException;
 import java.util.HashMap;
 import java.util.Objects;
@@ -27,14 +30,10 @@ import java.util.Objects;
 @RequestMapping("/api")
 public class UserController {
 
-    @Value("${uploadPath}")
-    private String uploadPath;
+    private static final Logger LOGGER = LoggerFactory.getLogger(CommentController.class);
 
     @Autowired
     private UserMapper userMapper;
-
-    @Autowired
-    private ImageUtils imageUtils;
 
     // jwt
     @Autowired
@@ -44,6 +43,13 @@ public class UserController {
 
     @Autowired
     private RandomGenerateUtils randomGenerateUtils;
+    @Autowired
+    private UserService userService;
+    @Autowired
+    private CommunityMapper communityMapper;
+    @Autowired
+    private TeamMapper teamMapper;
+
 
     // 处理登录请求
     @PostMapping(value = "/login")
@@ -86,7 +92,7 @@ public class UserController {
             }
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("注册失败");
         } catch (Exception e) {
-            e.printStackTrace();
+            LOGGER.error(e.getMessage());
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("注册失败");
         }
     }
@@ -97,14 +103,10 @@ public class UserController {
         String token = request.getHeader("token");
         int user_id = jwtUtils.getUserInfoFromToken(token,User.class).getUser_id();
         try{
-            HashMap<String,String> user = userMapper.getUserById(user_id);
-            String trueName = ImageUtils.getTrueName(user.get("image"));
-            String suffix = ImageUtils.getSuffix(user.get("image"));
-            String path = uploadPath + "avatar" + File.separator + trueName + "_origin" + suffix;
-            user.put("image",imageUtils.getFileBytes(path));
+            HashMap<String,String> user = userService.getUserByUser_id(user_id);
             return ResponseEntity.ok(user);
         } catch (Exception e){
-            e.printStackTrace();
+            LOGGER.error(e.getMessage());
             return ResponseEntity.status(400).body("查询个人信息出错");
         }
     }
@@ -132,6 +134,7 @@ public class UserController {
     public ResponseEntity<?> modifyPasswd(HttpServletRequest request,@RequestParam("passwd") String passwd, @RequestParam("new_passwd") String new_passwd){
         String token = request.getHeader("token");
         int user_id = jwtUtils.getUserInfoFromToken(token,User.class).getUser_id();
+        // 检查密码是否一致
         int checkResult = userMapper.checkUser(user_id,passwd);
         if(checkResult<=0){
             return ResponseEntity.status(400).body("原密码错误");
@@ -140,6 +143,7 @@ public class UserController {
         return ResponseEntity.ok("修改成功");
     }
 
+    // 获取随机名字
     @PostMapping(value = "/get/random/name")
     public ResponseEntity<?> getRandomName(@RequestParam("name") String name) {
         try {
@@ -147,6 +151,33 @@ public class UserController {
             return ResponseEntity.ok(randomName);
         } catch (BadHanyuPinyinOutputFormatCombination e) {
             return ResponseEntity.status(400).body("请确保传入中文名");
+        }
+    }
+
+    // 获取附加信息
+    @GetMapping(value="/get/extraInfo")
+    public ResponseEntity<?> getExtraInfo(HttpServletRequest request) {
+        User user = jwtUtils.getUserInfoFromToken(request.getHeader("token"),User.class);
+        int user_id = user.getUser_id();
+        boolean isLeader = false;
+        int id;
+        JSONObject result = new JSONObject();
+        if(Objects.equals(user.getUser_category(), "community")){
+            id = communityMapper.findCommunityIdByUserId(user_id);
+            result.put("communityID",id);
+            return ResponseEntity.ok(result);
+        }
+        if(Objects.equals(user.getUser_category(), "student")){
+            id = teamMapper.getTeamIdByUser(user_id);
+            if(teamMapper.getLeaderIdByTeamNumber(id)>0){
+                isLeader = true;
+            }
+            result.put("TeamID",id);
+            result.put("isLeader",isLeader);
+            return ResponseEntity.ok(result);
+        }
+        else{
+            return ResponseEntity.ok(result);
         }
     }
 

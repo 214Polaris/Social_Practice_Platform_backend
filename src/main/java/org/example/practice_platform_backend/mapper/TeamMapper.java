@@ -32,5 +32,9 @@ public interface TeamMapper {
 
     // 根据用户id获取团队id
     @Select("select team_number from student where user_id = #{user_id}")
-    int getTeamIdByUser(@Param("user_id")int user_id);
+    Integer getTeamIdByUser(@Param("user_id")int user_id);
+
+    // 获取团队队长 id
+    @Select("select team_manager from college_team where team_number = #{team_number}")
+    Integer getLeaderIdByTeamNumber(int team_number);
 }
