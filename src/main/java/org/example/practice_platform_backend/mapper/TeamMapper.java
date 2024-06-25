@@ -30,6 +30,10 @@ public interface TeamMapper {
             "(select team_number from succ_project where project_id = #{project_id})")
     String getTeamNameByProjectId(int project_id);
 
+    // 根据项目id 查团队id
+    @Select("select team_number from succ_project where project_id = #{project_id}")
+    Integer getTeamIdByProjectId(int project_id);
+
     // 根据用户id获取团队id
     @Select("select team_number from student where user_id = #{user_id}")
     Integer getTeamIdByUser(@Param("user_id")int user_id);

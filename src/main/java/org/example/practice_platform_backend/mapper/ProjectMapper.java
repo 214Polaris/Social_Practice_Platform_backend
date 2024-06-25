@@ -34,6 +34,13 @@ public interface ProjectMapper {
     Project getNeedByNeedId(int need_id);
 
     /**
+     * 查询结对对应需求信息
+     */
+    @Select("select * from community_need where need_id = " +
+            "(select need_id from succ_project where project_id = #{project_id})")
+    Project getNeedByProjectId(int project_id);
+
+    /**
      * 查询是否已经结对
      */
     @Select("Select Exists (select 1 from succ_project where need_id = #{need_id})")

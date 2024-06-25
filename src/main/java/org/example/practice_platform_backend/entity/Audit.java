@@ -7,11 +7,12 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.time.LocalDateTime;
+import java.util.Comparator;
 
 @Getter
 @Setter
 @Entity
-public class Audit {
+public class Audit implements Comparable<Audit>{
     @Id
     private int audit_id;
 
@@ -31,6 +32,18 @@ public class Audit {
     private int is_pass;
     private String fail_interpretation;
     private int is_notice;  // 是否已通知申请人
+
+    /**
+     * 比较两个审核内容的更新时间 优先比较last_mod_time，若为空则比较apply_time
+     */
+    private static final Comparator<Audit> COMPARATOR =
+            Comparator.comparing((Audit a) -> a.last_mod_time, Comparator.nullsFirst(LocalDateTime::compareTo))
+                    .thenComparing(a -> a.apply_time, Comparator.nullsFirst(LocalDateTime::compareTo));
+    @Override
+    public int compareTo(Audit o) {
+        return COMPARATOR.compare(this, o);
+    }
+
     // 社区审核列表
     @Getter
     @Setter
