@@ -40,7 +40,7 @@ public class ImageUtils {
         //获取最后一个"."
         String trueName = getRealName(name);
         int index = trueName.lastIndexOf(".");
-        return name.substring(0,index);
+        return trueName.substring(0,index);
     }
 
 

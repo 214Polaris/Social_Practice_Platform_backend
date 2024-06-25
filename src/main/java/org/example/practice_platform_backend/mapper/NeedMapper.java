@@ -16,6 +16,11 @@ public interface NeedMapper {
             "where is_pass = 1 and need_id = #{need_id}")
     CommunityNeed getNeedByNeedId(@Param("need_id") int need_id);
 
+    // 根据需求 id 获取详细需求(未审核)
+    @Select("select need_id,title, post_time, introduction, resource, community_id from community_need " +
+            "where is_pass = 0 and need_id = #{need_id}")
+    CommunityNeed getUnAuditNeedByNeedId(@Param("need_id") int need_id);
+
     // 根据需求 id 获取图片和视频的 list
     @Select("select media_id, path,type from need_media where need_id = #{need_id}")
     List<HashMap<String,String>> getMediaByNeedId(@Param("need_id") int need_id);
@@ -26,9 +31,13 @@ public interface NeedMapper {
     @Options(useGeneratedKeys = true, keyProperty = "need_id")
     void registerNeed(CommunityNeed communityNeed);
 
-    //返回封面 id
+    //返回封面个数
     @Select("SELECT COUNT(*) FROM need_media WHERE need_id = #{needId} AND type = 'cover'")
     int existsNeedCover(@Param("needId") int needId);
+
+    //返回封面的 path
+    @Select("SELECT path FROM need_media WHERE need_id = #{needId} AND type = 'cover'")
+    String getCoverPathByNeedId(@Param("needId") int needId);
 
     //检查有多少需求图片
     @Select("SELECT COUNT(*) FROM need_media WHERE need_id = #{needId} AND type != 'video'")
@@ -43,7 +52,7 @@ public interface NeedMapper {
     // 添加需求视频(封面)
     @Insert("insert into need_media(path,need_id,type) " +
             "values(#{path},#{need_id},'cover'); ")
-    @Options(useGeneratedKeys = true, keyProperty = "need_id")
+    @Options(useGeneratedKeys = true, keyProperty = "media_id")
     void addNeedCover(CommunityNeed.media m);
 
     //检查是否存在需求视频

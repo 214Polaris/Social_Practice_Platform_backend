@@ -127,6 +127,10 @@ public interface FruitMapper {
     @Delete("DELETE from fruit_media where fruit_id = #{id} and type = 'video'")
     boolean deleteFruitVideo(@org.apache.ibatis.annotations.Param("id") int id);
 
+    //获取成果封面
+    @Select("SELECT path from fruit_media where fruit_id=#{fruit_id} AND type = 'cover'")
+    String getFruitCover(@Param("fruit_id") int fruit_id);
+
     //媒体 id 查媒体名字
     @Select("SELECT path from fruit_media where media_id = #{media_id}")
     String getFruitMediaPathByMediaId(int media_id);

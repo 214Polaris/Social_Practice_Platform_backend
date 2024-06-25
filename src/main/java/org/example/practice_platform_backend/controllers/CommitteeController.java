@@ -94,6 +94,32 @@ public class CommitteeController {
         return ResponseEntity.ok(teamAuditList);
     }
 
+    //获取社区需求的审核列表
+    @GetMapping("/audit/need")
+    public ResponseEntity<?> getAduitNeedList(HttpServletRequest request) {
+        if(!isValid(request)){
+            return ResponseEntity.status(400).body("该用户不是校团委");
+        }
+        List<Audit.NeedAudit> needAuditList = auditService.getNeedAudits();
+        if(needAuditList.isEmpty()){
+            return ResponseEntity.status(200).body("审核列表为空");
+        }
+        return ResponseEntity.ok(needAuditList);
+    }
+
+    //获取成果的审核列表
+    @GetMapping("/audit/fruit")
+    public ResponseEntity<?> getAuditFruitList(HttpServletRequest request) {
+        if(!isValid(request)){
+            return ResponseEntity.status(400).body("该用户不是校团委");
+        }
+        List<Audit.FruitAudit> fruitAuditList = auditService.getFruitAudits();
+        if(fruitAuditList.isEmpty()){
+            return ResponseEntity.status(200).body("审核列表为空");
+        }
+        return ResponseEntity.ok(fruitAuditList);
+    }
+
 
 }
 

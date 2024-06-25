@@ -2,10 +2,37 @@ package org.example.practice_platform_backend.mapper;
 
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Select;
 import org.example.practice_platform_backend.entity.Audit;
+
+import java.util.List;
 
 @Mapper
 public interface AuditMapper {
+
+    /**
+     * 获取社区的审核列表
+     */
+    @Select("SELECT * from audit_community")
+    List<Audit> getCommunityAudit();
+
+    /**
+     * 获取队伍的审核列表
+     */
+    @Select("SELECT * from audit_team")
+    List<Audit> getTeamAudit();
+
+    /**
+     * 获取需求的审核列表
+     */
+    @Select("SELECT * from audit_need")
+    List<Audit> getNeedAudit();
+
+    /**
+     * 获取成果
+     */
+    @Select("SELECT * from audit_fruit")
+    List<Audit> getFruitAudit();
     /**
      * 插入新的结对审核
      */

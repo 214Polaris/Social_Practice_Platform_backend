@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.*;
 import org.example.practice_platform_backend.utils.JwtUtils;
 import org.springframework.dao.*;
 
+import java.io.File;
 import java.sql.SQLIntegrityConstraintViolationException;
 import java.util.HashMap;
 import java.util.Objects;
@@ -99,7 +100,7 @@ public class UserController {
             HashMap<String,String> user = userMapper.getUserById(user_id);
             String trueName = ImageUtils.getTrueName(user.get("image"));
             String suffix = ImageUtils.getSuffix(user.get("image"));
-            String path = uploadPath + trueName + "_origin" + suffix;
+            String path = uploadPath + "avatar" + File.separator + trueName + "_origin" + suffix;
             user.put("image",imageUtils.getFileBytes(path));
             return ResponseEntity.ok(user);
         } catch (Exception e){

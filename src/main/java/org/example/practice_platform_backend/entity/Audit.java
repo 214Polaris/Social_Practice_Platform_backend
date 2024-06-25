@@ -32,5 +32,47 @@ public class Audit {
     private String fail_interpretation;
     private int is_notice;  // 是否已通知申请人
 
+    // 社区审核列表
+    @Getter
+    @Setter
+    public static class CommunityAudit{
+        private int audit_id;
+        private int id;
+        private String name;
+        private String img;
+    }
+
+    // 高校队伍审核列表
+    @Setter
+    @Getter
+    public static class TeamAudit{
+        private int audit_id;
+        private int id;
+        private String academy_name;
+        private String team_name;
+        private String img;
+    }
+
+    // 需求审核列表
+    @Setter
+    @Getter
+    public static class NeedAudit{
+        private int audit_id;
+        private int id;
+        private String title;
+        private int community_id;
+        private String community_name;
+        private String img;
+    }
+
+    //成果审核列表
+    @Setter
+    @Getter
+    public static class FruitAudit{
+        private int audit_id;
+        private int id;
+        private String title;
+        private String img;
+    }
 
 }
