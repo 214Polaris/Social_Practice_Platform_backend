@@ -13,12 +13,12 @@ public interface NeedMapper {
 
     // 根据需求 id 获取详细需求
     @Select("select title, post_time, introduction, resource from community_need " +
-            "where is_pass = 1 and need_id = #{need_id}")
+            "where is_pass = 1 and need_id = #{need_id} ")
     CommunityNeed getNeedByNeedId(@Param("need_id") int need_id);
 
     // 根据需求 id 获取详细需求(未审核)
     @Select("select need_id,title, post_time, introduction, resource, community_id from community_need " +
-            "where is_pass = 0 and need_id = #{need_id}")
+            "where is_pass = 0 and need_id = #{need_id} and fail_interpretation = NULL")
     CommunityNeed getUnAuditNeedByNeedId(@Param("need_id") int need_id);
 
     // 根据需求 id 获取图片和视频的 list
