@@ -13,25 +13,25 @@ public interface AuditMapper {
     /**
      * 获取社区的审核列表
      */
-    @Select("SELECT * from audit_community")
+    @Select("SELECT * from audit_community where last_mod_time = NULL")
     List<Audit> getCommunityAudit();
 
     /**
      * 获取队伍的审核列表
      */
-    @Select("SELECT * from audit_team")
+    @Select("SELECT * from audit_team where last_mod_time = NULL")
     List<Audit> getTeamAudit();
 
     /**
      * 获取需求的审核列表
      */
-    @Select("SELECT * from audit_need")
+    @Select("SELECT * from audit_need where last_mod_time = NULL")
     List<Audit> getNeedAudit();
 
     /**
      * 获取成果
      */
-    @Select("SELECT * from audit_fruit")
+    @Select("SELECT * from audit_fruit where last_mod_time = NULL")
     List<Audit> getFruitAudit();
     /**
      * 插入新的结对审核

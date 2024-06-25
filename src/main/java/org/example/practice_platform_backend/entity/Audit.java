@@ -31,7 +31,6 @@ public class Audit {
     private int is_pass;
     private String fail_interpretation;
     private int is_notice;  // 是否已通知申请人
-
     // 社区审核列表
     @Getter
     @Setter
