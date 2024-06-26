@@ -89,7 +89,7 @@ public class AuditService {
     }
 
     //获取需求的审核列表
-    public List<Audit.NeedAudit> getNeedAudits() {
+    public List<Audit.NeedAudit>  getNeedAudits() {
         List<Audit> auditList = auditMapper.getNeedAudit();
         List<Audit.NeedAudit> needAuditList = new ArrayList<>();
         auditList.forEach(audit -> {
