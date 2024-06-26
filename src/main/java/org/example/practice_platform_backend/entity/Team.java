@@ -15,5 +15,6 @@ public class Team {
     private int member_cnt;
     private String address;
     private String avatar_path;
+    private String teacher;
 }
 

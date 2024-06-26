@@ -1,5 +1,6 @@
 package org.example.practice_platform_backend.controllers;
 
+import jakarta.servlet.http.HttpServletRequest;
 import net.minidev.json.JSONObject;
 import org.example.practice_platform_backend.entity.Team;
 import org.example.practice_platform_backend.mapper.TeamMapper;
@@ -10,10 +11,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.relational.core.sql.In;
 import org.springframework.data.repository.query.Param;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.jdbc.BadSqlGrammarException;
+import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
 import java.util.List;
@@ -53,5 +52,18 @@ public class TeamController {
             return ResponseEntity.status(400).body("未找到队伍信息");
         }
         return ResponseEntity.status(200).body(result);
+    }
+
+    //修改队伍基本信息
+    @PostMapping("/team/modify")
+    public ResponseEntity<?> modifyTeam(HttpServletRequest request, @RequestBody Team team) {
+        if(!teamUtils.checkTeamUser(request,team.getTeam_number())){
+            return ResponseEntity.status(400).body("该用户不是该队伍的负责人");
+        }
+        if(teamUtils.modifyTeam(team)){
+            return ResponseEntity.status(200).body("修改成功");
+        } else{
+            return ResponseEntity.status(400).body("修改队伍出现错误");
+        }
     }
 }

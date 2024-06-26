@@ -3,8 +3,13 @@ package org.example.practice_platform_backend.mapper;
 import net.minidev.json.JSONObject;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.Update;
 import org.example.practice_platform_backend.entity.Team;
+import org.example.practice_platform_backend.entity.User;
+import org.springframework.data.relational.core.sql.In;
 import org.springframework.data.repository.query.Param;
+import org.springframework.scheduling.annotation.Async;
+import org.springframework.transaction.annotation.Transactional;
 
 @Mapper
 public interface TeamMapper {
@@ -46,4 +51,34 @@ public interface TeamMapper {
             where c.team_number= #{team_number}
             """)
     JSONObject getTeacherInfoByTeamNumber(int team_number);
+
+    //查询队长的 user_id 是否对应队伍
+    @Select("select team_number from college_team where team_manager=#{team_manager}")
+    Integer getTeamNumberByTeamManager(int team_manager);
+
+    //修改队伍基本信息
+    @Async
+    @Update("<script>" +
+            "UPDATE college_team" +
+            "<set>" +
+            "<if test='team_name != null'> team_name = #{team_name},</if>" +
+            "<if test='introduction != null'> introduction = #{introduction},</if>" +
+            "<if test='academy != null'>academy = #{academy},</if>" +
+            "</set>" +
+            "WHERE team_number = #{team_number}" +
+            "</script>")
+    void modifyTeam(Team team);
+
+    //修改队伍指导老师
+    @Async
+    @Update("<script>" +
+            "UPDATE college_team_teacher" +
+            "<set>" +
+            "<if test='teacher != null'> user_id = #{teacher},</if>" +
+            "</set>" +
+            "WHERE team_number = #{team_number}" +
+            "</script>")
+    @Transactional
+    void modifyTeamTeacher(Team team);
+
 }
