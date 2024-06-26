@@ -1,7 +1,9 @@
 package org.example.practice_platform_backend.mapper;
 
 import net.minidev.json.JSONObject;
+import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Options;
 import org.apache.ibatis.annotations.Select;
 import org.apache.ibatis.annotations.Update;
 import org.example.practice_platform_backend.entity.Team;
@@ -36,6 +38,10 @@ public interface TeamMapper {
             "(select team_number from succ_project where project_id = #{project_id})")
     String getTeamNameByProjectId(int project_id);
 
+    // 根据项目id 查团队id
+    @Select("select team_number from succ_project where project_id = #{project_id}")
+    Integer getTeamIdByProjectId(int project_id);
+
     // 根据用户id获取团队id
     @Select("select team_number from student where user_id = #{user_id}")
     Integer getTeamIdByUser(@Param("user_id")int user_id);
@@ -51,6 +57,20 @@ public interface TeamMapper {
             where c.team_number= #{team_number}
             """)
     JSONObject getTeacherInfoByTeamNumber(int team_number);
+
+    /**
+     * 插入新队伍 未审核
+     */
+    @Insert("insert into college_team(team_name, team_manager, introduction, avatar_path, academy, college, address)" +
+            " values(#{team_name}, #{team_manager}, #{introduction}, #{avatar_path}, #{academy}, #{college}, #{address})")
+    @Options(useGeneratedKeys = true, keyProperty = "team_number")
+    void insertTeam(Team team);
+
+    /**
+     * 判断该人是否有队伍
+     */
+    @Select("select exists(select * from student where user_id = #{user_id})")
+    boolean isHaveTeam(int user_id);
 
     //查询队长的 user_id 是否对应队伍
     @Select("select team_number from college_team where team_manager=#{team_manager}")

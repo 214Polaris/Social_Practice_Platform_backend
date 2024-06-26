@@ -7,6 +7,7 @@ import net.minidev.json.JSONObject;
 import org.example.practice_platform_backend.entity.Community;
 import org.example.practice_platform_backend.entity.User;
 import org.example.practice_platform_backend.mapper.CommunityMapper;
+import org.example.practice_platform_backend.service.AuditService;
 import org.example.practice_platform_backend.service.CommunityService;
 import org.example.practice_platform_backend.service.MapService;
 import org.example.practice_platform_backend.service.ProjectService;
@@ -39,6 +40,9 @@ public class CommunityController {
     private JwtUtils jwtUtils;
     @Autowired
     private CommunityMapper communityMapper;
+
+    @Autowired
+    private AuditService  auditService;
 
     //加载社区
     @GetMapping("")
@@ -102,5 +106,22 @@ public class CommunityController {
             LOGGER.error(e.getMessage());
             return ResponseEntity.status(400).body("查询失败");
         }
+    }
+
+    @GetMapping("/get_audit_list")
+    public ResponseEntity<?> getAuditList(HttpServletRequest request) throws IOException {
+        User user = jwtUtils.getUserInfoFromToken(request.getHeader("token"), User.class);
+        if(!Objects.equals(user.getUser_category(), "community")){
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("当前用户不是社区负责人");
+        }
+        int user_id = user.getUser_id();
+        try{
+            JSONObject result = auditService.getAuditList_com(user_id);
+            return ResponseEntity.status(200).body(JSON.toJSONString(result));
+        } catch (Exception e){
+            LOGGER.error(e.getMessage());
+            return ResponseEntity.status(400).body("查询失败");
+        }
+
     }
 }

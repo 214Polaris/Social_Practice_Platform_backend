@@ -13,6 +13,15 @@ import java.util.List;
 
 @Mapper
 public interface FruitMapper {
+
+    /**
+     * 插入新的成果 待审核
+     */
+    @Insert("insert fruit_info (title, introduction, position, date, project_id)" +
+            "values(#{title}, #{introduction}, #{position}, #{date}, #{project_id})")
+    @Options(useGeneratedKeys = true, keyProperty = "fruit_id")
+    void insertFruit(Fruit fruit);
+
     // 获取成果详细信息
     @Select("select * from fruit_info where fruit_id=#{fruit_id}")
     Fruit getFruit(int fruit_id);

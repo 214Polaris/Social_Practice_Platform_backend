@@ -2,9 +2,8 @@ package org.example.practice_platform_backend.service;
 
 import net.minidev.json.JSONArray;
 import net.minidev.json.JSONObject;
-import org.example.practice_platform_backend.entity.Fruit;
-import org.example.practice_platform_backend.entity.Kudos;
-import org.example.practice_platform_backend.entity.Comment;
+import org.example.practice_platform_backend.entity.*;
+import org.example.practice_platform_backend.mapper.AuditMapper;
 import org.example.practice_platform_backend.mapper.FruitMapper;
 import org.example.practice_platform_backend.mapper.UserMapper;
 import org.example.practice_platform_backend.utils.FruitUtils;
@@ -14,7 +13,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.io.IOException;
 import java.sql.Timestamp;
-import java.util.List;
 
 @Service
 public class FruitService {
@@ -27,6 +25,12 @@ public class FruitService {
 
     @Autowired
     private FruitUtils  fruitUtils;
+
+    @Autowired
+    private AuditMapper  auditMapper;
+
+    private final String default_fruit_cover_path = "fruit_images/default.png";
+
     /**
      * 完成点赞事务
      */
@@ -77,6 +81,9 @@ public class FruitService {
         }
     }
 
+    /**
+     * 获取互动消息
+     */
     public JSONObject getInteraction(int user_id, String user_category, Timestamp timestamp, int offset_cm, int offset_kudos) throws IOException {
         JSONObject result = new JSONObject();
         JSONArray list = new JSONArray();
@@ -95,6 +102,30 @@ public class FruitService {
         }
         result.put("interaction_list",list);
         return result;
+    }
+
+    /**
+     * 插入 成果
+     */
+    public int postFruit(Fruit fruit, int user_id){
+        insertFruit(fruit, user_id);
+        return fruit.getFruit_id();
+    }
+
+    @Transactional
+    public void insertFruit(Fruit fruit, int user_id){
+        fruitMapper.insertFruit(fruit);
+        FruitMedia  fruitMedia = new FruitMedia();
+        fruitMedia.setFruit_id(fruit.getFruit_id());
+        fruitMedia.setPath(default_fruit_cover_path);
+        fruitMedia.setType("cover");
+        fruitMapper.addFruitCover(fruitMedia);
+        Audit audit = new Audit();
+        audit.setFruit_id(fruit.getFruit_id());
+        audit.setNew_id(fruit.getFruit_id());
+        audit.setApply_user_id(user_id);
+        audit.setApply_time(fruit.getDate());
+        auditMapper.newFruitAudit(audit);
     }
 }
 

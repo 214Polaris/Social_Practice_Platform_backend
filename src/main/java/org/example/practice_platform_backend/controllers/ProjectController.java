@@ -44,7 +44,7 @@ public class ProjectController {
         }
     }
 
-    //需求详情查询get,只实现了传图片
+    //需求详情查询get
     @GetMapping("/need/detail")
     public ResponseEntity<?>  getNeedDetail(@Param("need_id") String need_id) throws IOException {
         try{
@@ -81,7 +81,7 @@ public class ProjectController {
             String token = request.getHeader("token");
             int manager_id = jwtUtils.getUserInfoFromToken(token, User.class).getUser_id();
             projectService.pairNeed(Integer.parseInt(need_id), manager_id);
-            return ResponseEntity.status(200).body("配对成功");
+            return ResponseEntity.status(200).body("配对成功,待审核");
         }catch (Exception e){
             e.printStackTrace();
             return ResponseEntity.status(400).body("配对失败");
