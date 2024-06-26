@@ -74,9 +74,11 @@ public class CommunityLeaderController {
         media.setPath("need_images/default.jpg");
         needMapper.addNeedCover(media);
         Integer media_id = media.getMedia_id();
+        Integer need_id = communityNeed.getNeed_id();
         if(media_id==0){
             return ResponseEntity.status(400).body("注册社区需求失败");
         }
-        return ResponseEntity.status(200).header("id", String.valueOf(media_id)).body("注册社区需求成功");
+        return ResponseEntity.status(200).header("media_id", String.valueOf(media_id)).
+                header("need_id", String.valueOf(need_id)).body("注册社区需求成功");
     }
 }
