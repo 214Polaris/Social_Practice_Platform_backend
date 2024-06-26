@@ -75,4 +75,16 @@ public class TeamUtils {
         return result;
 
     }
+
+    public JSONObject getTeam(int team_id) throws IOException {
+        JSONObject result = new JSONObject();
+        Team team = teamMapper.getTeamById(team_id);
+        JSONObject teacher = teamMapper.getTeacherInfoByTeamNumber(team_id);
+        result.put("name", team.getTeam_name());
+        result.put("introduction", team.getIntroduction());
+        result.put("academy", team.getAcademy());
+        result.put("teacher", teacher.get("name"));
+        result.put("teacherID", teacher.get("user_id"));
+        return result;
+    }
 }
