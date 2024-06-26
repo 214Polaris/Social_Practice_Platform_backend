@@ -1,14 +1,21 @@
 package org.example.practice_platform_backend.utils;
 
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.Setter;
 import net.minidev.json.JSONArray;
 import net.minidev.json.JSONObject;
+import org.example.practice_platform_backend.controllers.CommitteeController;
 import org.example.practice_platform_backend.entity.Project;
 import org.example.practice_platform_backend.entity.Team;
+import org.example.practice_platform_backend.entity.User;
 import org.example.practice_platform_backend.mapper.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.io.IOException;
 import java.util.List;
@@ -16,6 +23,10 @@ import java.util.List;
 @Setter
 @Component
 public class TeamUtils {
+
+    // 错误日志
+    private static final Logger LOGGER = LoggerFactory.getLogger(CommitteeController.class);
+
 
     @Autowired
     private UserMapper  userMapper;
@@ -41,6 +52,9 @@ public class TeamUtils {
     @Value("${uploadPath}")
 //    private String uploadPath = "D:/Desktop/Processing/终极实训/Social_Practice_Platform_backend/uploadfiles";
     private String uploadPath;
+    @Autowired
+    private JwtUtils jwtUtils;
+
     public JSONObject getTeamInfo(Team team) throws IOException {
         JSONObject result = new JSONObject();
         JSONArray teamList = new JSONArray();
@@ -76,6 +90,7 @@ public class TeamUtils {
 
     }
 
+    //获取队伍基本信息
     public JSONObject getTeam(int team_id) throws IOException {
         JSONObject result = new JSONObject();
         Team team = teamMapper.getTeamById(team_id);
@@ -86,5 +101,27 @@ public class TeamUtils {
         result.put("teacher", teacher.get("name"));
         result.put("teacherID", teacher.get("user_id"));
         return result;
+    }
+
+    //鉴权
+    public Boolean checkTeamUser(HttpServletRequest request,int team_number) {
+        int user_id = jwtUtils.getUserInfoFromToken(request.getHeader("token"),User.class).getUser_id();
+        Integer bindTeam_number = teamMapper.getTeamNumberByTeamManager(user_id);
+        return bindTeam_number != null && bindTeam_number == team_number;
+    }
+
+    //修改队伍基本信息
+    @Transactional
+    public Boolean modifyTeam(Team team) {
+        try {
+            teamMapper.modifyTeam(team);
+            if (team.getTeacher() != null) {
+                teamMapper.modifyTeamTeacher(team);
+            }
+            return true;
+        }catch (DataAccessException e){
+            LOGGER.error(e.getMessage());
+            return false;
+        }
     }
 }

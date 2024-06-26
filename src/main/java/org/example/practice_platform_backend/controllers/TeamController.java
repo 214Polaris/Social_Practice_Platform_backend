@@ -16,6 +16,8 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.jdbc.BadSqlGrammarException;
+import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
 import java.util.List;
@@ -84,5 +86,18 @@ public class TeamController {
             return ResponseEntity.status(400).body("未找到队伍信息");
         }
         return ResponseEntity.status(200).body(result);
+    }
+
+    //修改队伍基本信息
+    @PostMapping("/team/modify")
+    public ResponseEntity<?> modifyTeam(HttpServletRequest request, @RequestBody Team team) {
+        if(!teamUtils.checkTeamUser(request,team.getTeam_number())){
+            return ResponseEntity.status(400).body("该用户不是该队伍的负责人");
+        }
+        if(teamUtils.modifyTeam(team)){
+            return ResponseEntity.status(200).body("修改成功");
+        } else{
+            return ResponseEntity.status(400).body("修改队伍出现错误");
+        }
     }
 }

@@ -16,5 +16,6 @@ public class Team {
     private String address;
     private String avatar_path;
     private String teacher_id;
+    private String teacher;
 }
 
