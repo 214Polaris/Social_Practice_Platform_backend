@@ -33,6 +33,8 @@ public class Audit implements Comparable<Audit>{
     private String fail_interpretation;
     private int is_notice;  // 是否已通知申请人
 
+    private String teacher_netid; // 队伍对应指导老师老师的net_id
+
     /**
      * 比较两个审核内容的更新时间 优先比较last_mod_time，若为空则比较apply_time
      */

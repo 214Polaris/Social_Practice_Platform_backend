@@ -53,6 +53,10 @@ public interface AuditMapper {
     @Update("update audit_need set is_notice = 1 where last_mod_time is not NULL and apply_user_id = #{user_id} and is_notice = 0")
     void updateNeedAuditAsRead(int user_id);
 
+    @Insert("insert audit_fruit (fruit_id, new_id, apply_user_id, apply_time) " +
+            "values(#{fruit_id}, #{new_id}, #{apply_user_id}, #{apply_time})")
+    void newFruitAudit(Audit audit);
+
     /**
      * 获取成果
      */
@@ -76,4 +80,12 @@ public interface AuditMapper {
             "(select project_id from succ_project where need_id in " +
             "(select need_id from community_need where community_id = #{community_id}))")
     List<Audit> getProjAuditByCommunityId(int community_id);
+
+    /**
+     * 插入新的队伍审核
+     */
+    @Insert("insert into audit_team (team_id,apply_user_id,apply_time, new_id, teacher_netid)" +
+            " values(#{team_id},#{apply_user_id}" +
+            ",#{apply_time}, #{new_id}, #{teacher_netid})")
+    void newTeamAudit(Audit audit);
 }

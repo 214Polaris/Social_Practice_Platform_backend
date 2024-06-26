@@ -32,6 +32,10 @@ public interface UserMapper {
     @Select("select name,username,phone_number,avatar_path as image,gender from user where user_id=#{userId}")
     HashMap<String,String> getUserById(@Param("userId")int userId);
 
+    // 根据net_id 判断用户是否存在
+    @Select("select exists(select * from user where username = #{username})")
+    boolean existUser(@Param("username")String username);
+
     //保存上传的头像图片路径
     @Async
     @Update("UPDATE user SET avatar_path = #{avatar_path} WHERE user_id = #{user_id}")

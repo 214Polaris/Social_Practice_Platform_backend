@@ -1,7 +1,9 @@
 package org.example.practice_platform_backend.mapper;
 
 import net.minidev.json.JSONObject;
+import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Options;
 import org.apache.ibatis.annotations.Select;
 import org.example.practice_platform_backend.entity.Team;
 import org.springframework.data.repository.query.Param;
@@ -50,4 +52,18 @@ public interface TeamMapper {
             where c.team_number= #{team_number}
             """)
     JSONObject getTeacherInfoByTeamNumber(int team_number);
+
+    /**
+     * 插入新队伍 未审核
+     */
+    @Insert("insert into college_team(team_name, team_manager, introduction, avatar_path, academy, college, address)" +
+            " values(#{team_name}, #{team_manager}, #{introduction}, #{avatar_path}, #{academy}, #{college}, #{address})")
+    @Options(useGeneratedKeys = true, keyProperty = "team_number")
+    void insertTeam(Team team);
+
+    /**
+     * 判断该人是否有队伍
+     */
+    @Select("select exists(select * from student where user_id = #{user_id})")
+    boolean isHaveTeam(int user_id);
 }

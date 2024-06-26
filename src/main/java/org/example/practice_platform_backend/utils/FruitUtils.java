@@ -73,6 +73,11 @@ public class FruitUtils {
             mediaList.add(media);
         }
         result.put("imgList", mediaList);
+        if(Comments.length == 0){  // 没有相关评论，直接传空list
+            result.put("comment_list", null);
+            result.put("unlike_flag", unlikeflag);
+            return result;
+        }
         for(int i=0;i<2;i++){
             JSONObject comment = new JSONObject();
             Map<String, String> user_info = commentMapper.getAvatarPathByUserId(Comments[i].getUser_id());

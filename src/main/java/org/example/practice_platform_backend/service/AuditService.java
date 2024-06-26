@@ -11,14 +11,13 @@ import org.example.practice_platform_backend.utils.ImageUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Objects;
+import java.time.LocalDateTime;
+import java.util.*;
 
 @Service
 public class AuditService {
@@ -40,7 +39,12 @@ public class AuditService {
     private FruitMapper fruitMapper;
 
     @Autowired
+    private UserMapper userMapper;
+
+    @Autowired
     private ProjectMapper projectMapper;
+
+    private final String[] address_match = {"广东省广州市海珠区", "广东省广州市番禺区", "广东省广州市越秀区", "广东省珠海市香洲区", "广东省深圳市光明区"};
 
     // 获取社区的审核列表
     public List<Audit.CommunityAudit> getCommunityAudits() {
@@ -224,5 +228,43 @@ public class AuditService {
         return needAuditList;
     }
 
+    /**
+     * 高校队伍注册申请
+     */
+    public String registerTeam(Team team){
+        if(teamMapper.isHaveTeam(team.getTeam_manager())){
+            return "该学生已拥有通过审核的队伍";
+        }
+        if(!Arrays.asList(address_match).contains(team.getAddress())){
+            return "地区不符合规范";
+        }
+        if(!userMapper.existUser(team.getTeacher_id())){
+            return "该老师不存在";
+        }
+        team.setCollege("中山大学");
+        team.setAvatar_path("team_avatar/default_avatar.jpg");
+        try{
+            insertTeam(team);
+        } catch  (Exception e){
+            return e.getMessage();
+        }
+        return null;
+    }
+
+    /**
+     * 插入队伍信息 创建审核列表
+     */
+    @Transactional
+    public void insertTeam(Team team) {
+        teamMapper.insertTeam(team);
+        int newId = team.getTeam_number();
+        Audit audit = new Audit();
+        audit.setApply_time(LocalDateTime.now());
+        audit.setTeam_id(newId);
+        audit.setNew_id(newId);
+        audit.setApply_user_id(team.getTeam_manager());
+        audit.setTeacher_netid(team.getTeacher_id());
+        auditMapper.newTeamAudit(audit);
+  }
 
 }

@@ -18,9 +18,12 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
+import java.sql.Date;
 import java.sql.Timestamp;
+import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Objects;
 
 // 成果相关
 @RestController
@@ -55,7 +58,7 @@ public class FruitController {
             int user_id = jwtUtils.getUserInfoFromToken(token, User.class).getUser_id();
             Fruit fruit = fruitMapper.getFruit(Integer.parseInt(fruit_id));
             FruitMedia[] fruitMedias = fruitMapper.getFruitMedia(Integer.parseInt(fruit_id));
-            Comment[] comments = commentMapper.getCommentByCommentId(Integer.parseInt(fruit_id), null);
+            Comment[] comments = commentMapper.getCommentByCommentId(Integer.parseInt(fruit_id), Date.from(Instant.now()));
             Kudos kudos = new Kudos();
             kudos.setFruit_id(Integer.parseInt(fruit_id));
             kudos.setUser_id(user_id);
@@ -105,7 +108,7 @@ public class FruitController {
         }
     }
 
-    @GetMapping(value = "res/interaction")
+    @GetMapping(value = "/res/interaction")
     public ResponseEntity<?> getInteraction(HttpServletRequest request,@RequestParam(value = "time") String time,
                                             @RequestParam(value = "offset_cm", required = false) String offset_cm,
                                             @RequestParam(value = "offset_kudos", required = false) String offset_kudos) {
@@ -123,6 +126,26 @@ public class FruitController {
         } catch (Exception e) {
             LOGGER.error(e.getMessage());
             return ResponseEntity.status(400).body("查询失败");
+        }
+    }
+
+    @PostMapping("/res/post")
+    public ResponseEntity<?> postFruit(@RequestBody Fruit fruit, HttpServletRequest request) {
+        try {
+            String token = request.getHeader("token");
+            User user = jwtUtils.getUserInfoFromToken(token, User.class);
+            if(!Objects.equals(user.getUser_category(), "student") && !Objects.equals(user.getUser_category(), "community")){
+                return ResponseEntity.status(400).body("发布成果请用学生或社区身份操作");
+            }
+            int user_id = user.getUser_id();
+            fruit.setDate(LocalDateTime.now());
+            int fruit_id = fruitService.postFruit(fruit, user_id);
+            JSONObject result = new JSONObject();
+            result.put("id", fruit_id);
+            return ResponseEntity.status(200).body(JSON.toJSONString(result));
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(400).body("发布失败");
         }
     }
 }
