@@ -247,14 +247,21 @@ public class SaveFileService {
         String type = typeMap.get(index);
         String fileName = searchImageMap.get(type).apply(media_id);
         if(fileName!=null){
-            deleteImageMap.get(type).apply(media_id);
             fileName = ImageUtils.getRealName(fileName);
-            String filePath = uploadPath + type + "_images/" + type + "_" + id + "/" + fileName;
-            // 将字符串路径转换为 Path 对象
-            Path path = Paths.get(filePath);
-            // 删除文件
-            Files.delete(path);
-            return true;
+            String filePath;
+            //处理默认封面的情况
+            if(fileName.equals("default.jpg")){
+                deleteImageMap.get(type).apply(media_id);
+                return true;
+            }else {
+                filePath = uploadPath + type + "_images/" + type + "_" + id + "/" + fileName;
+                // 将字符串路径转换为 Path 对象
+                Path path = Paths.get(filePath);
+                // 删除文件
+                Files.delete(path);
+                deleteImageMap.get(type).apply(media_id);
+                return true;
+            }
         }
         return false;
     }

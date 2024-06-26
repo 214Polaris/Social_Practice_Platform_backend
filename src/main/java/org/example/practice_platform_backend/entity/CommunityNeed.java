@@ -3,6 +3,7 @@ package org.example.practice_platform_backend.entity;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Getter;
 import lombok.Setter;
+import net.minidev.json.JSONObject;
 
 import java.util.Date;
 import java.util.HashMap;
@@ -24,7 +25,7 @@ public class CommunityNeed {
     private String fail_interpretation;
     //关联到哪个社区
     private int community_id;
-    private List<HashMap<String,String>> mediaList;
+    private List<JSONObject> mediaList;
 
     @Getter
     @Setter

@@ -9,6 +9,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.Map;
+import java.util.Objects;
 
 @Service
 public class SendFileService {
@@ -64,7 +65,13 @@ public class SendFileService {
      * @return 图片
      */
     public String sendImage(@RequestParam String fileName, @RequestParam int type, @RequestParam int id)throws IOException{
-        String path = uploadPath + imagePathMap.get(type) + "_" + id + "/" + fileName;
+        String path;
+        // 处理默认图片的情况
+        if(Objects.equals(fileName, "default.jpg")){
+            path = uploadPath + ImageUtils.getRealName(imagePathMap.get(type)) + "_images" + File.separator + fileName;
+        }else {
+            path = uploadPath + imagePathMap.get(type) + "_" + id + "/" + fileName;
+        }
         return imageUtils.getThumbnail(path);
     }
 

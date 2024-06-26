@@ -1,5 +1,6 @@
 package org.example.practice_platform_backend.mapper;
 
+import net.minidev.json.JSONObject;
 import org.apache.ibatis.annotations.*;
 import org.example.practice_platform_backend.entity.CommunityNeed;
 import org.springframework.scheduling.annotation.Async;
@@ -23,7 +24,7 @@ public interface NeedMapper {
 
     // 根据需求 id 获取图片和视频的 list
     @Select("select media_id, path,type from need_media where need_id = #{need_id}")
-    List<HashMap<String,String>> getMediaByNeedId(@Param("need_id") int need_id);
+    List<JSONObject> getMediaByNeedId(@Param("need_id") int need_id);
 
     //注册新的需求
     @Insert("INSERT into community_need(title, post_time, introduction, resource, is_pass, is_pair, address, community_id)\n" +

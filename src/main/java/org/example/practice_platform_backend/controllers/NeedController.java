@@ -1,7 +1,7 @@
 package org.example.practice_platform_backend.controllers;
 
 import jakarta.servlet.http.HttpServletRequest;
-import org.apache.ibatis.annotations.Param;
+import net.minidev.json.JSONObject;
 import org.example.practice_platform_backend.entity.CommunityNeed;
 import org.example.practice_platform_backend.entity.User;
 import org.example.practice_platform_backend.mapper.NeedMapper;
@@ -12,7 +12,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.Objects;
 
@@ -30,16 +29,16 @@ public class NeedController {
     public ResponseEntity<?> getNeed(@RequestParam("id") int need_id){
         CommunityNeed communityNeed = needMapper.getNeedByNeedId(need_id);
         if(communityNeed == null){
-            return ResponseEntity.status(400).body("未找到社区");
+            return ResponseEntity.status(400).body("未找到社区需求");
         }
-        List<HashMap<String,String>> mediaList = needMapper.getMediaByNeedId(need_id);
+        List<JSONObject> mediaList = needMapper.getMediaByNeedId(need_id);
         if(mediaList==null){
             return ResponseEntity.status(400).body("未找到社区的图片和视频");
         }
         //返回图片名称
         mediaList.forEach(media->{
             if(!Objects.equals(media.get("type"), "video")){
-                String path = media.get("path");
+                String path = media.getAsString("path");
                 path = ImageUtils.getRealName(path);
                 media.put("path",path);
             }

@@ -44,6 +44,9 @@ public class CommunityService {
     //加载社区信息
     public Community getCommunity(int id){
         Community community = communityMapper.getCommunityById(id);
+        if(community == null){
+            return null;
+        }
         List<Community.media> mediaList = communityMapper.getCommunityMedia(id);
         mediaList.forEach(media->{
             if(!Objects.equals(media.getType(), "video")){
