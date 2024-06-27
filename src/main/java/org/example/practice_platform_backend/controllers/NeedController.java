@@ -47,19 +47,4 @@ public class NeedController {
         return ResponseEntity.status(200).body(communityNeed);
     }
 
-    // 修改需求
-    @PostMapping("/modify/need")
-    public ResponseEntity<?> modifyNeed(HttpServletRequest request, @RequestBody CommunityNeed communityNeed){
-        //鉴权，确定是当前用户发布的需求
-        User user = jwtUtils.getUserInfoFromToken(request.getHeader("token"), User.class);
-        if(!Objects.equals(user.getUser_category(), "community")){
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("当前用户不是社区负责人");
-        }
-        if(!needMapper.selectNeedByUserId(user.getUser_id()).contains(communityNeed.getNeed_id())){
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("当前用户并未发布过该需求");
-        }
-        needMapper.modifyNeed(communityNeed);
-        return ResponseEntity.ok().body("修改成功");
-    }
-
 }

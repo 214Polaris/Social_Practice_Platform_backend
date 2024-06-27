@@ -308,9 +308,6 @@ public class AuditService {
         if(community.getIntroduction()!=null){
             origin_community.setIntroduction(community.getIntroduction());
         }
-        if(community.getAddress()!=null){
-            origin_community.setAddress(community.getAddress());
-        }
     }
 
     /**

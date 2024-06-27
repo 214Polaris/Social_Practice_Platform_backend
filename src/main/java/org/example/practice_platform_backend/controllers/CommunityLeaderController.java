@@ -42,8 +42,6 @@ public class CommunityLeaderController {
     private NeedMapper needMapper;
     @Autowired
     private AuditService auditService;
-    @Autowired
-    private AuditMapper auditMapper;
 
     // 注册社区信息，返回注册后的社区 id，同时同步到审核列表当中
     @PostMapping("/register/community")
@@ -70,7 +68,7 @@ public class CommunityLeaderController {
         return ResponseEntity.status(200).header("id", String.valueOf(community.getCommunity_id())).body("注册成功");
     }
 
-    //修改社区基本信息
+    //修改社区基本信息，同时同步到审核列表当中
     @PostMapping("/community/modify")
     @Transactional
     public ResponseEntity<?> modifyCommunity(HttpServletRequest request, @RequestBody Community community){
@@ -85,10 +83,12 @@ public class CommunityLeaderController {
         if(origin_community.getUser_id()!=user.getUser_id()){
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body("当前用户不是该社区的负责人");
         }
-        if(community.getAddress()!=null&&!MapService.checkValidAddress(community.getAddress())){
-            return ResponseEntity.status(400).body("地址格式不合法");
+        if(community.getAddress()!=null){
+            if(!MapService.checkValidAddress(community.getAddress())) {
+                return ResponseEntity.status(400).body("地址格式不合法");
+            }
+            origin_community.setAddress(community.getAddress());
         }
-        community.setUser_id(user.getUser_id());
         try {
             community.setUser_id(user.getUser_id());
             communityLeaderService.modifyCommunity(origin_community,community);
@@ -127,5 +127,21 @@ public class CommunityLeaderController {
         auditService.insertNeed(communityNeed,need_id);
         return ResponseEntity.status(200).header("media_id", String.valueOf(media_id)).
                 header("need_id", String.valueOf(need_id)).body("注册社区需求成功");
+    }
+
+    // 修改需求，同时同步到审核列表当中
+    @PostMapping("/modify/need")
+    public ResponseEntity<?> modifyNeed(HttpServletRequest request, @RequestBody CommunityNeed communityNeed){
+        //鉴权，确定是当前用户发布的需求
+        User user = jwtUtils.getUserInfoFromToken(request.getHeader("token"), User.class);
+        if(!Objects.equals(user.getUser_category(), "community")){
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("当前用户不是社区负责人");
+        }
+        if(!needMapper.selectNeedByUserId(user.getUser_id()).contains(communityNeed.getNeed_id())){
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("当前用户并未发布过该需求");
+        }
+
+        needMapper.modifyNeed(communityNeed);
+        return ResponseEntity.ok().body("修改成功");
     }
 }

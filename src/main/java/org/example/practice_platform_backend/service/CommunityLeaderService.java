@@ -101,7 +101,7 @@ public class CommunityLeaderService {
         // 存下新的 id
         int new_id = origin_community.getCommunity_id();
         // 将修改的 id 更新为最新的 id
-        community.setCommunity_id(community.getCommunity_id());
+        origin_community.setCommunity_id(community.getCommunity_id());
         auditService.insertCommunity(origin_community, new_id);
     }
 
