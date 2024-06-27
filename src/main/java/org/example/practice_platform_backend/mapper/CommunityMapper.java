@@ -54,7 +54,7 @@ public interface CommunityMapper {
     String getCommunityAvatarPath(int community_id);
 
     //社区id 查相关成果
-    @Select("Select * from fruit_info where project_id = " +
+    @Select("Select * from fruit_info where project_id in " +
             "(select project_id from succ_project where need_id in " +
             "(select need_id from community_need where community_id = #{community_id}))" +
             "LIMIT 2 OFFSET #{offset}")
