@@ -1,12 +1,15 @@
 package org.example.practice_platform_backend.controllers;
 
+import com.alibaba.fastjson2.JSON;
 import jakarta.servlet.http.HttpServletRequest;
+import net.minidev.json.JSONArray;
 import net.minidev.json.JSONObject;
 import org.example.practice_platform_backend.entity.Team;
 import org.example.practice_platform_backend.entity.User;
 import org.example.practice_platform_backend.mapper.TeamMapper;
 import org.example.practice_platform_backend.mapper.UserMapper;
 import org.example.practice_platform_backend.service.AuditService;
+import org.example.practice_platform_backend.service.TeamService;
 import org.example.practice_platform_backend.service.MapService;
 import org.example.practice_platform_backend.utils.JwtUtils;
 import org.example.practice_platform_backend.utils.TeamUtils;
@@ -45,6 +48,9 @@ public class TeamController {
 
     @Autowired
     private JwtUtils jwtUtils;
+
+    @Autowired
+    private TeamService teamService;
 
     @Autowired
     private UserMapper userMapper;
@@ -89,7 +95,7 @@ public class TeamController {
             return ResponseEntity.status(200).body(JSONObject.toJSONString(result));
         } catch (Exception e) {
             LOGGER.error(e.getMessage());
-            return ResponseEntity.status(400).body("查询错误");
+            return ResponseEntity.status(400).body("查询队伍详情出现错误");
         }
     }
 
@@ -141,6 +147,52 @@ public class TeamController {
         } catch (Exception e){
             LOGGER.error(e.getMessage());
             return ResponseEntity.status(400).body("修改队伍出现错误");
+        }
+    }
+
+    // 返回队员信息
+    @GetMapping("/team/members")
+    public ResponseEntity<?> getTeamMembers(@Param("TeamID") String TeamID) {
+        int team_number = Integer.parseInt(TeamID);
+        if(!teamMapper.isTeamExist(team_number)){
+            return ResponseEntity.status(400).body("队伍不存在");
+        }
+        try{
+            JSONArray members = teamService.getTeamMembers(team_number);
+            return ResponseEntity.status(200).body(JSON.toJSONString(members));
+        } catch(Exception e){
+            LOGGER.error(e.getMessage());
+            return ResponseEntity.status(400).body("查询队员信息出现错误");
+        }
+
+    }
+
+    // 添加队员
+    @PostMapping("/team/addMember")
+    public ResponseEntity<?> addTeamMember(@RequestParam("TeamID") String TeamID, @RequestParam("userName") String username) {
+        int team_number = Integer.parseInt(TeamID);
+        if(teamMapper.isHaveTeamByusername(username)) {
+            return ResponseEntity.status(400).body("该学生已加入其他队伍");
+        }
+        if(teamService.addTeamMember(team_number, username)){
+            return ResponseEntity.status(200).body("添加失败     其实不是啦，恭喜你添加成功啦哈哈哈");
+        } else{
+            return ResponseEntity.status(400).body("添加队员出现错误（这是真的出错）");
+        }
+    }
+
+    // 删除队员
+    @DeleteMapping ("/team/deleteMember")
+    public ResponseEntity<?> deleteTeamMember(@RequestParam("TeamID") String TeamID, @RequestParam("userName") String username) {
+        int team_number = Integer.parseInt(TeamID);
+        int user_id = userMapper.getUserIdByUsername(username);
+        if(!teamMapper.isTeamMember(user_id, team_number)) {
+            return ResponseEntity.status(400).body("该学生不在该队伍中");
+        }
+        if(teamService.deleteTeamMember(user_id)){
+            return ResponseEntity.status(200).body("什么？才刚添加又要删除是吧，闹着玩的？我很忙的，删除失败！！！好吧，其实成功了！！恭喜你，（撒花撒花）");
+        } else{
+            return ResponseEntity.status(400).body("删除队员出现错误");
         }
     }
 }

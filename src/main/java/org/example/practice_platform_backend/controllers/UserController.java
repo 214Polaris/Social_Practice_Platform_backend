@@ -2,6 +2,7 @@ package org.example.practice_platform_backend.controllers;
 
 import com.alibaba.fastjson2.JSONObject;
 import jakarta.servlet.http.HttpServletRequest;
+import net.minidev.json.JSONArray;
 import net.sourceforge.pinyin4j.format.exception.BadHanyuPinyinOutputFormatCombination;
 import org.example.practice_platform_backend.mapper.CommunityMapper;
 import org.example.practice_platform_backend.mapper.TeamMapper;
@@ -189,6 +190,22 @@ public class UserController {
             return ResponseEntity.status(200).header("flag",String.valueOf(1)).body(result);
         }
     }
+
+    @GetMapping(value="/user/stuInfo")
+    public ResponseEntity<?> getStuInfo(HttpServletRequest request){
+        try{
+            String token = request.getHeader("token");
+            int user_id = jwtUtils.getUserInfoFromToken(token,User.class).getUser_id();
+            net.minidev.json.JSONObject result = userService.getStuInfo(user_id);
+            return  ResponseEntity.ok(result);
+
+        } catch (Exception e){
+            LOGGER.error(e.getMessage());
+            return ResponseEntity.status(400).body("查询学生信息出错");
+        }
+
+    }
+
 
 }
 

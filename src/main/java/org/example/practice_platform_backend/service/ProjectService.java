@@ -128,6 +128,8 @@ public class ProjectService {
              }
              String cover = imageUtils.getFileBytes(uploadPath + coverPath);
              item.put("demand_img", cover);
+             List<String> tags = tagsMapper.searchTags(need.getNeed_id());
+             item.put("tagList", tags);
              list.add(item);
         }
         result.put("demand_list", list);

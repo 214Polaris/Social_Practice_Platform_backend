@@ -1,6 +1,7 @@
 package org.example.practice_platform_backend.service;
 
 import jakarta.servlet.http.HttpServletRequest;
+import net.minidev.json.JSONObject;
 import org.example.practice_platform_backend.entity.User;
 import org.example.practice_platform_backend.mapper.CommunityMapper;
 import org.example.practice_platform_backend.mapper.TeamMapper;
@@ -57,5 +58,17 @@ public class UserService {
             return null;
         }
     }
+
+    public JSONObject getStuInfo(int user_id){
+        JSONObject jsonObject = new JSONObject();
+        HashMap<String,String> user = userMapper.getStudentInfo(user_id);
+        jsonObject.put("Name",user.get("name"));
+        jsonObject.put("college",user.get("academy"));
+        int hasJoinOther = teamMapper.isHaveTeam(user_id)?1:0;
+        jsonObject.put("hasJoinOther",hasJoinOther);
+        return jsonObject;
+    }
+
+
 
 }

@@ -29,7 +29,7 @@ public class FruitService {
     @Autowired
     private AuditMapper  auditMapper;
 
-    private final String default_fruit_cover_path = "fruit_images/default.png";
+    private final String default_fruit_cover_path = "fruit_images/default.jpg";
 
     /**
      * 完成点赞事务
