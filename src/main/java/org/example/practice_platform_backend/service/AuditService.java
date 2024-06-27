@@ -227,44 +227,52 @@ public class AuditService {
         return needAuditList;
     }
 
-    /**
-     * 高校队伍注册申请
-     */
-    public String registerTeam(Team team){
-        if(teamMapper.isHaveTeam(team.getTeam_manager())){
-            return "该学生已拥有通过审核的队伍";
-        }
-        if(!Arrays.asList(address_match).contains(team.getAddress())){
-            return "地区不符合规范";
-        }
-        if(!userMapper.existUser(team.getTeacher_id())){
-            return "该老师不存在";
-        }
-        team.setCollege("中山大学");
-        team.setAvatar_path("team_avatar/default_avatar.jpg");
-        try{
-            insertTeam(team);
-        } catch  (Exception e){
-            return e.getMessage();
-        }
-        return null;
-    }
+//    /**
+//     * 高校队伍注册申请
+//     */
+//    @Transactional
+//    public boolean registerTeam(Team team){
+//        team.setCollege("中山大学");
+//        team.setAvatar_path("team_avatar/default_avatar.jpg");
+//        try{
+//            teamMapper.insertTeam(team);
+//            insertTeam(team,team.getTeam_number());
+//        } catch  (Exception e){
+//            LOGGER.error(e.getMessage());
+//            return false;
+//        }
+//        return true;
+//    }
 
     /**
      * 插入队伍信息 创建审核列表
      */
     @Transactional
-    public void insertTeam(Team team) {
-        teamMapper.insertTeam(team);
-        int newId = team.getTeam_number();
+    public void insertTeam(Team team,int newId) {
         Audit audit = new Audit();
         audit.setApply_time(LocalDateTime.now());
-        audit.setTeam_id(newId);
+        audit.setTeam_id(team.getTeam_number());
         audit.setNew_id(newId);
         audit.setApply_user_id(team.getTeam_manager());
         audit.setTeacher_netid(team.getTeacher_id());
         auditMapper.newTeamAudit(audit);
   }
+
+    /**
+     * 确认队伍修改信息
+     */
+    @Transactional
+    public void applyTeamChanges(Team origin_team, Team team){
+        if(team.getTeam_name()!=null){
+            origin_team.setTeam_name(team.getTeam_name());
+        }
+        if(team.getIntroduction()!=null){
+            origin_team.setIntroduction(team.getIntroduction());
+        }
+        if(team.getAcademy()!=null){
+            origin_team.setAcademy(team.getAcademy());
+        }
+    }
 
     /**
      * 插入社区的审核信息，创建社区审核列表
@@ -277,6 +285,35 @@ public class AuditService {
         audit.setNew_id(new_id);
         audit.setApply_user_id(community.getUser_id());
         auditMapper.insertCommunityAudit(audit);
+    }
+
+    /**
+     * 确认社区修改信息
+     */
+    @Transactional
+    public void applyCommunityChanges(Community origin_community, Community community){
+        if(community.getCommunity_name()!=null){
+            origin_community.setCommunity_name(community.getCommunity_name());
+        }
+        if(community.getIntroduction()!=null){
+            origin_community.setIntroduction(community.getIntroduction());
+        }
+        if(community.getAddress()!=null){
+            origin_community.setAddress(community.getAddress());
+        }
+    }
+
+    /**
+     * 插入需求审核信息，创建需求审核列表
+     */
+    @Transactional
+    public void insertNeed(CommunityNeed communityNeed,Integer new_id){
+        Audit audit = new Audit();
+        audit.setNeed_id(communityNeed.getNeed_id());
+        audit.setApply_time(LocalDateTime.now());
+        audit.setNew_id(new_id);
+        audit.setApply_user_id(communityMapper.getCommunityUserIdByCommunityId(communityNeed.getCommunity_id()));
+        auditMapper.insertNeedAudit(audit);
     }
 
 }

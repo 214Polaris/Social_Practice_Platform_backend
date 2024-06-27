@@ -95,4 +95,11 @@ public interface AuditMapper {
     @Insert("insert into audit_community(community_id,new_id,apply_user_id,apply_time) " +
             "values(#{community_id},#{new_id},#{apply_user_id},#{apply_time})")
     void insertCommunityAudit(Audit audit);
+
+    /**
+     * 插入社区需求审核
+     */
+    @Insert("insert into audit_need(need_id,new_id,apply_user_id,apply_time) " +
+            "values(#{need_id},#{new_id},#{apply_user_id},#{apply_time})")
+    void insertNeedAudit(Audit audit);
 }

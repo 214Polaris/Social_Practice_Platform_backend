@@ -2,12 +2,10 @@ package org.example.practice_platform_backend.service;
 
 import jakarta.servlet.http.HttpServletRequest;
 import net.sourceforge.pinyin4j.format.exception.BadHanyuPinyinOutputFormatCombination;
+import org.example.practice_platform_backend.entity.Community;
 import org.example.practice_platform_backend.entity.CommunityLeader;
 import org.example.practice_platform_backend.entity.User;
-import org.example.practice_platform_backend.mapper.CommentMapper;
-import org.example.practice_platform_backend.mapper.CommitteeMapper;
-import org.example.practice_platform_backend.mapper.KudosMapper;
-import org.example.practice_platform_backend.mapper.UserMapper;
+import org.example.practice_platform_backend.mapper.*;
 import org.example.practice_platform_backend.utils.ImageUtils;
 import org.example.practice_platform_backend.utils.JwtUtils;
 import org.example.practice_platform_backend.utils.RandomGenerateUtils;
@@ -53,6 +51,10 @@ public class CommunityLeaderService {
     private CommentMapper commentMapper;
     @Autowired
     private KudosMapper kudosMapper;
+    @Autowired
+    private CommunityMapper communityMapper;
+    @Autowired
+    private AuditService auditService;
 
     public boolean checkIdentity(HttpServletRequest request) {
         String user_category = jwtUtils.getUserInfoFromToken(request.getHeader("token"),User.class).getUser_category();
@@ -84,6 +86,23 @@ public class CommunityLeaderService {
                 LOGGER.error(e.getMessage());
             }
         }).collect(Collectors.toList());
+    }
+
+    /**
+     * 修改社区
+     * @param origin_community 修改前的社区
+     * @param community 修改后的社区
+     */
+    @Transactional
+    public void modifyCommunity(Community origin_community, Community community){
+        // 这里 origin_community 的 id 变了
+        auditService.applyCommunityChanges(origin_community,community);
+        communityMapper.registerCommunity(origin_community);
+        // 存下新的 id
+        int new_id = origin_community.getCommunity_id();
+        // 将修改的 id 更新为最新的 id
+        community.setCommunity_id(community.getCommunity_id());
+        auditService.insertCommunity(origin_community, new_id);
     }
 
     //  修改社区负责人

@@ -38,7 +38,7 @@ public interface CommunityMapper {
     int findCommunityIdByName(String community_name);
 
     //社区 id 获取社区基本信息
-    @Select("select community_id,community_name,introduction,address,user_id,avatar_path from community where community_id=#{community_id}")
+    @Select("select * from community where community_id=#{community_id}")
     Community getCommunityById(int community_id);
 
     //获取社区的所有媒体列表
@@ -61,7 +61,7 @@ public interface CommunityMapper {
     Fruit[] getCommunityFruits(int community_id, int offset);
 
     //负责人 id 查找社区
-    @Select("select community_id from community where user_id = #{user_id}")
+    @Select("select community_id from community where user_id = #{user_id} AND is_pass = 1")
     Integer findCommunityIdByUserId(@Param("user_id") int user_id);
 
     // 获取封面 id
@@ -123,5 +123,9 @@ public interface CommunityMapper {
     //删除图片
     @Delete("DELETE from community_media where media_id = #{media_id}")
     boolean deleteCommunityImage(@Param("media_id") int media_id);
+
+    //社区 id 查负责人
+    @Select("select user_id from community where community_id=#{community_id}")
+    Integer getCommunityUserIdByCommunityId(int community_id);
 
 }

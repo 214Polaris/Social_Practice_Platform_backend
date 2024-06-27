@@ -55,6 +55,9 @@ public class UserController {
     @PostMapping(value = "/login")
     public ResponseEntity<?> loginUser(@RequestParam("user_name") String name, @RequestParam("passwd") String password,@RequestParam("user_category") String user_category) {
         User loggedInUser = userMapper.login(name, password);
+        if (loggedInUser == null) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("账号或密码不正确");
+        }
         if(!Objects.equals(loggedInUser.getUser_category(), user_category)){
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("用户类别不正确");
         }
@@ -160,24 +163,30 @@ public class UserController {
         User user = jwtUtils.getUserInfoFromToken(request.getHeader("token"),User.class);
         int user_id = user.getUser_id();
         boolean isLeader = false;
-        int id;
+        Integer id;
         JSONObject result = new JSONObject();
         if(Objects.equals(user.getUser_category(), "community")){
             id = communityMapper.findCommunityIdByUserId(user_id);
+            if(id==null){
+                return ResponseEntity.status(200).header("flag", String.valueOf(0)).build();
+            }
             result.put("communityID",id);
-            return ResponseEntity.ok(result);
+            return ResponseEntity.status(200).header("flag",String.valueOf(1)).body(result);
         }
         if(Objects.equals(user.getUser_category(), "student")){
             id = teamMapper.getTeamIdByUser(user_id);
+            if(id==null){
+                return ResponseEntity.status(200).header("flag", String.valueOf(0)).build();
+            }
             if(teamMapper.getLeaderIdByTeamNumber(id)>0){
                 isLeader = true;
             }
             result.put("TeamID",id);
             result.put("isLeader",isLeader);
-            return ResponseEntity.ok(result);
+            return ResponseEntity.status(200).header("flag",String.valueOf(1)).body(result);
         }
         else{
-            return ResponseEntity.ok(result);
+            return ResponseEntity.status(200).header("flag",String.valueOf(1)).body(result);
         }
     }
 

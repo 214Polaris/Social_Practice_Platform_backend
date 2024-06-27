@@ -13,6 +13,8 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 @Mapper
 public interface TeamMapper {
     // 根据团队id获取团队信息
@@ -74,7 +76,7 @@ public interface TeamMapper {
 
     //查询队长的 user_id 是否对应队伍
     @Select("select team_number from college_team where team_manager=#{team_manager}")
-    Integer getTeamNumberByTeamManager(int team_manager);
+    List<Integer> getTeamNumberByTeamManager(int team_manager);
 
     //修改队伍基本信息
     @Async

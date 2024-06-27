@@ -4,12 +4,15 @@ import jakarta.servlet.http.HttpServletRequest;
 import org.example.practice_platform_backend.entity.Community;
 import org.example.practice_platform_backend.entity.CommunityNeed;
 import org.example.practice_platform_backend.entity.User;
+import org.example.practice_platform_backend.mapper.AuditMapper;
 import org.example.practice_platform_backend.mapper.CommunityMapper;
 import org.example.practice_platform_backend.mapper.NeedMapper;
 import org.example.practice_platform_backend.service.AuditService;
 import org.example.practice_platform_backend.service.CommunityLeaderService;
 import org.example.practice_platform_backend.service.MapService;
 import org.example.practice_platform_backend.utils.JwtUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.http.HttpStatus;
@@ -26,6 +29,8 @@ import java.util.Objects;
 @RequestMapping("/api/leader")
 public class CommunityLeaderController {
 
+    private static final Logger LOGGER = LoggerFactory.getLogger(CommunityLeaderService.class);
+
     @Autowired
     private CommunityLeaderService communityLeaderService;
     @Autowired
@@ -37,6 +42,8 @@ public class CommunityLeaderController {
     private NeedMapper needMapper;
     @Autowired
     private AuditService auditService;
+    @Autowired
+    private AuditMapper auditMapper;
 
     // 注册社区信息，返回注册后的社区 id，同时同步到审核列表当中
     @PostMapping("/register/community")
@@ -64,28 +71,29 @@ public class CommunityLeaderController {
     }
 
     //修改社区基本信息
-    @PostMapping("/modify")
+    @PostMapping("/community/modify")
     @Transactional
     public ResponseEntity<?> modifyCommunity(HttpServletRequest request, @RequestBody Community community){
         User user = jwtUtils.getUserInfoFromToken(request.getHeader("token"), User.class);
         if(!Objects.equals(user.getUser_category(), "community")){
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body("当前用户不是社区负责人");
         }
-        if(communityMapper.findCommunityIdByUserId(user.getUser_id())!=community.getCommunity_id()){
+        Community origin_community = communityMapper.getCommunityById(community.getCommunity_id());
+        if(origin_community==null){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("找不到该社区");
+        }
+        if(origin_community.getUser_id()!=user.getUser_id()){
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body("当前用户不是该社区的负责人");
         }
         if(community.getAddress()!=null&&!MapService.checkValidAddress(community.getAddress())){
             return ResponseEntity.status(400).body("地址格式不合法");
         }
-        // 获取之前的 id
+        community.setUser_id(user.getUser_id());
         try {
-            int origin_id = community.getCommunity_id();
-            communityMapper.registerCommunity(community);
-            int new_id = community.getCommunity_id();
-            community.setCommunity_id(origin_id);
-            auditService.insertCommunity(community, new_id);
+            community.setUser_id(user.getUser_id());
+            communityLeaderService.modifyCommunity(origin_community,community);
         }catch (DataAccessException e){
-            e.fillInStackTrace();
+            LOGGER.error(e.getMessage());
             return ResponseEntity.status(400).body("数据库错误");
         }
         return ResponseEntity.ok().body("修改社区成功");
@@ -116,6 +124,7 @@ public class CommunityLeaderController {
         if(media_id==0){
             return ResponseEntity.status(400).body("注册社区需求失败");
         }
+        auditService.insertNeed(communityNeed,need_id);
         return ResponseEntity.status(200).header("media_id", String.valueOf(media_id)).
                 header("need_id", String.valueOf(need_id)).body("注册社区需求成功");
     }

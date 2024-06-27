@@ -106,11 +106,11 @@ public class TeamUtils {
     //鉴权
     public Boolean checkTeamUser(HttpServletRequest request,int team_number) {
         int user_id = jwtUtils.getUserInfoFromToken(request.getHeader("token"),User.class).getUser_id();
-        Integer bindTeam_number = teamMapper.getTeamNumberByTeamManager(user_id);
-        return bindTeam_number != null && bindTeam_number == team_number;
+        List<Integer> bindTeam_number = teamMapper.getTeamNumberByTeamManager(user_id);
+        return bindTeam_number != null && bindTeam_number.contains(team_number);
     }
 
-    //修改队伍基本信息
+    //修改队伍基本信息，TODO：审核成功后调用
     @Transactional
     public Boolean modifyTeam(Team team) {
         try {
@@ -124,4 +124,5 @@ public class TeamUtils {
             return false;
         }
     }
+
 }
