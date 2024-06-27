@@ -62,7 +62,7 @@ public class FruitController {
             Kudos kudos = new Kudos();
             kudos.setFruit_id(Integer.parseInt(fruit_id));
             kudos.setUser_id(user_id);
-            boolean is_like = fruitMapper.getKudos(kudos);
+            boolean is_like = !fruitMapper.getKudos(kudos);
             JSONObject result = fruitUtils.getFruitInfo(fruit, comments, fruitMedias, is_like);
             return ResponseEntity.status(200).body(JSON.toJSONString(result));
         } catch (Exception e) {
