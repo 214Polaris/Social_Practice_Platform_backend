@@ -13,6 +13,7 @@ public class User {
     private String user_category;
     private String avatar_path;
     private String gender;
+    private String academy;
 
     public User(){
     }

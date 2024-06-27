@@ -1,11 +1,7 @@
 package org.example.practice_platform_backend.mapper;
 
 import net.minidev.json.JSONObject;
-import org.apache.ibatis.annotations.Insert;
-import org.apache.ibatis.annotations.Mapper;
-import org.apache.ibatis.annotations.Options;
-import org.apache.ibatis.annotations.Select;
-import org.apache.ibatis.annotations.Update;
+import org.apache.ibatis.annotations.*;
 import org.example.practice_platform_backend.entity.Team;
 import org.example.practice_platform_backend.entity.User;
 import org.springframework.data.relational.core.sql.In;
@@ -14,6 +10,9 @@ import org.springframework.scheduling.annotation.Async;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+
+import java.util.List;
+import java.util.Map;
 
 @Mapper
 public interface TeamMapper {
@@ -74,6 +73,13 @@ public interface TeamMapper {
     @Select("select exists(select * from student where user_id = #{user_id})")
     boolean isHaveTeam(int user_id);
 
+    /**
+     * 判断该人是否有队伍 学号版
+     */
+    @Select("select exists(select * from student where user_id =" +
+            " (select user_id from user where username = #{username}))")
+    boolean isHaveTeamByusername(String username);
+
     //查询队长的 user_id 是否对应队伍
     @Select("select team_number from college_team where team_manager=#{team_manager}")
     List<Integer> getTeamNumberByTeamManager(int team_manager);
@@ -103,4 +109,26 @@ public interface TeamMapper {
     @Transactional
     void modifyTeamTeacher(Team team);
 
+    // 获取队员信息
+    @Select("select name, username, academy, stu.user_id, stu.privilege_level from user " +
+            "join student as stu on user.user_id = stu.user_id " +
+            "where stu.team_number = #{team_number}")
+    List<Map<String, String>> getAllMembers(@Param("team_number")int team_number);
+
+    // 判断队伍是否存在
+    @Select("Select exists ( select * from college_team where team_number = #{team_number})")
+    boolean isTeamExist(int team_number);
+    
+    // 添加队员
+    @Insert("insert into student(user_id, team_number) values " +
+            " (#{user_id}, #{team_number})")
+    boolean addMember(@Param("user_id")int user_id, @Param("team_number")int team_number);
+
+    // 判断某人是否在队伍中
+    @Select("select exists(select * from student where user_id = #{user_id} and team_number = #{team_number})")
+    boolean isTeamMember(@Param("user_id")int user_id, @Param("team_number")int team_number);
+
+    // 删除队员
+    @Delete("delete from student where user_id = #{user_id}")
+    boolean deleteMember(@Param("user_id")int user_id);
 }

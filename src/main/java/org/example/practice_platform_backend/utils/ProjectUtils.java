@@ -70,7 +70,7 @@ public class ProjectUtils {
             FruitMedia[]  fruitMedia = fruitMapper.getFruitMedia(fruit.getFruit_id());
             String img_path = null;
             for(FruitMedia media : fruitMedia){
-                if(media.getType().equals("cover") ||  media.getType().equals("img")){
+                if(media.getType().equals("cover") ||  media.getType().equals("image")){
                     img_path = uploadPath + media.getPath();
                     break;
                 }
