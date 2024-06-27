@@ -178,7 +178,7 @@ public class UserController {
             if(id==null){
                 return ResponseEntity.status(200).header("flag", String.valueOf(0)).build();
             }
-            if(teamMapper.getLeaderIdByTeamNumber(id)>0){
+            if(Objects.equals(teamMapper.getLeaderIdByTeamNumber(id), id)){
                 isLeader = true;
             }
             result.put("TeamID",id);

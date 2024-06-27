@@ -43,6 +43,9 @@ public class CommunityLeaderController {
     @Autowired
     private AuditService auditService;
 
+    //获取该负责人发布的所有需求
+
+
     // 注册社区信息，返回注册后的社区 id，同时同步到审核列表当中
     @PostMapping("/register/community")
     @Transactional
