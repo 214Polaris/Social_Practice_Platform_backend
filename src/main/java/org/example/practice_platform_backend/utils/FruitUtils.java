@@ -62,7 +62,7 @@ public class FruitUtils {
         result.put("comment", String.valueOf(fruit.getComment_num()));
         for(FruitMedia fruitMedia : fruitMedias){
             JSONObject media = new JSONObject();
-            if(fruitMedia.getType().equals("img") ||  fruitMedia.getType().equals("cover")){
+            if(fruitMedia.getType().equals("image") ||  fruitMedia.getType().equals("cover")){
                 media.put("img_flag", 0);
                 media.put("src", imageUtils.getFileBytes(uploadPath + "/" + fruitMedia.getPath()));
             }

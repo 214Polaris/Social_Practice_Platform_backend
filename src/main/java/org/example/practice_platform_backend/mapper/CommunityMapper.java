@@ -53,8 +53,8 @@ public interface CommunityMapper {
     @Select("select avatar_path from community where community_id = #{community_id}")
     String getCommunityAvatarPath(int community_id);
 
-    //社区id 查相关成果
-    @Select("Select * from fruit_info where project_id in " +
+    //社区id 查相关成果 审核通过
+    @Select("Select * from fruit_info where is_pass = 1 and project_id in " +
             "(select project_id from succ_project where need_id in " +
             "(select need_id from community_need where community_id = #{community_id}))" +
             "LIMIT 2 OFFSET #{offset}")
