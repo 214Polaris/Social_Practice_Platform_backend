@@ -111,6 +111,9 @@ public class CommunityLeaderController {
         if(community_id==null){
             return ResponseEntity.status(400).body("该用户不存在社区");
         }
+        if(communityNeed.getAddress()==null||!MapService.checkValidAddress(communityNeed.getAddress())){
+            return ResponseEntity.status(400).body("地址未填写或地址格式错误");
+        }
         communityNeed.setIs_pair(0);
         communityNeed.setIs_pass(0);
         communityNeed.setCommunity_id(community_id);
@@ -137,11 +140,24 @@ public class CommunityLeaderController {
         if(!Objects.equals(user.getUser_category(), "community")){
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body("当前用户不是社区负责人");
         }
+        CommunityNeed origin_need = needMapper.getNeedByNeedId(communityNeed.getNeed_id());
+        if(origin_need==null){
+            return ResponseEntity.status(400).body("未找到待修改需求");
+        }
+        if(communityNeed.getAddress()!=null){
+            if(!MapService.checkValidAddress(communityNeed.getAddress())) {
+                return ResponseEntity.status(400).body("地址不符合格式");
+            }
+            origin_need.setAddress(communityNeed.getAddress());
+        }
         if(!needMapper.selectNeedByUserId(user.getUser_id()).contains(communityNeed.getNeed_id())){
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body("当前用户并未发布过该需求");
         }
-
-        needMapper.modifyNeed(communityNeed);
+        auditService.applyNeedChanges(origin_need,communityNeed);
+        needMapper.registerNeed(origin_need);
+        int new_id = origin_need.getNeed_id();
+        origin_need.setNeed_id(communityNeed.getNeed_id());
+        auditService.insertNeed(origin_need,new_id);
         return ResponseEntity.ok().body("修改成功");
     }
 }

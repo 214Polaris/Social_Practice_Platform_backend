@@ -13,7 +13,7 @@ import java.util.List;
 public interface NeedMapper {
 
     // 根据需求 id 获取详细需求
-    @Select("select title, post_time, introduction, resource from community_need " +
+    @Select("select * from community_need " +
             "where is_pass = 1 and need_id = #{need_id} ")
     CommunityNeed getNeedByNeedId(@Param("need_id") int need_id);
 

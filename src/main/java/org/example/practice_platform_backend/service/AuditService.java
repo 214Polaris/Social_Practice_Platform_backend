@@ -323,4 +323,20 @@ public class AuditService {
         auditMapper.insertNeedAudit(audit);
     }
 
+    /**
+     * 确认需求修改信息
+     */
+    @Transactional
+    public void applyNeedChanges(CommunityNeed origin_need,CommunityNeed need){
+        if(need.getResource()!=null){
+            origin_need.setResource(need.getResource());
+        }
+        if(need.getIntroduction()!=null){
+            origin_need.setIntroduction(need.getIntroduction());
+        }
+        if(need.getTitle()!=null){
+            origin_need.setTitle(need.getTitle());
+        }
+    }
+
 }

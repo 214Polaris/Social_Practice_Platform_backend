@@ -64,6 +64,10 @@ public class CommunityLeaderService {
         return Objects.equals(user_category, "committee");
     }
 
+    /**
+     * 判断是否是社区身份
+     * @param request request
+     */
     public boolean checkLeader(HttpServletRequest request) {
         String user_category = jwtUtils.getUserInfoFromToken(request.getHeader("token"),User.class).getUser_category();
         if(user_category==null||user_category.isEmpty()){
