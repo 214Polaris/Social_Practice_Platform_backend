@@ -88,4 +88,11 @@ public interface AuditMapper {
             " values(#{team_id},#{apply_user_id}" +
             ",#{apply_time}, #{new_id}, #{teacher_netid})")
     void newTeamAudit(Audit audit);
+
+    /**
+     * 插入社区审核
+     */
+    @Insert("insert into audit_community(community_id,new_id,apply_user_id,apply_time) " +
+            "values(#{community_id},#{new_id},#{apply_user_id},#{apply_time})")
+    void insertCommunityAudit(Audit audit);
 }

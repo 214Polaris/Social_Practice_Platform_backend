@@ -58,11 +58,8 @@ public class CommunityController {
     @PostMapping("/modify")
     public ResponseEntity<?> modifyCommunity(HttpServletRequest request, @RequestBody Community community){
         User user = jwtUtils.getUserInfoFromToken(request.getHeader("token"), User.class);
-        if(!Objects.equals(user.getUser_category(), "community")){
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("当前用户不是社区负责人");
-        }
-        if(communityMapper.findCommunityIdByUserId(user.getUser_id())!=community.getCommunity_id()){
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("当前用户不是该社区的负责人");
+        if(!Objects.equals(user.getUser_category(), "committee")){
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("当前用户不是校团委");
         }
         if(community.getAddress()!=null&&!MapService.checkValidAddress(community.getAddress())){
             return ResponseEntity.status(400).body("地址格式不合法");

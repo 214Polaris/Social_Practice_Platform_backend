@@ -18,7 +18,7 @@ public interface CommentMapper {
             "WHERE fruit_id = #{fruit_id} " +
             "AND comment_time < #{comment_time} " +
             "ORDER BY comment_time DESC " +
-            "LIMIT 5" )
+            "LIMIT 7" )
     Comment[] getCommentByCommentId(@Param("fruit_id") int fruit_id, @Param("comment_time") Date comment_time);
 
     //获取评论人的头像

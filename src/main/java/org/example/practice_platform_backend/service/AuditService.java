@@ -266,4 +266,17 @@ public class AuditService {
         auditMapper.newTeamAudit(audit);
   }
 
+    /**
+     * 插入社区的审核信息，创建社区审核列表
+     */
+    @Transactional
+    public void insertCommunity(Community community,Integer new_id){
+        Audit audit = new Audit();
+        audit.setCommunity_id(community.getCommunity_id());
+        audit.setApply_time(LocalDateTime.now());
+        audit.setNew_id(new_id);
+        audit.setApply_user_id(community.getUser_id());
+        auditMapper.insertCommunityAudit(audit);
+    }
+
 }
