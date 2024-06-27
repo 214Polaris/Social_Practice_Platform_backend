@@ -11,6 +11,7 @@ import org.example.practice_platform_backend.utils.ImageUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -42,6 +43,9 @@ public class AuditService {
 
     @Autowired
     private ProjectMapper projectMapper;
+
+    @Value("${uploadPath}")
+    private String uploadPath;
 
     private final String[] address_match = {"广东省广州市海珠区", "广东省广州市番禺区", "广东省广州市越秀区", "广东省珠海市香洲区", "广东省深圳市光明区"};
 
@@ -139,7 +143,7 @@ public class AuditService {
         return fruitAuditList;
     }
 
-    public JSONObject getAuditList_com(int user_id){
+    public JSONObject getAuditList_com(int user_id) throws IOException {
         List<Audit> communityAuditList = community_audit_notice(user_id);
         List<Audit> needAuditList = need_audit_notice(user_id);
         int community_id = communityMapper.findCommunityIdByUserId(user_id);
@@ -165,6 +169,8 @@ public class AuditService {
                      jsonObject.put("id", audit.getCommunity_id());
                 }
                 jsonObject.put("time", audit.getLast_mod_time());
+                String img_path = communityMapper.getCommunityAvatarPath(audit.getCommunity_id());
+                jsonObject.put("img", imageUtils.getThumbnail(uploadPath + img_path));
             }
             else if(audit.getNeed_id() != 0){ // 说明是需求相关
                 if(audit.getNeed_id() == audit.getNew_id()){ // 新需求
@@ -190,6 +196,8 @@ public class AuditService {
                     }
                     jsonObject.put("time", audit.getLast_mod_time());
                 }
+                String img_path = needMapper.getCoverPathByNeedId(audit.getNeed_id());
+                jsonObject.put("img", imageUtils.getThumbnail(uploadPath + img_path));
             }
             else if(audit.getProject_id() != 0){ // 说明是结对相关
                 jsonObject.put("type", 7);
@@ -198,6 +206,8 @@ public class AuditService {
                  jsonObject.put("time", audit.getApply_time());
                  jsonObject.put("TeamName", teamMapper.getTeamNameByProjectId(audit.getProject_id()));
                  jsonObject.put("TeamID", teamMapper.getTeamIdByProjectId(audit.getProject_id()));
+                 String img_path = teamMapper.getTeamAvatarPathByTeamNumber(teamMapper.getTeamIdByProjectId(audit.getProject_id()));
+                 jsonObject.put("img", imageUtils.getThumbnail(uploadPath + img_path));
             }
             else
                 continue;
