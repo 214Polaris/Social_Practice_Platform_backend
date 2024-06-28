@@ -134,10 +134,7 @@ public class SaveFileService {
         //保存原图
         saveBytesFile(file.getInputStream(),fileDir,fileName);
         //保存缩略图
-        File tmpfile = new File(fileDir+thumbnailFileName);
-        imageUtils.photoSmaller(file.getInputStream(),tmpfile);
-        MultipartFile multipartFile = new MockMultipartFile(thumbnailFileName, new FileInputStream(tmpfile));
-        saveBytesFile(multipartFile.getInputStream(),fileDir,thumbnailFileName);
+        imageUtils.photoSmaller(file.getInputStream(),fileDir+thumbnailFileName);
         //将头像名称保存到数据库中
         userMapper.updateAvatar(user_id, thumbnailFileName);
         CompletableFuture.completedFuture(true);

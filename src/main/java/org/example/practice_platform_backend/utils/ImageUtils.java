@@ -86,12 +86,12 @@ public class ImageUtils {
      * @Param sourceFile 源文件
      * @Param toFile 目标文件
      */
-    public void photoSmaller(InputStream inputStream,File file) throws IOException {
+    public void photoSmaller(InputStream inputStream,String path) throws IOException {
         Thumbnails.of(inputStream)
                 .size(200, 150)//尺寸
                 //.watermark(Positions.CENTER, ImageIO.read(markIco), 0.1f)
                 .outputQuality(0.4f)//缩略图质量
-                .toFile(file);
+                .toFile(path);
     }
 
     /**
