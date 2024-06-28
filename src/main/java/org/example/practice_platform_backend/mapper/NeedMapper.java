@@ -26,6 +26,12 @@ public interface NeedMapper {
     @Select("select media_id, path,type from need_media where need_id = #{need_id}")
     List<JSONObject> getMediaByNeedId(@Param("need_id") int need_id);
 
+    // 获取指定 user_id 发布的所有需求
+    @Select("select n.need_id,n.title,n.is_pass from community_need as n " +
+            "join community as c on c.community_id = n.community_id " +
+            "where c.user_id=#{user_id}")
+    List<JSONObject> getNeedByUserId(@Param("user_id") int user_id);
+
     //注册新的需求
     @Insert("INSERT into community_need(title, post_time, introduction, resource, is_pass, is_pair, address, community_id)\n" +
             "value(#{title},#{post_time},#{introduction},#{resource},#{is_pass},#{is_pair},#{address},#{community_id})")

@@ -179,16 +179,13 @@ public class UserController {
             if(id==null){
                 return ResponseEntity.status(200).header("flag", String.valueOf(0)).build();
             }
-            if(Objects.equals(teamMapper.getLeaderIdByTeamNumber(id), id)){
+            if(Objects.equals(teamMapper.getLeaderIdByTeamNumber(id), user_id)){
                 isLeader = true;
             }
             result.put("TeamID",id);
             result.put("isLeader",isLeader);
-            return ResponseEntity.status(200).header("flag",String.valueOf(1)).body(result);
         }
-        else{
-            return ResponseEntity.status(200).header("flag",String.valueOf(1)).body(result);
-        }
+        return ResponseEntity.status(200).header("flag",String.valueOf(1)).body(result);
     }
 
     @GetMapping(value="/user/stuInfo")

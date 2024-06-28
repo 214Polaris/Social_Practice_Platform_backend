@@ -1,6 +1,7 @@
 package org.example.practice_platform_backend.controllers;
 
 import jakarta.servlet.http.HttpServletRequest;
+import net.minidev.json.JSONObject;
 import org.example.practice_platform_backend.entity.Community;
 import org.example.practice_platform_backend.entity.CommunityNeed;
 import org.example.practice_platform_backend.entity.User;
@@ -18,11 +19,9 @@ import org.springframework.dao.DataAccessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Objects;
 
 @RestController
@@ -44,7 +43,18 @@ public class CommunityLeaderController {
     private AuditService auditService;
 
     //获取该负责人发布的所有需求
-
+    @GetMapping("/get/community/need")
+    public ResponseEntity<?> getCommunityNeeds(HttpServletRequest request) {
+        int user_id = jwtUtils.getUserInfoFromToken(request.getHeader("token"), User.class).getUser_id();
+        if(!communityLeaderService.checkLeader(request)){
+            return ResponseEntity.status(400).body("该用户不是社区负责人");
+        }
+        List<JSONObject> result = needMapper.getNeedByUserId(user_id);
+        if(result.isEmpty()){
+            return ResponseEntity.status(200).body("暂无发布需求");
+        }
+        return ResponseEntity.status(200).body(result);
+    }
 
     // 注册社区信息，返回注册后的社区 id，同时同步到审核列表当中
     @PostMapping("/register/community")
