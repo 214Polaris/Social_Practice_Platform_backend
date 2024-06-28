@@ -99,6 +99,9 @@ public class FruitUtils {
     public JSONArray getGAndC_com(int user_id, Timestamp timestamp, int offset_cm, int offset_kudos) throws IOException {
         JSONArray result;
         List<Integer> fruitIds = fruitMapper.getFruitIds_com(user_id);
+        if(fruitIds.size() == 0){
+            return null;
+        }
         result = getGAndC(fruitIds, timestamp, offset_cm, offset_kudos);
         return  result;
     }
@@ -109,6 +112,9 @@ public class FruitUtils {
     public JSONArray getGAndC_team(int team_id, Timestamp timestamp, int offset_cm, int offset_kudos) throws IOException {
         JSONArray result;
         List<Integer> fruitIds = fruitMapper.getFruitIds_team(team_id);
+        if(fruitIds.size() == 0){
+            return null;
+        }
         result =  getGAndC(fruitIds, timestamp, offset_cm, offset_kudos);
         return result;
     }

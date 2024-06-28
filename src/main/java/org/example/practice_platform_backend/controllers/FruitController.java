@@ -125,7 +125,7 @@ public class FruitController {
             JSONObject result = fruitService.getInteraction(user_id, user_category, timestamp, offset_cm_int, offset_kudos_int);
             return ResponseEntity.status(200).body(JSON.toJSONString(result));
         } catch (Exception e) {
-            LOGGER.error(e.getMessage());
+            e.printStackTrace();
             return ResponseEntity.status(400).body("查询失败");
         }
     }
