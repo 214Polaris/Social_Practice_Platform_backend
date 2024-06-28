@@ -172,7 +172,7 @@ public class TeamController {
     public ResponseEntity<?> addTeamMember(@RequestParam("TeamID") String TeamID, @RequestParam("userName") String username) {
         int team_number = Integer.parseInt(TeamID);
         if(teamMapper.isHaveTeamByusername(username)) {
-            return ResponseEntity.status(400).body("该学生已加入其他队伍");
+            return ResponseEntity.status(400).body("该学生已有所属队伍");
         }
         if(teamService.addTeamMember(team_number, username)){
             return ResponseEntity.status(200).body("添加失败     其实不是啦，恭喜你添加成功啦哈哈哈");
