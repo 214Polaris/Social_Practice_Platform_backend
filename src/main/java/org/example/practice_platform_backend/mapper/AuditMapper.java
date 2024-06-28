@@ -1,9 +1,6 @@
 package org.example.practice_platform_backend.mapper;
 
-import org.apache.ibatis.annotations.Insert;
-import org.apache.ibatis.annotations.Mapper;
-import org.apache.ibatis.annotations.Select;
-import org.apache.ibatis.annotations.Update;
+import org.apache.ibatis.annotations.*;
 import org.example.practice_platform_backend.entity.Audit;
 
 import java.time.LocalDateTime;
@@ -39,6 +36,18 @@ public interface AuditMapper {
     List<Audit> getTeamAudit();
 
     /**
+     * 获取队伍审核列表 相关申请人
+     */
+    @Select("SELECT * from audit_team where last_mod_time is not NULL and apply_user_id = #{user_id} and is_notice = 0")
+    List<Audit> getTeamAuditByUserId(int user_id);
+
+    /**
+     * 更新读取信息
+     */
+    @Update("update audit_team set is_notice = 1 where last_mod_time is not NULL and apply_user_id = #{user_id} and is_notice = 0")
+    void updateTeamAuditAsRead(int user_id);
+
+    /**
      * 获取需求的审核列表
      */
     @Select("SELECT * from audit_need where last_mod_time is NULL")
@@ -66,7 +75,29 @@ public interface AuditMapper {
     @Select("SELECT * from audit_fruit where last_mod_time is NULL")
     List<Audit> getFruitAudit();
 
+    /**
+     * 获取成果审核列表 申请人
+     */
+    @Select("SELECT * from audit_fruit where last_mod_time is not NULL and apply_user_id = #{user_id} and is_notice = 0")
+    List<Audit> getFruitAuditByUserId(int user_id);
 
+    /**
+     * 更新读取信息
+     */
+    @Update("update audit_fruit set is_notice = 1 where last_mod_time is not NULL and apply_user_id = #{user_id} and is_notice = 0")
+    void updateFruitAuditAsRead(int user_id);
+
+    /**
+     * 获取结对审核列表 申请人
+     */
+    @Select("SELECT * from audit_project where last_mod_time is not NULL and apply_user_id = #{user_id} and is_notice = 0")
+    List<Audit> getProjAuditByUserId(int user_id);
+
+    /**
+     * 更新读取信息
+     */
+    @Update("update audit_project set is_notice = 1 where last_mod_time is not NULL and apply_user_id = #{user_id} and is_notice = 0")
+    void updateProjAuditAsRead(int user_id);
 
     /**
      * 插入新的结对审核
@@ -182,4 +213,10 @@ public interface AuditMapper {
     @Update("update audit_team set last_mod_time=#{last_mod_time}," +
             "fail_interpretation=#{fail_interpretation},is_pass=1,new_id=#{new_id}")
     void auditTeamFail(LocalDateTime last_mod_time,String fail_interpretation, int audit_id, int new_id);
+
+    /**
+     * 判断这个队伍是否已申请过这个结对
+     */
+    @Select("select exists (select * from succ_project where need_id = #{need_id} and team_id = #{team_id})")
+    boolean getIsAudit_team(@Param("need_id") int need_id, @Param("team_id") int team_id);
 }

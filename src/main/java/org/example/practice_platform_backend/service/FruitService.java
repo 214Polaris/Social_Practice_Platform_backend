@@ -13,6 +13,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.io.IOException;
 import java.sql.Timestamp;
+import java.util.HashMap;
+import java.util.Map;
 
 @Service
 public class FruitService {
@@ -107,13 +109,17 @@ public class FruitService {
     /**
      * 插入 成果
      */
-    public int postFruit(Fruit fruit, int user_id){
-        insertFruit(fruit, user_id);
-        return fruit.getFruit_id();
+    public Map<String, Integer> postFruit(Fruit fruit, int user_id){
+        int media_id = insertFruit(fruit, user_id);
+        Map<String, Integer> result = new HashMap<>();
+        result.put("media_id", media_id);
+        result.put("fruit_id", fruit.getFruit_id());
+        return result;
     }
 
+    // 插入成果 返回media_id
     @Transactional
-    public void insertFruit(Fruit fruit, int user_id){
+    public int insertFruit(Fruit fruit, int user_id){
         fruitMapper.insertFruit(fruit);
         FruitMedia  fruitMedia = new FruitMedia();
         fruitMedia.setFruit_id(fruit.getFruit_id());
@@ -126,6 +132,7 @@ public class FruitService {
         audit.setApply_user_id(user_id);
         audit.setApply_time(fruit.getDate());
         auditMapper.newFruitAudit(audit);
+        return fruitMedia.getMedia_id();
     }
 }
 

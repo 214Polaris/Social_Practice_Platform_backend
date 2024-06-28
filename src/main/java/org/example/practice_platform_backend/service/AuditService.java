@@ -238,6 +238,16 @@ public class AuditService {
         return needAuditList;
     }
 
+    /**
+     * 获取队伍审核变更列表 申请人
+     */
+    @Transactional
+    public List<Audit> team_audit_notice(int user_id){
+        List<Audit> teamAuditList = auditMapper.getTeamAuditByUserId(user_id);
+        auditMapper.updateTeamAuditAsRead(user_id);
+        return teamAuditList;
+    }
+
 //    /**
 //     * 高校队伍注册申请
 //     */
