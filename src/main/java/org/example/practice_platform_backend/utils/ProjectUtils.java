@@ -44,8 +44,8 @@ public class ProjectUtils {
         for(FruitMedia media : fruitMedia){
             JSONObject mediaJson = new JSONObject();
             if(media.getType().equals("image") || media.getType().equals("cover")){
-                String path =  uploadPath + media.getPath();
-                mediaJson.put("src",imageUtils.getFileBytes(path));
+                String path =  ImageUtils.getRealName(media.getPath());
+                mediaJson.put("src",path);
                 mediaJson.put("img_flag",0);
                 mediaList.add(mediaJson);
             }

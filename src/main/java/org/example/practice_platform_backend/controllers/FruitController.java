@@ -23,6 +23,7 @@ import java.sql.Timestamp;
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Map;
 import java.util.Objects;
 
 // 成果相关
@@ -139,9 +140,12 @@ public class FruitController {
             }
             int user_id = user.getUser_id();
             fruit.setDate(LocalDateTime.now());
-            int fruit_id = fruitService.postFruit(fruit, user_id);
+            Map<String,Integer> info = fruitService.postFruit(fruit, user_id);
+            int fruit_id = info.get("fruit_id");
+            int media_id = info.get("media_id");
             JSONObject result = new JSONObject();
             result.put("id", fruit_id);
+            result.put("media_id", media_id);
             return ResponseEntity.status(200).body(JSON.toJSONString(result));
         } catch (Exception e) {
             e.printStackTrace();

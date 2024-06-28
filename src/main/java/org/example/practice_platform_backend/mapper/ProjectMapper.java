@@ -108,4 +108,11 @@ public interface ProjectMapper {
      */
     @Select("select need_id from succ_project where team_number=#{team_number}")
     List<Integer> getNeedIdByTeamNumber(@Param("team_number") int team_number);
+
+    /**
+     * 根据结对id 查封面路径
+     */
+    @Select("select path from need_media where type = 'cover' and need_id = " +
+            " (select need_id from succ_project where project_id = #{project_id})")
+    String getCoverPathByProjectId(int project_id);
 }

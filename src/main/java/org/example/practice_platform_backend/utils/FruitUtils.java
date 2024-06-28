@@ -64,7 +64,8 @@ public class FruitUtils {
             JSONObject media = new JSONObject();
             if(fruitMedia.getType().equals("image") ||  fruitMedia.getType().equals("cover")){
                 media.put("img_flag", 0);
-                media.put("src", imageUtils.getFileBytes(uploadPath + "/" + fruitMedia.getPath()));
+                String Path = ImageUtils.getRealName(fruitMedia.getPath());
+                media.put("src", Path);
             }
             else{
                 media.put("img_flag", 1);

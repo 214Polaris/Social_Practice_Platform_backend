@@ -7,7 +7,9 @@ import net.minidev.json.JSONArray;
 import net.minidev.json.JSONObject;
 import org.example.practice_platform_backend.entity.Project;
 import org.example.practice_platform_backend.entity.User;
+import org.example.practice_platform_backend.mapper.AuditMapper;
 import org.example.practice_platform_backend.mapper.ProjectMapper;
+import org.example.practice_platform_backend.mapper.TeamMapper;
 import org.example.practice_platform_backend.service.ProjectService;
 import org.example.practice_platform_backend.utils.JwtUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,6 +33,12 @@ public class ProjectController {
 
     @Autowired
     private JwtUtils jwtUtils;
+
+    @Autowired
+    private TeamMapper teamMapper;
+
+    @Autowired
+    private AuditMapper auditMapper;
     //结对详情信息get,只实现了传图片
     @GetMapping("/project/detail")
     public ResponseEntity<?>  getProjectDetail(@Param("proj_id") String proj_id) throws IOException {
@@ -77,9 +85,14 @@ public class ProjectController {
     @PostMapping("/need/pair")
     public ResponseEntity<?>  pairNeed(@RequestParam(value = "demand_id") String need_id,
                                        HttpServletRequest request) throws IOException {
+
         try{
             String token = request.getHeader("token");
             int manager_id = jwtUtils.getUserInfoFromToken(token, User.class).getUser_id();
+            int team_id = teamMapper.getTeamIdByUser(manager_id);
+            if(auditMapper.getIsAudit_team(Integer.parseInt(need_id), team_id)){
+                return ResponseEntity.status(400).body("你已经申请过这个结对了");
+            }
             projectService.pairNeed(Integer.parseInt(need_id), manager_id);
             return ResponseEntity.status(200).body("配对成功,待审核");
         }catch (Exception e){

@@ -20,6 +20,9 @@ public interface TeamMapper {
     @Select("select * from college_team where team_number = #{team_id}")
     Team getTeamById(int team_id);
 
+    @Select("select team_name from college_team where team_number = #{team_number}")
+    String getTeamNameByTeamNumber(int team_number);
+
     // 根据团队id获取团队教师id
     @Select("select user_id from college_team_teacher where team_number = #{team_number}")
     int  getTeacherIdByTeamNumber(int team_number);

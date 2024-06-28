@@ -143,6 +143,7 @@ public class AuditService {
         return fruitAuditList;
     }
 
+    @Transactional
     public JSONObject getAuditList_com(int user_id) throws IOException {
         List<Audit> communityAuditList = community_audit_notice(user_id);
         List<Audit> needAuditList = need_audit_notice(user_id);
@@ -235,6 +236,16 @@ public class AuditService {
         List<Audit> needAuditList = auditMapper.getNeedAuditByUserId(user_id);
         auditMapper.updateNeedAuditAsRead(user_id);
         return needAuditList;
+    }
+
+    /**
+     * 获取队伍审核变更列表 申请人
+     */
+    @Transactional
+    public List<Audit> team_audit_notice(int user_id){
+        List<Audit> teamAuditList = auditMapper.getTeamAuditByUserId(user_id);
+        auditMapper.updateTeamAuditAsRead(user_id);
+        return teamAuditList;
     }
 
 //    /**

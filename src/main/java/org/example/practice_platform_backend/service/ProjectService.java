@@ -140,9 +140,9 @@ public class ProjectService {
      * 新增结对
      */
     @Transactional
-    public void pairNeed(int need_id, int manger_id){
+    public void pairNeed(int need_id, int manager_id){
         //根据队长id 查队伍id
-        int team_id = teamMapper.getTeamIdByUser(manger_id);
+        int team_id = teamMapper.getTeamIdByUser(manager_id);
         Project new_proj = new Project();
         new_proj.setIs_pass(0);
         new_proj.setTutor(userMapper.getNameById(teamMapper.getTeacherIdByTeamNumber(team_id)));
@@ -153,7 +153,7 @@ public class ProjectService {
         Audit audit = new Audit();
         audit.setProject_id(new_proj.getProject_id());
         audit.setNew_id(new_proj.getProject_id());
-        audit.setApply_user_id(manger_id);
+        audit.setApply_user_id(manager_id);
         audit.setApply_time(LocalDateTime.now());
         audit.setIs_pass(0);
         audit.setIs_notice(0);

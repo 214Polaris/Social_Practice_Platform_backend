@@ -1,5 +1,6 @@
 package org.example.practice_platform_backend.controllers;
 
+import com.alibaba.fastjson2.JSON;
 import com.alibaba.fastjson2.JSONObject;
 import jakarta.servlet.http.HttpServletRequest;
 import net.minidev.json.JSONArray;
@@ -189,10 +190,9 @@ public class UserController {
     }
 
     @GetMapping(value="/user/stuInfo")
-    public ResponseEntity<?> getStuInfo(HttpServletRequest request){
+    public ResponseEntity<?> getStuInfo(HttpServletRequest request,  @RequestParam("username") String username){
         try{
-            String token = request.getHeader("token");
-            int user_id = jwtUtils.getUserInfoFromToken(token,User.class).getUser_id();
+            int user_id = userMapper.getUserIdByUsername(username);
             net.minidev.json.JSONObject result = userService.getStuInfo(user_id);
             return  ResponseEntity.ok(result);
 
@@ -201,6 +201,21 @@ public class UserController {
             return ResponseEntity.status(400).body("查询学生信息出错");
         }
 
+    }
+
+    @GetMapping(value = "/user/stu_notice")
+    public ResponseEntity<?> getStuNotice(HttpServletRequest request){
+        try{
+            String token = request.getHeader("token");
+            int user_id = jwtUtils.getUserInfoFromToken(token,User.class).getUser_id();
+            net.minidev.json.JSONArray result = userService.getStuNotice(user_id);
+            return  ResponseEntity.ok(JSON.toJSONString(result));
+
+        } catch (Exception e){
+//            LOGGER.error(e.getMessage());
+            e.printStackTrace();
+            return ResponseEntity.status(400).body("查询学生信息出错");
+        }
     }
 
 
