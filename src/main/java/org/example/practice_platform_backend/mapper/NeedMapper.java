@@ -27,9 +27,12 @@ public interface NeedMapper {
     List<JSONObject> getMediaByNeedId(@Param("need_id") int need_id);
 
     // 获取指定 user_id 发布的所有需求
-    @Select("select n.need_id,n.title,n.is_pass from community_need as n " +
-            "join community as c on c.community_id = n.community_id " +
-            "where c.user_id=#{user_id}")
+    @Select("""
+            select n.need_id,n.title,n.is_pass, SUBSTRING_INDEX(m.path, '/', -1) AS img from community_need as n
+             join community as c on c.community_id = n.community_id
+             join need_media as m on m.need_id = n.need_id
+             where c.user_id=#{user_id} AND m.type='cover'
+            """)
     List<JSONObject> getNeedByUserId(@Param("user_id") int user_id);
 
     //注册新的需求

@@ -11,6 +11,7 @@ import org.example.practice_platform_backend.mapper.NeedMapper;
 import org.example.practice_platform_backend.service.AuditService;
 import org.example.practice_platform_backend.service.CommunityLeaderService;
 import org.example.practice_platform_backend.service.MapService;
+import org.example.practice_platform_backend.utils.ImageUtils;
 import org.example.practice_platform_backend.utils.JwtUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -49,11 +50,11 @@ public class CommunityLeaderController {
         if(!communityLeaderService.checkLeader(request)){
             return ResponseEntity.status(400).body("该用户不是社区负责人");
         }
-        List<JSONObject> result = needMapper.getNeedByUserId(user_id);
-        if(result.isEmpty()){
+        List<JSONObject> results = needMapper.getNeedByUserId(user_id);
+        if(results.isEmpty()){
             return ResponseEntity.status(200).body("暂无发布需求");
         }
-        return ResponseEntity.status(200).body(result);
+        return ResponseEntity.status(200).body(results);
     }
 
     // 注册社区信息，返回注册后的社区 id，同时同步到审核列表当中
