@@ -123,7 +123,6 @@ public class SaveFileService {
     }
 
     // 处理保存操作
-    @Async
     public void saveAvatar(MultipartFile file, int user_id) throws IOException {
         // 把传进来的 MultipartFile 文件转换成 File 并创建临时文件
         String originalFilename = file.getOriginalFilename();
