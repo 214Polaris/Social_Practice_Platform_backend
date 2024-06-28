@@ -145,7 +145,7 @@ public class FruitUtils {
             }else{
                 cover_path = uploadPath +  cover_path;
             }
-            activity_json.put("fruit_cover",  imageUtils.getFileBytes(cover_path));
+            activity_json.put("fruit_cover",  imageUtils.getThumbnail(cover_path));
             result.add(activity_json);
         }
         return  result;

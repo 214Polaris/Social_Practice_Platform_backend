@@ -177,7 +177,7 @@ public interface FruitMapper {
             "<foreach item='fruitId' collection='fruitIds' open='(' separator=',' close=')'>",
             "#{fruitId}",
             "</foreach>",
-            " ORDER BY comment_time DESC LIMIT 5 OFFSET #{offset}",
+            " ORDER BY comment_time DESC LIMIT 3 OFFSET #{offset}",
             "</script>"
     })
     List<Comment.Activity> getCommentsByFruitIds(@Param("fruitIds") List<Integer> fruitIds,
@@ -192,7 +192,7 @@ public interface FruitMapper {
             "<foreach item='fruitId' collection='fruitIds' open='(' separator=',' close=')'>",
             "#{fruitId}",
             "</foreach>",
-            " ORDER BY kudos_time DESC LIMIT 5 OFFSET #{offset}",
+            " ORDER BY kudos_time DESC LIMIT 3 OFFSET #{offset}",
             "</script>"
     })
     List<Comment.Activity> getKudosByFruitIds(@Param("fruitIds") List<Integer> fruitIds,
