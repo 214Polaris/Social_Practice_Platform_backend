@@ -1,7 +1,10 @@
 package org.example.practice_platform_backend.controllers;
 
 import jakarta.servlet.http.HttpServletRequest;
+import net.minidev.json.JSONObject;
 import org.example.practice_platform_backend.entity.Audit;
+import org.example.practice_platform_backend.entity.CommunityNeed;
+import org.example.practice_platform_backend.mapper.AuditMapper;
 import org.example.practice_platform_backend.service.AuditService;
 import org.example.practice_platform_backend.service.CommunityLeaderService;
 import org.example.practice_platform_backend.entity.CommunityLeader;
@@ -31,6 +34,8 @@ public class CommitteeController {
 
     @Autowired
     private AuditService auditService;
+    @Autowired
+    private AuditMapper auditMapper;
 
     // 解析 token 判断是否是校团委
     private Boolean isValid(HttpServletRequest request){
@@ -120,6 +125,29 @@ public class CommitteeController {
         return ResponseEntity.ok(fruitAuditList);
     }
 
+//    //获取详细的审核信息
+//    @GetMapping("/audit/detail")
+//    public ResponseEntity<?> getAuditDetailList(HttpServletRequest request,@RequestParam("type") Integer type,
+//                                                @RequestParam("audit_id") Integer auditId) {
+//
+//        if(!isValid(request)){
+//            return ResponseEntity.status(400).body("该用户不是校团委");
+//        }
+//        //需求
+//        if(type == 1){
+//            auditMapper.getNeedAudit(auditId);
+//
+//        }
+//    }
+
+//    //审核结果
+//    @PostMapping("/audit/result")
+//    public ResponseEntity<?> auditResult(HttpServletRequest request, @RequestBody JSONObject result) {
+//        if(!isValid(request)){
+//            return ResponseEntity.status(400).body("该用户不是校团委");
+//        }
+//
+//    }
 
 }
 

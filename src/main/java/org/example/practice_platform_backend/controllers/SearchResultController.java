@@ -18,7 +18,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.dao.DataAccessException;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -54,9 +53,9 @@ public class SearchResultController {
             return ResponseEntity.badRequest().body("必需的请求参数缺失");
         }
 
-        List<SearchResult> searchResults = new ArrayList<>(List.of());
-        List<String> tags = List.of();
-        Map<String,String> memberList = Map.of();
+        List<SearchResult> searchResults;
+        List<String> tags;
+        Map<String,String> memberList;
 
         try {
             switch (category) {

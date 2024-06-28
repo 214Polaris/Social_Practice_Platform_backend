@@ -18,9 +18,12 @@ import org.springframework.transaction.annotation.Transactional;
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.*;
+import java.util.function.BiFunction;
+import java.util.function.Function;
 
 @Service
 public class AuditService {
+
     private static final Logger LOGGER = LoggerFactory.getLogger(SaveFileService.class);
     @Autowired
     AuditMapper auditMapper;
@@ -39,15 +42,12 @@ public class AuditService {
     private FruitMapper fruitMapper;
 
     @Autowired
-    private UserMapper userMapper;
-
-    @Autowired
     private ProjectMapper projectMapper;
 
     @Value("${uploadPath}")
     private String uploadPath;
 
-    private final String[] address_match = {"广东省广州市海珠区", "广东省广州市番禺区", "广东省广州市越秀区", "广东省珠海市香洲区", "广东省深圳市光明区"};
+//    private final String[] address_match = {"广东省广州市海珠区", "广东省广州市番禺区", "广东省广州市越秀区", "广东省珠海市香洲区", "广东省深圳市光明区"};
 
     // 获取社区的审核列表
     public List<Audit.CommunityAudit> getCommunityAudits() {
@@ -143,6 +143,7 @@ public class AuditService {
         return fruitAuditList;
     }
 
+    @Transactional
     public JSONObject getAuditList_com(int user_id) throws IOException {
         List<Audit> communityAuditList = community_audit_notice(user_id);
         List<Audit> needAuditList = need_audit_notice(user_id);
@@ -338,5 +339,38 @@ public class AuditService {
             origin_need.setTitle(need.getTitle());
         }
     }
+
+    /**
+     * 更新审核的处理结果
+     * @param result 处理结果
+     */
+    @Transactional
+    public void updateAudit(JSONObject result){
+        int type = (int) result.get("type");
+        Boolean is_pass = (Boolean) result.get("is_pass");
+        int audit_id = (int) result.get("audit_id");
+        String reason = result.getAsString("reason");
+        int origin_id = (int) result.get("origin_id");
+        if(is_pass){
+            // 成果
+            if(type==1){
+
+                auditMapper.auditFruitPass(LocalDateTime.now(),audit_id,origin_id);
+            }
+            // 社区
+            else if(type==2){
+                auditMapper.auditCommunityPass(LocalDateTime.now(),audit_id,origin_id);
+            }
+            // 队伍
+            else if(type==3){
+                auditMapper.auditTeamPass(LocalDateTime.now(),audit_id,origin_id);
+            }
+            // 需求
+            else if(type==4){
+                auditMapper.auditNeedPass(LocalDateTime.now(),audit_id,origin_id);
+            }
+        }
+    }
+
 
 }

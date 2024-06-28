@@ -15,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -121,7 +122,6 @@ public class SaveFileService {
         );
     }
 
-
     // 处理保存操作
     @Async
     public void saveAvatar(MultipartFile file, int user_id) throws IOException {
@@ -132,35 +132,15 @@ public class SaveFileService {
         String fileName ="avatar/" + user_id + "_avatar" + "_origin" + suffix ;
         String fileDir = uploadPath;
         //保存原图
-        assert originalFilename != null;
-        File tempFile = File.createTempFile(fileName,suffix);
-        file.transferTo(tempFile);
-        saveThumbNails(tempFile,fileDir,fileName);
+        saveBytesFile(file.getInputStream(),fileDir,fileName);
         //保存缩略图
-        File smallerPhoto = File.createTempFile(originalFilename,suffix);  //创建缩略图的临时文件
-        imageUtils.photoSmaller(tempFile,smallerPhoto);
-        saveThumbNails(smallerPhoto,fileDir,thumbnailFileName);
-        //删除临时文件
-        tempFile.delete();
-        smallerPhoto.delete();
+        File tmpfile = new File(fileDir+thumbnailFileName);
+        imageUtils.photoSmaller(file.getInputStream(),tmpfile);
+        MultipartFile multipartFile = new MockMultipartFile(thumbnailFileName, new FileInputStream(tmpfile));
+        saveBytesFile(multipartFile.getInputStream(),fileDir,thumbnailFileName);
         //将头像名称保存到数据库中
         userMapper.updateAvatar(user_id, thumbnailFileName);
         CompletableFuture.completedFuture(true);
-    }
-
-    public void saveThumbNails(File sourceFile, String fileDir, String fileName) {
-        try {
-            Path directoryPath = Paths.get(fileDir);
-            Path path = Paths.get(fileDir+fileName);
-            // 确保目录存在
-            if (!Files.exists(path.getParent())) {
-                Files.createDirectories(path.getParent());
-            }
-            Path filePath = directoryPath.resolve(fileName);
-            Files.copy(sourceFile.toPath(), filePath, StandardCopyOption.REPLACE_EXISTING);
-        } catch (IOException e) {
-            LOGGER.error(e.getMessage());
-        }
     }
 
     @Transactional
