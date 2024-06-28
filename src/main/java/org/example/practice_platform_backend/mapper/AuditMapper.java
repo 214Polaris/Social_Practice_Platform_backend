@@ -3,7 +3,10 @@ package org.example.practice_platform_backend.mapper;
 import org.apache.ibatis.annotations.*;
 import org.example.practice_platform_backend.entity.Audit;
 
+import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 @Mapper
 public interface AuditMapper {
@@ -133,6 +136,83 @@ public interface AuditMapper {
     @Insert("insert into audit_need(need_id,new_id,apply_user_id,apply_time) " +
             "values(#{need_id},#{new_id},#{apply_user_id},#{apply_time})")
     void insertNeedAudit(Audit audit);
+
+    /**
+     * 获取社区审核的两个id
+     */
+    @Select("select community_id,new_id from audit_community where audit_id = #{audit_id}")
+    Map<String,Integer> getCommunityIdByAuditId(int audit_id);
+
+    /**
+     * 社区审核通过，设置 modify_time 和 is_pass
+     */
+    @Update("update audit_community set last_mod_time=#{last_mod_time}, is_pass=1,new_id=#{new_id} " +
+            "where audit_id = #{audit_id}")
+    void auditCommunityPass(LocalDateTime last_mod_time, int audit_id, int new_id);
+
+    /**
+     * 社区审核未通过，设置审核原因,modify_time和 is_pass
+     */
+    @Update("update audit_community set last_mod_time=#{last_mod_time}," +
+            "fail_interpretation=#{fail_interpretation},is_pass=1,new_id=#{new_id}")
+    void auditCommunityFail(LocalDateTime last_mod_time,String fail_interpretation, int audit_id, int new_id);
+
+    /**
+     * 获取成果审核的两个id
+     */
+    @Select("select fruit_id,new_id from audit_fruit where audit_id = #{audit_id}")
+    Map<String,Integer> getFruitIdByAuditId(int audit_id);
+
+    /**
+     * 成果审核通过，设置 modify_time 和 is_pass，覆盖原来的 new_id
+     */
+    @Update("update audit_fruit set last_mod_time=#{last_mod_time}, is_pass=1, new_id=#{new_id} " +
+            "where audit_id = #{audit_id}")
+    void auditFruitPass(LocalDateTime last_mod_time, int audit_id, int new_id);
+
+    /**
+     * 成果审核未通过，设置审核原因,modify_time和 is_pass
+     */
+    @Update("update audit_fruit set last_mod_time=#{last_mod_time}," +
+            "fail_interpretation=#{fail_interpretation},is_pass=1,new_id=#{new_id}")
+    void auditFruitFail(LocalDateTime last_mod_time,String fail_interpretation, int audit_id, int new_id);
+
+    /**
+     * 需求审核通过，设置 modify_time 和 is_pass,覆盖原来的 new_id
+     */
+    @Update("update audit_need set last_mod_time=#{last_mod_time}, is_pass=1,new_id=#{new_id} " +
+            "where audit_id = #{audit_id}")
+    void auditNeedPass(LocalDateTime last_mod_time, int audit_id,int new_id);
+    /**
+     * 需求审核未通过，设置审核原因,modify_time和 is_pass
+     */
+    @Update("update audit_need set last_mod_time=#{last_mod_time}," +
+            "fail_interpretation=#{fail_interpretation},is_pass=1,new_id=#{new_id}")
+    void auditNeedFail(LocalDateTime last_mod_time,String fail_interpretation, int audit_id, int new_id);
+    /**
+     * 结队审核通过，设置 modify_time 和 is_pass,覆盖原来的 new_id
+     */
+    @Update("update audit_project set last_mod_time=#{last_mod_time}, is_pass=1,new_id=#{new_id} " +
+            "where audit_id = #{audit_id}")
+    void auditProjectPass(LocalDateTime last_mod_time, int audit_id,int new_id);
+    /**
+     * 结队审核未通过，设置审核原因,modify_time和 is_pass
+     */
+    @Update("update audit_project set last_mod_time=#{last_mod_time}," +
+            "fail_interpretation=#{fail_interpretation},is_pass=1,new_id=#{new_id}")
+    void auditProjectFail(LocalDateTime last_mod_time,String fail_interpretation, int audit_id, int new_id);
+    /**
+     * 队伍审核通过，设置 modify_time 和 is_pass,覆盖原来的 new_id
+     */
+    @Update("update audit_team set last_mod_time=#{last_mod_time}, is_pass=1,new_id=#{new_id} " +
+            "where audit_id = #{audit_id}")
+    void auditTeamPass(LocalDateTime last_mod_time, int audit_id,int new_id);
+    /**
+     * 队伍审核未通过，设置审核原因,modify_time和 is_pass
+     */
+    @Update("update audit_team set last_mod_time=#{last_mod_time}," +
+            "fail_interpretation=#{fail_interpretation},is_pass=1,new_id=#{new_id}")
+    void auditTeamFail(LocalDateTime last_mod_time,String fail_interpretation, int audit_id, int new_id);
 
     /**
      * 判断这个队伍是否已申请过这个结对

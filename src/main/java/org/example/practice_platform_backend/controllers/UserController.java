@@ -9,9 +9,11 @@ import org.example.practice_platform_backend.mapper.CommunityMapper;
 import org.example.practice_platform_backend.mapper.TeamMapper;
 import org.example.practice_platform_backend.service.CommunityLeaderService;
 import org.example.practice_platform_backend.service.UserService;
+import org.example.practice_platform_backend.utils.ImageUtils;
 import org.example.practice_platform_backend.utils.RandomGenerateUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -23,6 +25,7 @@ import org.springframework.web.bind.annotation.*;
 import org.example.practice_platform_backend.utils.JwtUtils;
 import org.springframework.dao.*;
 
+import java.io.IOException;
 import java.sql.SQLIntegrityConstraintViolationException;
 import java.util.HashMap;
 import java.util.Objects;
@@ -33,6 +36,9 @@ import java.util.Objects;
 public class UserController {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(CommentController.class);
+
+    @Value("${uploadPath}")
+    private String uploadPath;
 
     @Autowired
     private UserMapper userMapper;
@@ -51,6 +57,8 @@ public class UserController {
     private CommunityMapper communityMapper;
     @Autowired
     private TeamMapper teamMapper;
+    @Autowired
+    private ImageUtils imageUtils;
 
 
     // 处理登录请求
@@ -161,7 +169,7 @@ public class UserController {
 
     // 获取附加信息
     @GetMapping(value="/get/extraInfo")
-    public ResponseEntity<?> getExtraInfo(HttpServletRequest request) {
+    public ResponseEntity<?> getExtraInfo(HttpServletRequest request) throws IOException {
         User user = jwtUtils.getUserInfoFromToken(request.getHeader("token"),User.class);
         int user_id = user.getUser_id();
         boolean isLeader = false;
@@ -173,7 +181,6 @@ public class UserController {
                 return ResponseEntity.status(200).header("flag", String.valueOf(0)).build();
             }
             result.put("communityID",id);
-            return ResponseEntity.status(200).header("flag",String.valueOf(1)).body(result);
         }
         if(Objects.equals(user.getUser_category(), "student")){
             id = teamMapper.getTeamIdByUser(user_id);
@@ -186,6 +193,7 @@ public class UserController {
             result.put("TeamID",id);
             result.put("isLeader",isLeader);
         }
+        result.put("avatar",imageUtils.getThumbnail(uploadPath + user.getAvatar_path()));
         return ResponseEntity.status(200).header("flag",String.valueOf(1)).body(result);
     }
 

@@ -86,12 +86,12 @@ public class ImageUtils {
      * @Param sourceFile 源文件
      * @Param toFile 目标文件
      */
-    public void photoSmaller(File sourceFile,File toFile) throws IOException {
-        Thumbnails.of(sourceFile)
+    public void photoSmaller(InputStream inputStream,File file) throws IOException {
+        Thumbnails.of(inputStream)
                 .size(200, 150)//尺寸
                 //.watermark(Positions.CENTER, ImageIO.read(markIco), 0.1f)
                 .outputQuality(0.4f)//缩略图质量
-                .toFile(toFile);
+                .toFile(file);
     }
 
     /**
@@ -107,7 +107,7 @@ public class ImageUtils {
         int height = originalImage.getHeight();
         Thumbnails.of(file)
                 .size(width,height)
-                .outputQuality(0.7)
+                .outputQuality(0.5)
                 .toOutputStream(bos);
         byte[] data = bos.toByteArray();
         return new String(Objects.requireNonNull(Base64.encodeBase64(data,true)));

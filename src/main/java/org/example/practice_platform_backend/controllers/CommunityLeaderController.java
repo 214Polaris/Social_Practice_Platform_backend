@@ -43,6 +43,7 @@ public class CommunityLeaderController {
     @Autowired
     private AuditService auditService;
 
+
     //获取该负责人发布的所有需求
     @GetMapping("/get/community/need")
     public ResponseEntity<?> getCommunityNeeds(HttpServletRequest request) {
