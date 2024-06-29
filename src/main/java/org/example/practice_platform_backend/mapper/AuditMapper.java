@@ -54,6 +54,30 @@ public interface AuditMapper {
     List<Audit> getNeedAudit();
 
     /**
+     * 根据 auditId 获取需求 id
+     */
+    @Select("SELECT new_id from audit_need where audit_id = #{audit_id} ")
+    Integer getNeedByAuditId(int audit_id);
+
+    /**
+     * 根据 auditId 获取team_number
+     */
+    @Select("SELECT new_id from audit_community where audit_id = #{audit_id} ")
+    Integer getCommunityByAuditId(int audit_id);
+
+    /**
+     * 根据 auditId 获取team_number
+     */
+    @Select("SELECT new_id from audit_team where audit_id = #{audit_id} ")
+    Integer getTeamByAuditId(int audit_id);
+
+    /**
+     * 根据 auditId 获取 fruit_id
+     */
+    @Select("SELECT new_id from audit_fruit where audit_id = #{audit_id} ")
+    Integer getFruitByAuditId(int audit_id);
+
+    /**
      * 获取需求审核列表 申请人
      */
     @Select("SELECT * from audit_need where last_mod_time is not NULL and apply_user_id = #{user_id} and is_notice = 0")

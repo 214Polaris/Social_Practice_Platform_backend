@@ -6,6 +6,7 @@ import net.minidev.json.JSONArray;
 import net.minidev.json.JSONObject;
 import org.example.practice_platform_backend.entity.Team;
 import org.example.practice_platform_backend.entity.User;
+import org.example.practice_platform_backend.mapper.AuditMapper;
 import org.example.practice_platform_backend.mapper.TeamMapper;
 import org.example.practice_platform_backend.mapper.UserMapper;
 import org.example.practice_platform_backend.service.AuditService;
@@ -54,6 +55,8 @@ public class TeamController {
 
     @Autowired
     private UserMapper userMapper;
+    @Autowired
+    private AuditMapper auditMapper;
 
     // 注册新队伍 待审核
     @PostMapping(value = "/team/register")
@@ -73,6 +76,9 @@ public class TeamController {
             }
             if(!userMapper.existUser(team.getTeacher_id())){
                 return ResponseEntity.status(400).body("该老师不存在");
+            }
+            if(auditMapper.getTeamAuditByUserId(user_id)!=null){
+                return ResponseEntity.status(400).body("已存在待审核的队伍创建");
             }
             team.setCollege("中山大学");
             team.setAvatar_path("team_avatar/default_avatar.jpg");
@@ -133,6 +139,9 @@ public class TeamController {
                 return ResponseEntity.status(400).body("该老师不存在");
             }
             origin_team.setTeacher(team.getTeacher());
+        }
+        if(auditMapper.getTeamAuditByUserId(team.getTeam_manager())!=null){
+            return ResponseEntity.status(400).body("已有待审核的队伍修改");
         }
         // 看修改了哪里
         auditService.applyTeamChanges(origin_team,team);

@@ -16,8 +16,15 @@ import java.util.Map;
 
 @Mapper
 public interface TeamMapper {
-    // 根据团队id获取团队信息
-    @Select("select * from college_team where team_number = #{team_id}")
+    // 根据团队id获取团队信息,包括指导老师
+    @Select("""
+           select t.team_number,t.introduction,t.academy, t.team_name,
+           t.college,t.team_manager,t.member_cnt,t.address,user.name
+           from college_team as t
+           join college_team_teacher as c on t.team_number = c.team_number
+           join user on c.user_id = user.user_id
+           where t.team_number = 1
+           """)
     Team getTeamById(int team_id);
 
     @Select("select team_name from college_team where team_number = #{team_number}")

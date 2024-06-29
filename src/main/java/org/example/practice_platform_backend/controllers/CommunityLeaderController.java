@@ -42,6 +42,8 @@ public class CommunityLeaderController {
     private NeedMapper needMapper;
     @Autowired
     private AuditService auditService;
+    @Autowired
+    private AuditMapper auditMapper;
 
 
     //获取该负责人发布的所有需求
@@ -75,6 +77,9 @@ public class CommunityLeaderController {
         if(!MapService.checkValidAddress(community.getAddress())){
             return ResponseEntity.status(400).body("地址格式不合法");
         }
+        if(auditMapper.getCommunityAuditByUserId(user_id)!=null){
+            return ResponseEntity.status(400).body("已有待审核的社区");
+        };
         community.setUser_id(user_id);
         // 插入社区
         communityMapper.registerCommunity(community);
@@ -129,6 +134,9 @@ public class CommunityLeaderController {
         if(communityNeed.getAddress()==null||!MapService.checkValidAddress(communityNeed.getAddress())){
             return ResponseEntity.status(400).body("地址未填写或地址格式错误");
         }
+        if(auditMapper.getNeedAuditByUserId(user_id)!=null){
+            return ResponseEntity.status(400).body("已有待审核的需求");
+        }
         communityNeed.setIs_pair(0);
         communityNeed.setIs_pass(0);
         communityNeed.setCommunity_id(community_id);
@@ -167,6 +175,9 @@ public class CommunityLeaderController {
         }
         if(!needMapper.selectNeedByUserId(user.getUser_id()).contains(communityNeed.getNeed_id())){
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body("当前用户并未发布过该需求");
+        }
+        if(auditMapper.getNeedAuditByUserId(user.getUser_id())!=null){
+            return ResponseEntity.status(400).body("已有待审核的需求");
         }
         auditService.applyNeedChanges(origin_need,communityNeed);
         needMapper.registerNeed(origin_need);

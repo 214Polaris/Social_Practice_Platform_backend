@@ -32,8 +32,6 @@ import java.util.Objects;
 public class FruitController {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(FruitController.class);
-    @Autowired
-    private UserMapper userMapper;
 
     @Autowired
     private FruitMapper fruitMapper;

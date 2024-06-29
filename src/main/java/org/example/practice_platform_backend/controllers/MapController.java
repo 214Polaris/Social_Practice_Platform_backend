@@ -1,11 +1,13 @@
 package org.example.practice_platform_backend.controllers;
 
+import net.minidev.json.JSONObject;
 import org.example.practice_platform_backend.mapper.CommunityMapper;
 import org.example.practice_platform_backend.service.MapService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.HashMap;
@@ -20,6 +22,7 @@ public class MapController {
     @Autowired
     private MapService mapService;
 
+    //获取按市统计的社区数量
     @GetMapping(value="/get/community/count")
     public ResponseEntity<?> getCommunityCount() {
         List<HashMap<String, Integer>> result = mapService.getCommunityCountsByCity();
@@ -28,4 +31,15 @@ public class MapController {
         }
         return ResponseEntity.status(200).body(result);
     }
+
+    //获取某个市的全部详细的打点的经纬度
+    @GetMapping(value = "/get/coordinate")
+    public ResponseEntity<?> getCoordinate(@RequestParam("city") String city) {
+        List<JSONObject> result = communityMapper.getCommunityLongitudeAndLatitude(city);
+        if (result.isEmpty()) {
+            return ResponseEntity.status(200).body("空");
+        }
+        return ResponseEntity.status(200).body(result);
+    }
+
 }
