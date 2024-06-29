@@ -91,9 +91,30 @@ public interface ProjectMapper {
     /**
      * 查询未结对的需求 offset
      */
-    @Select("select * from community_need where is_pair = 0 " +
+    @Select("select * from community_need where is_pair = 0 and is_pass = 1 " +
             " LIMIT 8 OFFSET #{offset}")
     List<Project> getUnpairedNeed(@Param("offset") int offset);
+
+    /**
+     * 根据标题 模糊查未结对需求
+     */
+    @Select("select * from community_need where is_pair = 0 and is_pass = 1 and title like CONCAT('%', #{title}, '%')")
+    List<Project> getUnpairedNeedByTitle(@Param("title") String title);
+
+    /**
+     * 根据社区名 模糊查未结对需求
+     */
+    @Select("select * from community_need where is_pair = 0 and is_pass = 1 and community_id in " +
+            "(select community_id from community where community_name like CONCAT('%', #{community_name}, '%'))")
+    List<Project> getUnpairedNeedByCommunityName(@Param("community_name") String community_name);
+
+    /**
+     * 根据标签 模糊查未结对需求
+     */
+    @Select("select * from community_need where is_pair = 0 and is_pass = 1 and need_id in " +
+            "(select need_id from need_match where category_id  in " +
+            "(select category_id from need_category where category_name like CONCAT('%', #{tag}, '%')))")
+    List<Project> getUnpairedNeedByTag(@Param("tag") String tag);
 
     /**
      * 新增结对项目，等待审核

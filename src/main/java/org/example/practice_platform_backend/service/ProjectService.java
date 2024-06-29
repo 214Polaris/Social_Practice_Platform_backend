@@ -15,8 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.io.IOException;
 import java.time.LocalDateTime;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Service
 public class ProjectService {
@@ -113,24 +112,43 @@ public class ProjectService {
      */
     public JSONObject getUnpairedNeed(int offset) throws IOException {
         JSONObject result = new JSONObject();
-        JSONArray list = new JSONArray();
         List<Project> need_list = projectMapper.getUnpairedNeed(offset);
+        result = getUnpairNeedJSON(need_list);
+        return result;
+    }
+
+    public JSONObject searchUnpairedNeed(String keyword) throws IOException {
+        List<Project> need_list_title = projectMapper.getUnpairedNeedByTitle(keyword);
+        List<Project> need_list_communityName = projectMapper.getUnpairedNeedByCommunityName(keyword);
+        List<Project> need_list_tag = projectMapper.getUnpairedNeedByTag(keyword);
+        // 使用HashSet进行去重
+        Set<Project> uniqueProjects = new HashSet<>();
+        uniqueProjects.addAll(need_list_title);
+        uniqueProjects.addAll(need_list_communityName);
+        uniqueProjects.addAll(need_list_tag);
+        List<Project> need_list = new ArrayList<>(uniqueProjects);
+        return getUnpairNeedJSON(need_list);
+    }
+
+    public JSONObject getUnpairNeedJSON(List<Project> need_list) throws IOException {
+        JSONObject result = new JSONObject();
+        JSONArray list = new JSONArray();
         for(Project need : need_list){
-             JSONObject item = new JSONObject();
-             item.put("demand_id", String.valueOf(need.getNeed_id()));
-             item.put("demand_title", need.getTitle());
-             item.put("demand_gov", communityMapper.getCommunityById(need.getCommunity_id()));
-             item.put("demand_time", need.getPost_time());
-             item.put("demand_locate", need.getAddress());
-             String coverPath = mediaMapper.getNeedCoverPath(need.getNeed_id());
-             if(coverPath == null){
-                 continue;
-             }
-             String cover = imageUtils.getFileBytes(uploadPath + coverPath);
-             item.put("demand_img", cover);
-             List<String> tags = tagsMapper.searchTags(need.getNeed_id());
-             item.put("tagList", tags);
-             list.add(item);
+            JSONObject item = new JSONObject();
+            item.put("demand_id", String.valueOf(need.getNeed_id()));
+            item.put("demand_title", need.getTitle());
+            item.put("demand_gov", communityMapper.getCommunityById(need.getCommunity_id()).getCommunity_name());
+            item.put("demand_time", need.getPost_time());
+            item.put("demand_locate", need.getAddress());
+            String coverPath = mediaMapper.getNeedCoverPath(need.getNeed_id());
+            if(coverPath == null){
+                continue;
+            }
+            String cover = imageUtils.getThumbnail(uploadPath + coverPath);
+            item.put("demand_img", cover);
+            List<String> tags = tagsMapper.searchTags(need.getNeed_id());
+            item.put("tagList", tags);
+            list.add(item);
         }
         result.put("demand_list", list);
         return result;

@@ -80,6 +80,21 @@ public class ProjectController {
     }
 
     /**
+     * 根据关键词 查未配对需求
+     */
+    @GetMapping("/search/unpaired")
+    public ResponseEntity<?>  searchUnpairedNeed(@RequestParam(value = "keyword") String keyword) throws IOException {
+        try{
+            JSONObject result = projectService.searchUnpairedNeed(keyword);
+            return ResponseEntity.status(200).body(JSON.toJSONString(result));
+        }catch (Exception e){
+            e.printStackTrace();
+            return ResponseEntity.status(400).body("查询失败");
+        }
+
+    }
+
+    /**
      * 配对申请
      */
     @PostMapping("/need/pair")
