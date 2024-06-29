@@ -80,6 +80,21 @@ public class ProjectController {
     }
 
     /**
+     * 根据关键词 查未配对需求
+     */
+    @GetMapping("/search/unpaired")
+    public ResponseEntity<?>  searchUnpairedNeed(@RequestParam(value = "keyword") String keyword) throws IOException {
+        try{
+            JSONObject result = projectService.searchUnpairedNeed(keyword);
+            return ResponseEntity.status(200).body(JSON.toJSONString(result));
+        }catch (Exception e){
+            e.printStackTrace();
+            return ResponseEntity.status(400).body("查询失败");
+        }
+
+    }
+
+    /**
      * 配对申请
      */
     @PostMapping("/need/pair")
@@ -112,5 +127,36 @@ public class ProjectController {
         jsonObject.put("Needs", NeedIdList);
         return ResponseEntity.ok(jsonObject);
     }
+
+    /**
+     * 获取已结对项目的数量
+     */
+    @GetMapping("/need/paired_number")
+    public ResponseEntity<?> getPairedNumber() {
+        int paired_number = projectMapper.getPairedNeedCount();
+        JSONObject result = new JSONObject();
+        result.put("number", paired_number);
+        return ResponseEntity.ok(JSON.toJSONString(result));
+    }
+
+    /**
+     * 获取已结对的需求 根据队伍
+     */
+    @GetMapping("/need/team_paired")
+    public ResponseEntity<?> getTeamPairedNeed(HttpServletRequest request) throws IOException {
+        String token = request.getHeader("token");
+        int user_id = jwtUtils.getUserInfoFromToken(token, User.class).getUser_id();
+        int team_number = teamMapper.getTeamIdByUser(user_id);
+        JSONArray result = projectService.getPairedNeedByTeam(team_number);
+        return ResponseEntity.status(200).body(JSON.toJSONString(result));
+    }
+
+
+
+
+
+
+
+
 }
 
