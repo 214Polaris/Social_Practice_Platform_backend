@@ -32,5 +32,4 @@ public class MapService {
         // 使用String的matches方法检查字符串是否符合正则表达式
         return address != null && address.matches(regex);
     }
-
 }

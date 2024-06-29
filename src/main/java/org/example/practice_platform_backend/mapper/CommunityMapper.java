@@ -1,5 +1,6 @@
 package org.example.practice_platform_backend.mapper;
 
+import net.minidev.json.JSONObject;
 import org.apache.ibatis.annotations.*;
 import org.example.practice_platform_backend.entity.Community;
 import org.example.practice_platform_backend.entity.Fruit;
@@ -133,4 +134,8 @@ public interface CommunityMapper {
     //社区 id 查负责人
     @Select("select user_id from community where community_id=#{community_id}")
     Integer getCommunityUserIdByCommunityId(int community_id);
+
+    //查询经纬度
+    @Select("select longitude,latitude from community where address like CONCAT('%', #{address}, '%')")
+    List<JSONObject> getCommunityLongitudeAndLatitude(@Param("address") String address);
 }

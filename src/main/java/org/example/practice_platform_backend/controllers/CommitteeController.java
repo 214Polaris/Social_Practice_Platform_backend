@@ -1,14 +1,10 @@
 package org.example.practice_platform_backend.controllers;
 
 import jakarta.servlet.http.HttpServletRequest;
-import net.minidev.json.JSONObject;
-import org.example.practice_platform_backend.entity.Audit;
-import org.example.practice_platform_backend.entity.CommunityNeed;
-import org.example.practice_platform_backend.mapper.AuditMapper;
+import org.example.practice_platform_backend.entity.*;
+import org.example.practice_platform_backend.mapper.*;
 import org.example.practice_platform_backend.service.AuditService;
 import org.example.practice_platform_backend.service.CommunityLeaderService;
-import org.example.practice_platform_backend.entity.CommunityLeader;
-import org.example.practice_platform_backend.entity.User;
 import org.example.practice_platform_backend.utils.JwtUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -36,6 +32,16 @@ public class CommitteeController {
     private AuditService auditService;
     @Autowired
     private AuditMapper auditMapper;
+    @Autowired
+    private NeedMapper needMapper;
+    @Autowired
+    private TeamMapper teamMapper;
+    @Autowired
+    private CommunityMapper communityMapper;
+    @Autowired
+    private FruitMapper fruitMapper;
+    @Autowired
+    private UserMapper userMapper;
 
     // 解析 token 判断是否是校团委
     private Boolean isValid(HttpServletRequest request){
@@ -125,20 +131,41 @@ public class CommitteeController {
         return ResponseEntity.ok(fruitAuditList);
     }
 
-//    //获取详细的审核信息
-//    @GetMapping("/audit/detail")
-//    public ResponseEntity<?> getAuditDetailList(HttpServletRequest request,@RequestParam("type") Integer type,
-//                                                @RequestParam("audit_id") Integer auditId) {
-//
-//        if(!isValid(request)){
-//            return ResponseEntity.status(400).body("该用户不是校团委");
-//        }
-//        //需求
-//        if(type == 1){
-//            auditMapper.getNeedAudit(auditId);
-//
-//        }
-//    }
+    //获取详细的审核信息
+    @GetMapping("/audit/detail")
+    public ResponseEntity<?> getAuditDetailList(HttpServletRequest request,@RequestParam("type") Integer type,
+                                                @RequestParam("audit_id") Integer auditId) {
+
+        if(!isValid(request)){
+            return ResponseEntity.status(400).body("该用户不是校团委");
+        }
+        //需求
+        if(type == 1){
+            Integer need_id = auditMapper.getNeedByAuditId(auditId);
+            CommunityNeed need = needMapper.getUnAuditNeedByNeedId(need_id);
+            return ResponseEntity.ok(need);
+        }
+        //队伍
+        if(type == 2){
+            Integer team_number = auditMapper.getTeamByAuditId(auditId);
+            Team team = teamMapper.getTeamById(team_number);
+            return ResponseEntity.ok(team);
+        }
+        //社区
+        if(type == 3){
+            Integer community_id = auditMapper.getCommunityByAuditId(auditId);
+            Community community = communityMapper.getCommunityById(community_id);
+            community.setAvatar_path(null);
+            return ResponseEntity.ok(community);
+        }
+        //成果
+        if(type == 4){
+            Integer fruit_id = auditMapper.getFruitByAuditId(auditId);
+            Fruit fruit = fruitMapper.getFruit(fruit_id);
+            return ResponseEntity.ok(fruit);
+        }
+        return ResponseEntity.status(400).body("类别不正确");
+    }
 
 //    //审核结果
 //    @PostMapping("/audit/result")
