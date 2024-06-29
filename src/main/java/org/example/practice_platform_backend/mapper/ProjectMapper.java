@@ -82,6 +82,13 @@ public interface ProjectMapper {
     Project[] getProjectListByCommunityId(int community_id);
 
     /**
+     * 根据队伍id 查相关结对需求
+     */
+    @Select("select * from community_need where need_id in " +
+            " (select need_id from succ_project where is_pass = 1 and team_number = #{team_number})")
+    List<Project> getPairedNeedByTeam(int team_number);
+
+    /**
      * 根据项目id 查询对应的需求名
      */
     @Select("select title from community_need where need_id = " +
@@ -91,9 +98,30 @@ public interface ProjectMapper {
     /**
      * 查询未结对的需求 offset
      */
-    @Select("select * from community_need where is_pair = 0 " +
+    @Select("select * from community_need where is_pair = 0 and is_pass = 1 " +
             " LIMIT 8 OFFSET #{offset}")
     List<Project> getUnpairedNeed(@Param("offset") int offset);
+
+    /**
+     * 根据标题 模糊查未结对需求
+     */
+    @Select("select * from community_need where is_pair = 0 and is_pass = 1 and title like CONCAT('%', #{title}, '%')")
+    List<Project> getUnpairedNeedByTitle(@Param("title") String title);
+
+    /**
+     * 根据社区名 模糊查未结对需求
+     */
+    @Select("select * from community_need where is_pair = 0 and is_pass = 1 and community_id in " +
+            "(select community_id from community where community_name like CONCAT('%', #{community_name}, '%'))")
+    List<Project> getUnpairedNeedByCommunityName(@Param("community_name") String community_name);
+
+    /**
+     * 根据标签 模糊查未结对需求
+     */
+    @Select("select * from community_need where is_pair = 0 and is_pass = 1 and need_id in " +
+            "(select need_id from need_match where category_id  in " +
+            "(select category_id from need_category where category_name like CONCAT('%', #{tag}, '%')))")
+    List<Project> getUnpairedNeedByTag(@Param("tag") String tag);
 
     /**
      * 新增结对项目，等待审核
@@ -115,4 +143,10 @@ public interface ProjectMapper {
     @Select("select path from need_media where type = 'cover' and need_id = " +
             " (select need_id from succ_project where project_id = #{project_id})")
     String getCoverPathByProjectId(int project_id);
+
+    /**
+     * 获取已结对需求数目
+     */
+    @Select("select count(*) from succ_project where is_pass = 1")
+    int getPairedNeedCount();
 }

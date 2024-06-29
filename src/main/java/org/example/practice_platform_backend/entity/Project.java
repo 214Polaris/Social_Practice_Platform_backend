@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.time.LocalDateTime;
+import java.util.Objects;
 
 // 合并需求和结对项目的一个实体类
 @Getter
@@ -28,7 +29,19 @@ public class Project {
     private String address;
     private int community_id;
 
+    // 重写equals和hashCode方法,进行去重
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Project project = (Project) o;
+        return Objects.equals(need_id, project.need_id);
+    }
 
+    @Override
+    public int hashCode() {
+        return Objects.hash(need_id);
+    }
 
 
 }

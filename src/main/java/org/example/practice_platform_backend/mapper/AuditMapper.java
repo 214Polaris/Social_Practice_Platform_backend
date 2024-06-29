@@ -241,6 +241,6 @@ public interface AuditMapper {
     /**
      * 判断这个队伍是否已申请过这个结对
      */
-    @Select("select exists (select * from succ_project where need_id = #{need_id} and team_id = #{team_id})")
+    @Select("select exists (select * from succ_project where need_id = #{need_id} and team_number = #{team_id})")
     boolean getIsAudit_team(@Param("need_id") int need_id, @Param("team_id") int team_id);
 }
