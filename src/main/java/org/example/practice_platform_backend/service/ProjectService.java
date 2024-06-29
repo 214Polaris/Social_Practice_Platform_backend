@@ -177,4 +177,19 @@ public class ProjectService {
         audit.setIs_notice(0);
         auditMapper.newProjAudit(audit);
     }
+
+    /**
+     * 根据队伍id， 查其相关的结对需求
+     */
+    public JSONArray getPairedNeedByTeam(int team_id) throws IOException {
+        List<Project> need_list = projectMapper.getPairedNeedByTeam(team_id);
+        JSONArray list = new JSONArray();
+        for(Project need : need_list){
+            JSONObject item = new JSONObject();
+            item.put("needID", need.getNeed_id());
+            item.put("needName", need.getTitle());
+            list.add(item);
+        }
+        return list;
+    }
 }

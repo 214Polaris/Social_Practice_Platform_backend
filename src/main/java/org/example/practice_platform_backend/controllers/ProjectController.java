@@ -127,5 +127,36 @@ public class ProjectController {
         jsonObject.put("Needs", NeedIdList);
         return ResponseEntity.ok(jsonObject);
     }
+
+    /**
+     * 获取已结对项目的数量
+     */
+    @GetMapping("/need/paired_number")
+    public ResponseEntity<?> getPairedNumber() {
+        int paired_number = projectMapper.getPairedNeedCount();
+        JSONObject result = new JSONObject();
+        result.put("number", paired_number);
+        return ResponseEntity.ok(JSON.toJSONString(result));
+    }
+
+    /**
+     * 获取已结对的需求 根据队伍
+     */
+    @GetMapping("/need/team_paired")
+    public ResponseEntity<?> getTeamPairedNeed(HttpServletRequest request) throws IOException {
+        String token = request.getHeader("token");
+        int user_id = jwtUtils.getUserInfoFromToken(token, User.class).getUser_id();
+        int team_number = teamMapper.getTeamIdByUser(user_id);
+        JSONArray result = projectService.getPairedNeedByTeam(team_number);
+        return ResponseEntity.status(200).body(JSON.toJSONString(result));
+    }
+
+
+
+
+
+
+
+
 }
 
