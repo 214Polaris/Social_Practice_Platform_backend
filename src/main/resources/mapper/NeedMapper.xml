@@ -1,0 +1,8 @@
+<!-- needMapper.xml -->
+<insert id="batchInsertNeedMatches" parameterType="map">
+    INSERT INTO need_match (need_id, category_id)
+    VALUES
+    <foreach collection="tags" item="tag" separator=",">
+        (#{needId}, #{tag})
+    </foreach>
+</insert>

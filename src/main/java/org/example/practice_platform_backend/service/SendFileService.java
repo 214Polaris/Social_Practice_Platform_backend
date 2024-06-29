@@ -53,7 +53,12 @@ public class SendFileService {
      * @return 图片
      */
     public String sendOriginalImage(@RequestParam String fileName, @RequestParam int type, @RequestParam int id)throws IOException{
-        String path = uploadPath + imagePathMap.get(type) + "_" + id + "/" + fileName;
+        String path;
+        if(Objects.equals(fileName, "default.jpg")){
+            path = uploadPath + ImageUtils.getRealName(imagePathMap.get(type)) + "_images" + File.separator + fileName;
+        }else {
+            path = uploadPath + imagePathMap.get(type) + "_" + id + "/" + fileName;
+        }
         return imageUtils.getFileBytes(path);
     }
 

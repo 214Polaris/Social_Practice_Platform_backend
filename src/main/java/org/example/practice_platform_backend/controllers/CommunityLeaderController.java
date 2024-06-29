@@ -80,6 +80,9 @@ public class CommunityLeaderController {
         if(auditMapper.getCommunityAuditByUserId(user_id)!=null){
             return ResponseEntity.status(400).body("已有待审核的社区");
         };
+        if(community.getLatitude()==0 || community.getLongitude()==0){
+            return ResponseEntity.status(400).body("请传入经纬度");
+        }
         community.setUser_id(user_id);
         // 插入社区
         communityMapper.registerCommunity(community);
@@ -147,6 +150,7 @@ public class CommunityLeaderController {
         needMapper.addNeedCover(media);
         Integer media_id = media.getMedia_id();
         Integer need_id = communityNeed.getNeed_id();
+        needMapper.batchInsertNeedMatches(need_id,communityNeed.getTags());
         if(media_id==0){
             return ResponseEntity.status(400).body("注册社区需求失败");
         }

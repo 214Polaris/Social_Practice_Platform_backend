@@ -1,10 +1,7 @@
 package org.example.practice_platform_backend.entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
 import lombok.*;
 
-import java.util.HashMap;
 import java.util.List;
 
 @Getter
@@ -28,5 +25,7 @@ public class Community {
     private int user_id;
     private List<media> mediaList;
     private String avatar_path;
+    private Float latitude;
+    private Float longitude;
     Community(){};
 }
