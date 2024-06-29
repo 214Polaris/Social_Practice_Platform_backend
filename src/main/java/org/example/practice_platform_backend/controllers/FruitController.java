@@ -71,7 +71,10 @@ public class FruitController {
     }
 
     @PostMapping(value = "/res/update_like")
-    public ResponseEntity<?> updateResLike(@RequestBody Kudos kudos) {
+    public ResponseEntity<?> updateResLike(@RequestBody Kudos kudos, HttpServletRequest request) {
+        String token = request.getHeader("token");
+        int user_id = jwtUtils.getUserInfoFromToken(token, User.class).getUser_id();
+        kudos.setUser_id(user_id);
         try {
             if (kudos.isLike()) {
                 fruitService.addKudos(kudos);
