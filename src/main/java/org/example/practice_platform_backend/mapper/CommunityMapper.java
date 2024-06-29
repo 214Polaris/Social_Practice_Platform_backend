@@ -136,6 +136,6 @@ public interface CommunityMapper {
     Integer getCommunityUserIdByCommunityId(int community_id);
 
     //查询经纬度
-    @Select("select longitude,latitude from community where address like CONCAT('%', #{address}, '%')")
+    @Select("select address, longitude,latitude from community where address like CONCAT('%', #{address}, '%')")
     List<JSONObject> getCommunityLongitudeAndLatitude(@Param("address") String address);
 }

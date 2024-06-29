@@ -105,4 +105,6 @@ public interface NeedMapper {
     //删除需求图片
     @Delete("DELETE from need_media where media_id = #{media_id}")
     boolean deleteNeedImage(@Param("media_id") int media_id);
+
+    void batchInsertNeedMatches(@Param("needId") int needId, @Param("tags") List<Integer> tags);
 }

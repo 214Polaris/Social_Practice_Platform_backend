@@ -26,6 +26,7 @@ public class CommunityNeed {
     //关联到哪个社区
     private int community_id;
     private List<JSONObject> mediaList;
+    private List<Integer> tags;
 
     @Getter
     @Setter

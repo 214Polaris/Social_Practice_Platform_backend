@@ -47,4 +47,7 @@ public interface TagsMapper {
             "join need_category on need_match.category_id = need_category.id " +
             "where fruit_info.fruit_id = #{fruit_id} " )
     List<String> searchFruitTags(@Param("fruit_id") int fruit_id);
+
+    //根据社区添加 tags 匹配
+//    @Insert("INSERT ")
 }

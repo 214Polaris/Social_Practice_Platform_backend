@@ -1,5 +1,6 @@
 package org.example.practice_platform_backend.controllers;
 
+import com.alibaba.fastjson.JSONObject;
 import jakarta.servlet.http.HttpServletRequest;
 import org.example.practice_platform_backend.entity.*;
 import org.example.practice_platform_backend.mapper.*;
@@ -149,6 +150,7 @@ public class CommitteeController {
         if(type == 2){
             Integer team_number = auditMapper.getTeamByAuditId(auditId);
             Team team = teamMapper.getTeamById(team_number);
+            team.setAvatar_path(null);
             return ResponseEntity.ok(team);
         }
         //社区
@@ -173,6 +175,8 @@ public class CommitteeController {
 //        if(!isValid(request)){
 //            return ResponseEntity.status(400).body("该用户不是校团委");
 //        }
+//
+//        if()
 //
 //    }
 
