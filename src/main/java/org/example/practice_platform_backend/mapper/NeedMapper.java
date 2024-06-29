@@ -18,7 +18,7 @@ public interface NeedMapper {
     CommunityNeed getNeedByNeedId(@Param("need_id") int need_id);
 
     // 根据需求 id 获取详细需求(未审核)
-    @Select("select need_id,title, post_time, introduction, resource, community_id from community_need " +
+    @Select("select need_id,title, post_time, introduction, resource, community_id, address from community_need " +
             "where is_pass = 0 and need_id = #{need_id}")
     CommunityNeed getUnAuditNeedByNeedId(@Param("need_id") int need_id);
 
@@ -28,7 +28,7 @@ public interface NeedMapper {
 
     // 获取指定 user_id 发布的所有需求
     @Select("""
-            select n.need_id,n.title,n.is_pass, SUBSTRING_INDEX(m.path, '/', -1) AS img from community_need as n
+            select n.need_id,n.title,n.is_pass, n.post_time, SUBSTRING_INDEX(m.path, '/', -1) AS img from community_need as n
              join community as c on c.community_id = n.community_id
              join need_media as m on m.need_id = n.need_id
              where c.user_id=#{user_id} AND m.type='cover'
@@ -107,4 +107,8 @@ public interface NeedMapper {
     boolean deleteNeedImage(@Param("media_id") int media_id);
 
     void batchInsertNeedMatches(@Param("needId") int needId, @Param("tags") List<Integer> tags);
+
+    //查询经纬度
+    @Select("select address, longitude,latitude from community_need where address like CONCAT('%', #{address}, '%')")
+    List<JSONObject> getNeedLongitudeAndLatitude(@Param("address") String address);
 }

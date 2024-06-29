@@ -43,6 +43,8 @@ public class CommitteeController {
     private FruitMapper fruitMapper;
     @Autowired
     private UserMapper userMapper;
+    @Autowired
+    private TagsMapper tagsMapper;
 
     // 解析 token 判断是否是校团委
     private Boolean isValid(HttpServletRequest request){
@@ -144,6 +146,7 @@ public class CommitteeController {
         if(type == 1){
             Integer need_id = auditMapper.getNeedByAuditId(auditId);
             CommunityNeed need = needMapper.getUnAuditNeedByNeedId(need_id);
+            need.setTags(tagsMapper.searchTags(need_id));
             return ResponseEntity.ok(need);
         }
         //队伍
@@ -151,6 +154,7 @@ public class CommitteeController {
             Integer team_number = auditMapper.getTeamByAuditId(auditId);
             Team team = teamMapper.getTeamById(team_number);
             team.setAvatar_path(null);
+            team.setTags(tagsMapper.searchTeamTags(team_number));
             return ResponseEntity.ok(team);
         }
         //社区

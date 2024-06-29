@@ -2,6 +2,7 @@ package org.example.practice_platform_backend.controllers;
 
 import net.minidev.json.JSONObject;
 import org.example.practice_platform_backend.mapper.CommunityMapper;
+import org.example.practice_platform_backend.mapper.NeedMapper;
 import org.example.practice_platform_backend.service.MapService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -21,6 +22,8 @@ public class MapController {
     CommunityMapper communityMapper;
     @Autowired
     private MapService mapService;
+    @Autowired
+    private NeedMapper needMapper;
 
     //获取按市统计的社区数量
     @GetMapping(value="/get/community/count")
@@ -35,7 +38,7 @@ public class MapController {
     //获取某个市的全部详细的打点的经纬度
     @GetMapping(value = "/get/coordinate")
     public ResponseEntity<?> getCoordinate(@RequestParam("city") String city) {
-        List<JSONObject> result = communityMapper.getCommunityLongitudeAndLatitude(city);
+        List<JSONObject> result = needMapper.getNeedLongitudeAndLatitude(city);
         if (result.isEmpty()) {
             return ResponseEntity.status(200).body("空");
         }

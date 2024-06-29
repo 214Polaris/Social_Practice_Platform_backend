@@ -150,7 +150,7 @@ public class CommunityLeaderController {
         needMapper.addNeedCover(media);
         Integer media_id = media.getMedia_id();
         Integer need_id = communityNeed.getNeed_id();
-        needMapper.batchInsertNeedMatches(need_id,communityNeed.getTags());
+        needMapper.batchInsertNeedMatches(need_id,communityNeed.getTags_id());
         if(media_id==0){
             return ResponseEntity.status(400).body("注册社区需求失败");
         }

@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Getter;
 import lombok.Setter;
 import net.minidev.json.JSONObject;
+import org.springframework.data.relational.core.sql.In;
 
 import java.util.Date;
 import java.util.HashMap;
@@ -26,8 +27,10 @@ public class CommunityNeed {
     //关联到哪个社区
     private int community_id;
     private List<JSONObject> mediaList;
-    private List<Integer> tags;
-
+    private Float latitude;
+    private Float longitude;
+    private List<String> tags;
+    private List<Integer> tags_id;
     @Getter
     @Setter
     public static class media{
