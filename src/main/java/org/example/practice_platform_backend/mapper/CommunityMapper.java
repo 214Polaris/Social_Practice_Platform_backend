@@ -50,6 +50,12 @@ public interface CommunityMapper {
     @Select("select community_name from community where community_id = #{community_id}")
     String getCommunityName(int community_id);
 
+    // 结对编号 查社区id
+    @Select("select c.community_id from community_need as c " +
+            "join succ_project as s on c.need_id = s.need_id " +
+            "where project_id = #{project_id}")
+    int  getCommunityIdByProjectId(int project_id);
+
     //社区id 查社区头像
     @Select("select avatar_path from community where community_id = #{community_id}")
     String getCommunityAvatarPath(int community_id);
