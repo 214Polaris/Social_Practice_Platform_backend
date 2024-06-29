@@ -4,8 +4,10 @@ import com.alibaba.fastjson2.JSON;
 import jakarta.servlet.http.HttpServletRequest;
 import net.minidev.json.JSONArray;
 import net.minidev.json.JSONObject;
+import org.example.practice_platform_backend.entity.Audit;
 import org.example.practice_platform_backend.entity.Community;
 import org.example.practice_platform_backend.entity.User;
+import org.example.practice_platform_backend.mapper.AuditMapper;
 import org.example.practice_platform_backend.mapper.CommunityMapper;
 import org.example.practice_platform_backend.service.AuditService;
 import org.example.practice_platform_backend.service.CommunityService;
@@ -43,6 +45,9 @@ public class CommunityController {
 
     @Autowired
     private AuditService  auditService;
+
+    @Autowired
+    private AuditMapper  auditMapper;
 
     //加载社区
     @GetMapping("")
@@ -119,6 +124,24 @@ public class CommunityController {
             LOGGER.error(e.getMessage());
             return ResponseEntity.status(400).body("查询失败");
         }
+    }
 
+    @PostMapping("/audit/project")
+    public ResponseEntity<?> auditProject(HttpServletRequest request, @RequestBody Audit audit) throws IOException {
+        User user = jwtUtils.getUserInfoFromToken(request.getHeader("token"), User.class);
+        if(!Objects.equals(user.getUser_category(), "community")){
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("当前用户不是社区负责人");
+        }
+        int user_id = user.getUser_id();
+        if(!auditMapper.isCommunityAdmin(user_id,audit.getAudit_id())){
+            return ResponseEntity.status(400).body("不能审核其他社区的结对申请");
+        }
+        try{
+            auditService.auditProject(audit);
+            return ResponseEntity.status(200).body("审核成功");
+        } catch (Exception e){
+            LOGGER.error(e.getMessage());
+            return ResponseEntity.status(400).body("审核失败");
+        }
     }
 }

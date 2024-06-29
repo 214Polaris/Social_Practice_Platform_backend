@@ -1,9 +1,6 @@
 package org.example.practice_platform_backend.mapper;
 
-import org.apache.ibatis.annotations.Insert;
-import org.apache.ibatis.annotations.Mapper;
-import org.apache.ibatis.annotations.Options;
-import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.*;
 import org.example.practice_platform_backend.entity.Fruit;
 import org.example.practice_platform_backend.entity.Project;
 import org.example.practice_platform_backend.entity.Report;
@@ -149,4 +146,18 @@ public interface ProjectMapper {
      */
     @Select("select count(*) from succ_project where is_pass = 1")
     int getPairedNeedCount();
+
+    /**
+     * 更新结对状态
+     */
+    @Update("update succ_project set is_pass = #{is_pass} where project_id = #{project_id}")
+    void updateProjectStatus(@Param("is_pass")  int is_pass, @Param("project_id") int project_id);
+
+    /**
+     * 更新需求结对状态
+     */
+    @Update("update community_need set is_pair = #{is_pair} where need_id = " +
+            "(select need_id from  succ_project where project_id = #{project_id})")
+    void updateNeedStatus(@Param("is_pair") int is_pair, @Param("project_id") int project_id);
+
 }

@@ -56,7 +56,7 @@ public class UserService {
 
     private final Map<String, Function<Integer, String>> getCoverMap;
 
-    private final Map<String, Function<Audit, Integer>> getComId;
+    private final Map<String, Function<Integer, Integer>> getComId;
 
     private final Map<String, Function<Integer, String>> getComName;
 
@@ -101,13 +101,13 @@ public class UserService {
                 );
 
            getComId = Map.of(
-                        "team", Audit::getCommunity_id,
-                    "team_new", Audit::getCommunity_id
+                        "project", communityMapper::getCommunityIdByProjectId,
+                    "project_new", communityMapper::getCommunityIdByProjectId
                 );
 
             getComName = Map.of(
-                        "team", communityMapper::getCommunityName,
-                    "team_new", communityMapper::getCommunityName
+                        "project", communityMapper::getCommunityName,
+                    "project_new", communityMapper::getCommunityName
                 );
     }
 
@@ -120,7 +120,7 @@ public class UserService {
         return id -> "Default Value";
     }
 
-    private static Function<Audit, Integer> getDefaultFunction_int() {
+    private static Function<Integer, Integer> getDefaultFunction_int() {
         return id -> 0;
     }
 
@@ -158,6 +158,7 @@ public class UserService {
         return jsonObject;
     }
 
+    @Transactional
     public JSONArray getStuNotice(int user_id) throws IOException {
         List<Audit> teamAuditList = team_audit_notice(user_id);
         List<Audit> fruitAuditList = fruit_audit_notice(user_id);
@@ -195,7 +196,7 @@ public class UserService {
             String name = getNameMap.getOrDefault(type_String,getDefaultFunction()).apply(id);
             String reason = getReasonMap.getOrDefault(type_String,getDefaultFunction_str()).apply(audit);
             String img_path = getCoverMap.getOrDefault(type_String,getDefaultFunction()).apply(id);
-            int comID = getComId.getOrDefault(type_String,getDefaultFunction_int()).apply(audit);
+            int comID = getComId.getOrDefault(type_String,getDefaultFunction_int()).apply(audit.getProject_id());
             String comName = getComName.getOrDefault(type_String,getDefaultFunction()).apply(comID);
             jsonObject.put("type",type);
             jsonObject.put("Name", name);

@@ -209,6 +209,7 @@ public class AuditService {
                  jsonObject.put("TeamID", teamMapper.getTeamIdByProjectId(audit.getProject_id()));
                  String img_path = teamMapper.getTeamAvatarPathByTeamNumber(teamMapper.getTeamIdByProjectId(audit.getProject_id()));
                  jsonObject.put("img", imageUtils.getThumbnail(uploadPath + img_path));
+                 jsonObject.put("audit_id", audit.getAudit_id());
             }
             else
                 continue;
@@ -382,5 +383,34 @@ public class AuditService {
         }
     }
 
+    // 更新结对审核
+    @Transactional
+    public void auditProject(Audit audit){
+        int is_pass = audit.getIs_pass();
+        int audit_id = audit.getAudit_id();
+        if(is_pass == 1){ //操作是审核通过
+            passProject(audit_id);
+        }
+        else{ // 审核不通过
+            failProject(audit_id);
+        }
+    }
+
+    // 通过结对审核
+    @Transactional
+    public void passProject(int audit_id){
+        int project_id = auditMapper.getProjectIdByAuditId(audit_id);
+        auditMapper.updateProjectAuditTime(LocalDateTime.now(), project_id); // 更新所有审核时间
+        auditMapper.updateProjectAuditStatus(audit_id); // 更新审核状态
+        projectMapper.updateProjectStatus(1, project_id); // 更新结对状态
+        projectMapper.updateNeedStatus(1, project_id); // 更新需求结对状态
+    }
+
+    // 不通过结对审核
+    @Transactional
+    public void failProject(int audit_id){
+        int project_id = auditMapper.getProjectIdByAuditId(audit_id);
+        auditMapper.updateProjectAuditTime_alone(LocalDateTime.now(), audit_id); // 更新审核时间
+    }
 
 }

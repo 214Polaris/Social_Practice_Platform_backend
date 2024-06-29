@@ -219,4 +219,38 @@ public interface AuditMapper {
      */
     @Select("select exists (select * from succ_project where need_id = #{need_id} and team_number = #{team_id})")
     boolean getIsAudit_team(@Param("need_id") int need_id, @Param("team_id") int team_id);
+
+    //判断这个审核是否是这个社区负责人负责的
+    @Select("SELECT EXISTS (" +
+            "  SELECT 1 " +
+            "  FROM community c " +
+            "  JOIN community_need cn ON c.community_id = cn.community_id " +
+            "  JOIN succ_project sp ON cn.need_id = sp.need_id " +
+            "  JOIN audit_project ap ON sp.project_id = ap.project_id " +
+            "  WHERE c.user_id = #{userId} " +
+            "  AND ap.audit_id = #{auditId}" +
+            ")")
+    boolean isCommunityAdmin(@Param("userId") int userId, @Param("auditId") int auditId);
+
+    // 获取这个结对对应的 需求id
+    @Select("SELECT need_id FROM succ_project WHERE project_id = #{project_id}")
+    int getNeedIdByProjectId(int project_id);
+
+    // 获取这个审核对应的 结对id
+    @Select("SELECT project_id FROM audit_project WHERE audit_id = #{audit_id}")
+    int getProjectIdByAuditId(int audit_id);
+
+    // 更新审核信息 结对成功
+    @Update("update audit_project set last_mod_time=#{last_mod_time} where project_id in " +
+            "(select project_id from succ_project where need_id = " +
+            "(select need_id from succ_project where project_id  = #{project_id}))")
+    void updateProjectAuditTime(@Param("last_mod_time") LocalDateTime last_mod_time,  @Param("project_id") int project_id);
+
+    // 更新审核信息 结对失败
+    @Update("update audit_project set last_mod_time=#{last_mod_time} where audit_id = #{audit_id}")
+    void updateProjectAuditTime_alone(@Param("last_mod_time") LocalDateTime last_mod_time,  @Param("audit_id") int audit_id);
+
+    // 通过结对审核
+    @Update("update audit_project set is_pass = 1 where audit_id = #{audit_id}")
+    void updateProjectAuditStatus(@Param("audit_id") int audit_id);
 }
