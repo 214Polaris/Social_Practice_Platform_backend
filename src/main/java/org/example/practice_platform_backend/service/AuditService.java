@@ -419,7 +419,7 @@ public class AuditService {
      * 更新审核的处理结果
      */
     @Transactional
-    public String updateAudit(Integer audit_id,Integer type,String reason,Boolean is_pass,int id){
+    public String updateAudit(int audit_id,Integer type,String reason,Boolean is_pass,int id){
         //通过的情况
         if(is_pass){
             //通过需求的审核，将new_id对应的需求覆盖到原 id 的需求上，然后删除 new_id 对应的需求，同时在审核表上，把 new_id 指向旧的
@@ -504,7 +504,7 @@ public class AuditService {
             //不通过社区需求的审核，直接删掉新的即可
             if(type==1){
                 try {
-                    int new_id = auditMapper.getCommunityNewIdByAuditId(audit_id);
+                    int new_id = auditMapper.getNeedByAuditId(audit_id);
                     if(new_id!=id){
                         auditMapper.auditNeedFail(LocalDateTime.now(), reason, audit_id, id);
                         needMapper.deleteTempNeed(new_id);

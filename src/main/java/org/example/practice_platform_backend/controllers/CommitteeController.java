@@ -189,11 +189,14 @@ public class CommitteeController {
         Integer audit_id = result.getInteger("audit_id");
         String reason = result.getString("reason");
         Boolean is_pass = result.getBoolean("is_pass");
-        Integer new_id = result.getInteger("new_id");
+        Integer id = result.getInteger("id");
+        if(id==null||audit_id==null){
+            return ResponseEntity.status(400).body("请输入 id");
+        }
         if(reason==null&&!is_pass){
             return ResponseEntity.status(400).body("请输入不过审的理由");
         }
-        String msg = auditService.updateAudit(audit_id,type,reason,is_pass,new_id);
+        String msg = auditService.updateAudit(audit_id,type,reason,is_pass,id);
         if(msg==null){
             return ResponseEntity.status(400).body("数据库错误");
         }

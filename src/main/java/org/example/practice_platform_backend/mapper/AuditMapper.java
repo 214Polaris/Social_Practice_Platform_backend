@@ -65,7 +65,8 @@ public interface AuditMapper {
     @Select("SELECT n.title,n.post_time,n.introduction,n.resource,n.address,n.longitude,n.latitude, n.need_id " +
             "from audit_need as a " +
             "join community_need as n on a.new_id=n.need_id " +
-            "where a.audit_id = #{audit_id} ")
+            "where a.audit_id = #{audit_id} " +
+            "and n.is_pass=0")
     CommunityNeed getCommunityNeedByAuditId(int audit_id);
 
     /**
