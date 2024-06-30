@@ -1,7 +1,7 @@
 package org.example.practice_platform_backend.mapper;
 
 import org.apache.ibatis.annotations.*;
-import org.example.practice_platform_backend.entity.Audit;
+import org.example.practice_platform_backend.entity.*;
 
 import java.time.LocalDateTime;
 import java.util.Date;
@@ -60,22 +60,63 @@ public interface AuditMapper {
     Integer getNeedByAuditId(int audit_id);
 
     /**
-     * 根据 auditId 获取team_number
+     * 根据 auditId 获取完整新的需求，会将新的需求 id 返回到 community_need 里
+     */
+    @Select("SELECT n.title,n.post_time,n.introduction,n.resource,n.address,n.longitude,n.latitude, n.need_id " +
+            "from audit_need as a " +
+            "join community_need as n on a.new_id=n.need_id " +
+            "where a.audit_id = #{audit_id} ")
+    CommunityNeed getCommunityNeedByAuditId(int audit_id);
+
+    /**
+     * 根据 auditId 获取社区Id
      */
     @Select("SELECT new_id from audit_community where audit_id = #{audit_id} ")
-    Integer getCommunityByAuditId(int audit_id);
+    Integer getCommunityNewIdByAuditId(int audit_id);
+
+    /**
+     * 根据 auditId 获取社区
+     */
+    @Select("""
+           SELECT c.*
+           from audit_community as a
+           join community as c on a.new_id = c.community_id
+           where audit_id = #{audit_id}
+           """)
+    Community getCommunityByAuditId(int audit_id);
 
     /**
      * 根据 auditId 获取team_number
      */
     @Select("SELECT new_id from audit_team where audit_id = #{audit_id} ")
-    Integer getTeamByAuditId(int audit_id);
+    Integer getTeamIdByAuditId(int audit_id);
+
+    /**
+     * 根据 auditId 获取队伍
+     */
+    @Select("""
+           SELECT c.* from audit_team as a
+           join college_team as c on a.new_id = c.team_number
+           where a.audit_id = #{audit_id} and c.is_pass=0
+           """)
+    Team getTeamByAuditId(int audit_id);
 
     /**
      * 根据 auditId 获取 fruit_id
      */
     @Select("SELECT new_id from audit_fruit where audit_id = #{audit_id} ")
-    Integer getFruitByAuditId(int audit_id);
+    Integer getFruitNewIdByAuditId(int audit_id);
+
+    /**
+     * 根据 auditId 获取成果
+     */
+    @Select("""
+            SELECT f.*
+            from audit_fruit as a\s
+            join fruit_info as f on a.new_id = f.fruit_id
+            where audit_id=#{audit_id}
+            """)
+    Fruit getFruitByAuditId(int audit_id);
 
     /**
      * 获取需求审核列表 申请人
@@ -178,7 +219,7 @@ public interface AuditMapper {
      * 社区审核未通过，设置审核原因,modify_time和 is_pass
      */
     @Update("update audit_community set last_mod_time=#{last_mod_time}," +
-            "fail_interpretation=#{fail_interpretation},is_pass=1,new_id=#{new_id}")
+            "fail_interpretation=#{fail_interpretation},is_pass=0,new_id=#{new_id} where audit_id = #{audit_id}")
     void auditCommunityFail(LocalDateTime last_mod_time,String fail_interpretation, int audit_id, int new_id);
 
     /**
@@ -198,7 +239,8 @@ public interface AuditMapper {
      * 成果审核未通过，设置审核原因,modify_time和 is_pass
      */
     @Update("update audit_fruit set last_mod_time=#{last_mod_time}," +
-            "fail_interpretation=#{fail_interpretation},is_pass=1,new_id=#{new_id}")
+            "fail_interpretation=#{fail_interpretation},is_pass=0,new_id=#{new_id} " +
+            "where audit_id = #{audit_id}")
     void auditFruitFail(LocalDateTime last_mod_time,String fail_interpretation, int audit_id, int new_id);
 
     /**
@@ -211,7 +253,7 @@ public interface AuditMapper {
      * 需求审核未通过，设置审核原因,modify_time和 is_pass
      */
     @Update("update audit_need set last_mod_time=#{last_mod_time}," +
-            "fail_interpretation=#{fail_interpretation},is_pass=1,new_id=#{new_id}")
+            "fail_interpretation=#{fail_interpretation},is_pass=0,new_id=#{new_id} where audit_id = #{audit_id}")
     void auditNeedFail(LocalDateTime last_mod_time,String fail_interpretation, int audit_id, int new_id);
     /**
      * 结队审核通过，设置 modify_time 和 is_pass,覆盖原来的 new_id
@@ -223,7 +265,7 @@ public interface AuditMapper {
      * 结队审核未通过，设置审核原因,modify_time和 is_pass
      */
     @Update("update audit_project set last_mod_time=#{last_mod_time}," +
-            "fail_interpretation=#{fail_interpretation},is_pass=1,new_id=#{new_id}")
+            "fail_interpretation=#{fail_interpretation},is_pass=0,new_id=#{new_id} where audit_id = #{audit_id}")
     void auditProjectFail(LocalDateTime last_mod_time,String fail_interpretation, int audit_id, int new_id);
     /**
      * 队伍审核通过，设置 modify_time 和 is_pass,覆盖原来的 new_id
@@ -235,7 +277,7 @@ public interface AuditMapper {
      * 队伍审核未通过，设置审核原因,modify_time和 is_pass
      */
     @Update("update audit_team set last_mod_time=#{last_mod_time}," +
-            "fail_interpretation=#{fail_interpretation},is_pass=1,new_id=#{new_id}")
+            "fail_interpretation=#{fail_interpretation},is_pass=0,new_id=#{new_id} where audit_id = #{audit_id}")
     void auditTeamFail(LocalDateTime last_mod_time,String fail_interpretation, int audit_id, int new_id);
 
     /**

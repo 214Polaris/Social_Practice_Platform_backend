@@ -11,7 +11,7 @@ import java.util.concurrent.ThreadPoolExecutor;
 @Configuration
 @EnableAsync
 public class PoolConfig {
-    @Bean
+    @Bean(name="threadPoolExecutor")
     public TaskExecutor taskExecutor() {
         ThreadPoolTaskExecutor executor = new ThreadPoolTaskExecutor();
         executor.initialize();
@@ -20,6 +20,8 @@ public class PoolConfig {
         executor.setQueueCapacity(512); //设置队列容量
         executor.setKeepAliveSeconds(60); //设置线程活跃时间（秒）
         executor.setThreadNamePrefix("ThreadPool-"); //默认线程名称
+        executor.setThreadPriority(Thread.MAX_PRIORITY);
+        executor.setDaemon(false);
         executor.setRejectedExecutionHandler(new ThreadPoolExecutor.CallerRunsPolicy());//拒绝策略
         executor.setWaitForTasksToCompleteOnShutdown(true); // 等待所有任务结束后再关闭线程池
         return executor;

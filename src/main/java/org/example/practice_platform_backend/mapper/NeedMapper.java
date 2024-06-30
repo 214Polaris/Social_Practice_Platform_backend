@@ -36,8 +36,8 @@ public interface NeedMapper {
     List<JSONObject> getNeedByUserId(@Param("user_id") int user_id);
 
     //注册新的需求
-    @Insert("INSERT into community_need(title, post_time, introduction, resource, is_pass, is_pair, address, community_id)\n" +
-            "value(#{title},#{post_time},#{introduction},#{resource},#{is_pass},#{is_pair},#{address},#{community_id})")
+    @Insert("INSERT into community_need(title, post_time, introduction, resource, is_pass, is_pair, address, community_id,longitude,latitude)\n" +
+            "value(#{title},#{post_time},#{introduction},#{resource},#{is_pass},#{is_pair},#{address},#{community_id},#{longitude},#{latitude})")
     @Options(useGeneratedKeys = true, keyProperty = "need_id")
     void registerNeed(CommunityNeed communityNeed);
 
@@ -92,11 +92,20 @@ public interface NeedMapper {
             "<if test='title != null'>title = #{title},</if>" +
             "<if test='introduction != null'>introduction = #{introduction},</if>" +
             "<if test='resource != null'>resource = #{resource},</if>" +
+            "<if test='post_time != null'>post_time = #{post_time},</if>" +
+            "<if test='address!=null'> address= #{address},</if>" +
+            "<if test='longitude!=null'> longitude=#{longitude},</if>" +
+            "<if test='latitude!=null'> latitude=#{latitude},</if>" +
             "</set>" +
             "WHERE need_id = #{need_id}" +
             "</script>")
     @Transactional
     void modifyNeed(CommunityNeed communityNeed);
+
+    //删除临时需求
+    @Delete("DELETE from community_need " +
+            "where need_id = #{need_id} ")
+    void deleteTempNeed(@Param("need_id") int need_id);
 
     //媒体 id 查媒体名字
     @Select("SELECT path from need_media where media_id = #{media_id}")

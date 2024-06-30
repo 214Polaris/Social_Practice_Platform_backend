@@ -11,6 +11,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.scheduling.annotation.Async;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.Map;
@@ -151,7 +153,7 @@ public class CommitteeController {
         }
         //队伍
         if(type == 2){
-            Integer team_number = auditMapper.getTeamByAuditId(auditId);
+            Integer team_number = auditMapper.getTeamIdByAuditId(auditId);
             Team team = teamMapper.getTeamById(team_number);
             team.setAvatar_path(null);
             team.setTags(tagsMapper.searchTeamTags(team_number));
@@ -159,30 +161,44 @@ public class CommitteeController {
         }
         //社区
         if(type == 3){
-            Integer community_id = auditMapper.getCommunityByAuditId(auditId);
+            Integer community_id = auditMapper.getCommunityNewIdByAuditId(auditId);
             Community community = communityMapper.getCommunityById(community_id);
             community.setAvatar_path(null);
             return ResponseEntity.ok(community);
         }
         //成果
         if(type == 4){
-            Integer fruit_id = auditMapper.getFruitByAuditId(auditId);
+            Integer fruit_id = auditMapper.getFruitNewIdByAuditId(auditId);
             Fruit fruit = fruitMapper.getFruit(fruit_id);
             return ResponseEntity.ok(fruit);
         }
         return ResponseEntity.status(400).body("类别不正确");
     }
 
-//    //审核结果
-//    @PostMapping("/audit/result")
-//    public ResponseEntity<?> auditResult(HttpServletRequest request, @RequestBody JSONObject result) {
-//        if(!isValid(request)){
-//            return ResponseEntity.status(400).body("该用户不是校团委");
-//        }
-//
-//        if()
-//
-//    }
+    //审核结果
+    @PostMapping("/audit/result")
+    @Transactional
+    public ResponseEntity<?> auditResult(HttpServletRequest request, @RequestBody JSONObject result) {
+        if(!isValid(request)){
+            return ResponseEntity.status(400).body("该用户不是校团委");
+        }
+        Integer type = result.getInteger("type");
+        if(type>4||type<1){
+            return ResponseEntity.status(400).body("type不正确");
+        }
+        Integer audit_id = result.getInteger("audit_id");
+        String reason = result.getString("reason");
+        Boolean is_pass = result.getBoolean("is_pass");
+        Integer new_id = result.getInteger("new_id");
+        if(reason==null&&!is_pass){
+            return ResponseEntity.status(400).body("请输入不过审的理由");
+        }
+        String msg = auditService.updateAudit(audit_id,type,reason,is_pass,new_id);
+        if(msg==null){
+            return ResponseEntity.status(400).body("数据库错误");
+        }
+        return ResponseEntity.status(200).body(msg);
+    }
 
 }
 

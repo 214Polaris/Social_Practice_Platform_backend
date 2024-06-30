@@ -107,7 +107,7 @@ public class ImageUtils {
         int height = originalImage.getHeight();
         Thumbnails.of(file)
                 .size(width,height)
-                .outputQuality(0.5)
+                .outputQuality(0.4)
                 .toOutputStream(bos);
         byte[] data = bos.toByteArray();
         return new String(Objects.requireNonNull(Base64.encodeBase64(data,true)));

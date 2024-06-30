@@ -1,13 +1,10 @@
 package org.example.practice_platform_backend.service;
 
-import jakarta.servlet.http.HttpServletRequest;
 import net.minidev.json.JSONArray;
 import net.minidev.json.JSONObject;
 import org.example.practice_platform_backend.entity.Audit;
-import org.example.practice_platform_backend.entity.User;
 import org.example.practice_platform_backend.mapper.*;
 import org.example.practice_platform_backend.utils.ImageUtils;
-import org.example.practice_platform_backend.utils.JwtUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -29,22 +26,12 @@ public class UserService {
 
     @Autowired
     private ImageUtils imageUtils;
-    @Autowired
-    private JwtUtils jwtUtils;
-    @Autowired
-    private CommunityMapper communityMapper;
 
     @Autowired
     private TeamMapper teamMapper;
 
     @Autowired
     private AuditMapper  auditMapper;
-
-    @Autowired
-    private FruitMapper  fruitMapper;
-
-    @Autowired
-    private ProjectMapper projectMapper;
 
     private final Map<Integer, String> getTypeMap;
 
@@ -60,7 +47,7 @@ public class UserService {
 
     private final Map<String, Function<Integer, String>> getComName;
 
-    public UserService(TeamMapper teamMapper, FruitMapper fruitMapper, ProjectMapper projectMapper, AuditMapper auditMapper, CommunityMapper communityMapper, UserMapper userMapper, ImageUtils imageUtils, JwtUtils jwtUtils) {
+    public UserService(TeamMapper teamMapper, FruitMapper fruitMapper, ProjectMapper projectMapper, CommunityMapper communityMapper) {
         getTypeMap = Map.of(
                 1, "team",
                 2, "team_new",
@@ -132,20 +119,6 @@ public class UserService {
         String path = uploadPath + "avatar" + File.separator + trueName + "_origin" + suffix;
         user.put("image",imageUtils.getFileBytes(path));
         return user;
-    }
-
-    // 获取附加信息
-    public Integer getExtraInfo(User user) {
-        int user_id = user.getUser_id();
-        if(Objects.equals(user.getUser_category(), "community")){
-            return communityMapper.findCommunityIdByUserId(user_id);
-        }
-        if(Objects.equals(user.getUser_category(), "student")){
-            return teamMapper.getTeamIdByUser(user_id);
-        }
-        else{
-            return null;
-        }
     }
 
     public JSONObject getStuInfo(int user_id){

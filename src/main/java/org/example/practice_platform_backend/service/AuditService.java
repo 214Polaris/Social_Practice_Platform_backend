@@ -2,25 +2,28 @@ package org.example.practice_platform_backend.service;
 
 import net.minidev.json.JSONArray;
 import net.minidev.json.JSONObject;
-import org.example.practice_platform_backend.entity.Audit;
-import org.example.practice_platform_backend.entity.Community;
-import org.example.practice_platform_backend.entity.CommunityNeed;
-import org.example.practice_platform_backend.entity.Team;
+import org.example.practice_platform_backend.entity.*;
 import org.example.practice_platform_backend.mapper.*;
 import org.example.practice_platform_backend.utils.ImageUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.task.TaskExecutor;
+import org.springframework.dao.DataAccessException;
+import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.*;
-import java.util.function.BiFunction;
-import java.util.function.Function;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutionException;
+import java.util.stream.Collectors;
 
+@EnableAsync
 @Service
 public class AuditService {
 
@@ -47,78 +50,139 @@ public class AuditService {
     @Value("${uploadPath}")
     private String uploadPath;
 
+    @Autowired
+    @Qualifier("threadPoolExecutor")
+    private TaskExecutor executor;
+
 //    private final String[] address_match = {"广东省广州市海珠区", "广东省广州市番禺区", "广东省广州市越秀区", "广东省珠海市香洲区", "广东省深圳市光明区"};
+
+    // 处理单个社区审核，获取审核粗略信息
+    public Audit.CommunityAudit handleCommunityAudit(Audit audit){
+        Community community = communityMapper.getCommunityById(audit.getCommunity_id());
+        Audit.CommunityAudit communityAudit = new Audit.CommunityAudit();
+        communityAudit.setId(audit.getCommunity_id());
+        communityAudit.setName(community.getCommunity_name());
+        communityAudit.setAudit_id(audit.getAudit_id());
+        try {
+            String image = sendFileService.sendAvatar(community.getAvatar_path());
+            communityAudit.setImg(image);
+        } catch (IOException e) {
+            LOGGER.error(e.getMessage());
+        }
+        return communityAudit;
+    }
 
     // 获取社区的审核列表
     public List<Audit.CommunityAudit> getCommunityAudits() {
         List<Audit> auditList = auditMapper.getCommunityAudit();
-        List<Audit.CommunityAudit> communityAuditList = new ArrayList<>();
+        List<CompletableFuture<Audit.CommunityAudit>> futures = new ArrayList<>();
+        // 提交所有异步任务
         auditList.forEach(audit -> {
-            Community community = communityMapper.getCommunityById(audit.getCommunity_id());
-            Audit.CommunityAudit communityAudit = new Audit.CommunityAudit();
-            communityAudit.setId(audit.getCommunity_id());
-            communityAudit.setName(community.getCommunity_name());
-            communityAudit.setAudit_id(audit.getAudit_id());
-            try {
-                String image = sendFileService.sendAvatar(community.getAvatar_path());
-                communityAudit.setImg(image);
-            } catch (IOException e) {
-                LOGGER.error(e.getMessage());
-            }
-            communityAuditList.add(communityAudit);
+            CompletableFuture<Audit.CommunityAudit> communityAuditFuture = CompletableFuture.supplyAsync(() -> handleCommunityAudit(audit), executor);
+            futures.add(communityAuditFuture);
         });
-        return communityAuditList;
+
+        // 等待所有任务完成并收集结果
+        return futures.stream()
+                .map(future -> {
+                    try {
+                        return future.get();
+                    } catch (InterruptedException | ExecutionException e) {
+                        System.err.println("Failed to get future result: " + e.getMessage());
+                        return null;
+                    }
+                })
+                .filter(Objects::nonNull)  // 过滤掉null值
+                .collect(Collectors.toList());
+    }
+
+    //处理单个队伍审核的粗略信息
+    public Audit.TeamAudit handleTeamAudit(Audit audit) {
+        Team team = teamMapper.getTeamById(audit.getTeam_id());
+        Audit.TeamAudit teamAudit = new Audit.TeamAudit();
+        teamAudit.setId(audit.getTeam_id());
+        teamAudit.setTeam_name(team.getTeam_name());
+        teamAudit.setAudit_id(audit.getAudit_id());
+        teamAudit.setAcademy_name(team.getAcademy());
+        try {
+            String image = sendFileService.sendAvatar(team.getAvatar_path());
+            teamAudit.setImg(image);
+        } catch (IOException e) {
+            LOGGER.error(e.getMessage());
+        }
+        return teamAudit;
     }
 
     //获取高校队伍的审核列表
     public List<Audit.TeamAudit> getTeamAudits() {
         List<Audit> auditList = auditMapper.getTeamAudit();
-        List<Audit.TeamAudit> teamAuditList = new ArrayList<>();
+        List<CompletableFuture<Audit.TeamAudit>> futures = new ArrayList<>();
+        // 提交所有异步任务
         auditList.forEach(audit -> {
-            Team team = teamMapper.getTeamById(audit.getTeam_id());
-            Audit.TeamAudit teamAudit = new Audit.TeamAudit();
-            teamAudit.setId(audit.getTeam_id());
-            teamAudit.setTeam_name(team.getTeam_name());
-            teamAudit.setAudit_id(audit.getAudit_id());
-            teamAudit.setAcademy_name(team.getAcademy());
-            try {
-                String image = sendFileService.sendAvatar(team.getAvatar_path());
-                teamAudit.setImg(image);
-            } catch (IOException e) {
-                LOGGER.error(e.getMessage());
-            }
-            teamAuditList.add(teamAudit);
+            CompletableFuture<Audit.TeamAudit> teamAuditFuture = CompletableFuture.supplyAsync(() -> handleTeamAudit(audit), executor);
+            futures.add(teamAuditFuture);
         });
-        return teamAuditList;
+
+        // 等待所有任务完成并收集结果
+        return futures.stream()
+                .map(future -> {
+                    try {
+                        return future.get();
+                    } catch (InterruptedException | ExecutionException e) {
+                        System.err.println("Failed to get future result: " + e.getMessage());
+                        return null;
+                    }
+                })
+                .filter(Objects::nonNull)  // 过滤掉null值
+                .collect(Collectors.toList());
+    }
+
+    //处理单个审核，获取审核粗略信息
+    public Audit.NeedAudit handleNeedAudit(Audit audit) {
+        CommunityNeed need = needMapper.getUnAuditNeedByNeedId(audit.getNeed_id());
+        if(need==null){
+            return null;
+        }
+        Audit.NeedAudit needAudit = new Audit.NeedAudit();
+        needAudit.setId(audit.getNeed_id());
+        needAudit.setCommunity_id(need.getCommunity_id());
+        String community_name = communityMapper.getCommunityName(need.getCommunity_id());
+        needAudit.setTitle(need.getTitle());
+        needAudit.setCommunity_name(community_name);
+        needAudit.setAudit_id(audit.getAudit_id());
+        try {
+            String coverPath = needMapper.getCoverPathByNeedId(need.getNeed_id());
+            coverPath = ImageUtils.getRealName(coverPath);
+            String image = sendFileService.sendImage(coverPath,1,need.getNeed_id());
+            needAudit.setImg(image);
+        } catch (IOException e) {
+            LOGGER.error(e.getMessage());
+        }
+        return needAudit;
     }
 
     //获取需求的审核列表
-    public List<Audit.NeedAudit>  getNeedAudits() {
+    public List<Audit.NeedAudit> getNeedAudits() {
         List<Audit> auditList = auditMapper.getNeedAudit();
-        List<Audit.NeedAudit> needAuditList = new ArrayList<>();
+        List<CompletableFuture<Audit.NeedAudit>> futures = new ArrayList<>();
+        // 提交所有异步任务
         auditList.forEach(audit -> {
-            CommunityNeed need = needMapper.getUnAuditNeedByNeedId(audit.getNeed_id());
-            if(need==null){
-                return;
-            }
-            Audit.NeedAudit needAudit = new Audit.NeedAudit();
-            needAudit.setId(audit.getNeed_id());
-            needAudit.setCommunity_id(need.getCommunity_id());
-            String community_name = communityMapper.getCommunityName(need.getCommunity_id());
-            needAudit.setTitle(need.getTitle());
-            needAudit.setCommunity_name(community_name);
-            needAudit.setAudit_id(audit.getAudit_id());
-            try {
-                String coverPath = needMapper.getCoverPathByNeedId(need.getNeed_id());
-                coverPath = ImageUtils.getRealName(coverPath);
-                String image = sendFileService.sendImage(coverPath,1,need.getNeed_id());
-                needAudit.setImg(image);
-            } catch (IOException e) {
-                LOGGER.error(e.getMessage());
-            }
-            needAuditList.add(needAudit);
+            CompletableFuture<Audit.NeedAudit> needAuditFuture = CompletableFuture.supplyAsync(() -> handleNeedAudit(audit), executor);
+            futures.add(needAuditFuture);
         });
-        return needAuditList;
+
+        // 等待所有任务完成并收集结果
+        return futures.stream()
+                .map(future -> {
+                    try {
+                        return future.get();
+                    } catch (InterruptedException | ExecutionException e) {
+                        System.err.println("Failed to get future result: " + e.getMessage());
+                        return null;
+                    }
+                })
+                .filter(Objects::nonNull)  // 过滤掉null值
+                .collect(Collectors.toList());
     }
 
     //获取成果的审核列表
@@ -353,34 +417,151 @@ public class AuditService {
 
     /**
      * 更新审核的处理结果
-     * @param result 处理结果
      */
     @Transactional
-    public void updateAudit(JSONObject result){
-        int type = (int) result.get("type");
-        Boolean is_pass = (Boolean) result.get("is_pass");
-        int audit_id = (int) result.get("audit_id");
-        String reason = result.getAsString("reason");
-        int origin_id = (int) result.get("origin_id");
+    public String updateAudit(Integer audit_id,Integer type,String reason,Boolean is_pass,int id){
+        //通过的情况
         if(is_pass){
-            // 成果
+            //通过需求的审核，将new_id对应的需求覆盖到原 id 的需求上，然后删除 new_id 对应的需求，同时在审核表上，把 new_id 指向旧的
             if(type==1){
-
-                auditMapper.auditFruitPass(LocalDateTime.now(),audit_id,origin_id);
+                try {
+                    CommunityNeed need = auditMapper.getCommunityNeedByAuditId(audit_id);
+                    int new_id = need.getNeed_id();
+                    need.setIs_pass(1);
+                    if(id!=new_id){
+                        need.setNeed_id(id);
+                        needMapper.modifyNeed(need);
+                        auditMapper.auditNeedPass(LocalDateTime.now(), audit_id, id);
+                        needMapper.deleteTempNeed(new_id);
+                    }else{
+                        needMapper.modifyNeed(need);
+                        auditMapper.auditNeedPass(LocalDateTime.now(), audit_id, id);
+                    }
+                    return "需求审核完成";
+                }catch (DataAccessException e){
+                    LOGGER.error(e.getMessage());
+                    return null;
+                }
             }
-            // 社区
-            else if(type==2){
-                auditMapper.auditCommunityPass(LocalDateTime.now(),audit_id,origin_id);
+            //通过队伍的审核，同上
+            if(type==2){
+                try{
+                    Team team = auditMapper.getTeamByAuditId(audit_id);
+                    int new_id = team.getTeam_number();
+                    if(new_id!=id){
+                        team.setTeam_number(id);
+                        teamMapper.modifyTeam(team);
+                        auditMapper.auditTeamPass(LocalDateTime.now(), audit_id, id);
+                        teamMapper.deleteExtraTeam(new_id);
+                    }else{
+                        teamMapper.modifyTeam(team);
+                        auditMapper.auditTeamPass(LocalDateTime.now(), audit_id, id);
+                    }
+                    return "队伍审核完成";
+                }catch (DataAccessException e){
+                    LOGGER.error(e.getMessage());
+                    return null;
+                }
             }
-            // 队伍
-            else if(type==3){
-                auditMapper.auditTeamPass(LocalDateTime.now(),audit_id,origin_id);
+            //通过社区的审核，同上
+            if(type==3){
+                try{
+                    Community community = auditMapper.getCommunityByAuditId(audit_id);
+                    int new_id = community.getCommunity_id();
+                    community.setIs_pass(1);
+                    if(new_id!=id){
+                        community.setCommunity_id(id);
+                        communityMapper.modifyCommunity(community);
+                        auditMapper.auditCommunityPass(LocalDateTime.now(), audit_id, id);
+                        communityMapper.deleteTempCommunity(new_id);
+                    }else{
+                        communityMapper.modifyCommunity(community);
+                        auditMapper.auditCommunityPass(LocalDateTime.now(), audit_id, id);
+                    }
+                    return "社区审核完成";
+                }catch (DataAccessException e){
+                    LOGGER.error(e.getMessage());
+                    return null;
+                }
             }
-            // 需求
-            else if(type==4){
-                auditMapper.auditNeedPass(LocalDateTime.now(),audit_id,origin_id);
+            //通过成果审核，成果不能修改，其他同上
+            if(type==4){
+                try{
+                    Fruit fruit  = auditMapper.getFruitByAuditId(audit_id);
+                    if(fruit!=null){
+                        auditMapper.auditFruitPass(LocalDateTime.now(), audit_id, id);
+                        fruitMapper.passFruit(id);
+                        return "成果审核完成";
+                    }
+                    return null;
+                }catch (DataAccessException e){
+                    LOGGER.error(e.getMessage());
+                    return null;
+                }
             }
         }
+        else{
+            //不通过社区需求的审核，直接删掉新的即可
+            if(type==1){
+                try {
+                    int new_id = auditMapper.getCommunityNewIdByAuditId(audit_id);
+                    if(new_id!=id){
+                        auditMapper.auditNeedFail(LocalDateTime.now(), reason, audit_id, id);
+                        needMapper.deleteTempNeed(new_id);
+                        return "社区需求审核完成";
+                    }
+                    auditMapper.auditNeedFail(LocalDateTime.now(), reason, audit_id, id);
+                    return "社区需求审核完成";
+                }catch (DataAccessException e){
+                    LOGGER.error(e.getMessage());
+                    return null;
+                }
+            }
+            //不通过队伍的审核，同时
+            if(type==2){
+                try {
+                    int new_id = auditMapper.getTeamIdByAuditId(audit_id);
+                    if(new_id!=id){
+                        auditMapper.auditTeamFail(LocalDateTime.now(), reason, audit_id, id);
+                        teamMapper.deleteExtraTeam(new_id);
+                        return "队伍审核完成";
+                    }
+                    auditMapper.auditTeamFail(LocalDateTime.now(), reason, audit_id, id);
+                    return "队伍审核完成";
+                }catch (DataAccessException e){
+                    LOGGER.error(e.getMessage());
+                    return null;
+                }
+            }
+            //不通过社区的审核，同上
+            if(type==3){
+                try {
+                    int new_id = auditMapper.getCommunityNewIdByAuditId(audit_id);
+                    if(new_id!=id){
+                        auditMapper.auditCommunityFail(LocalDateTime.now(), reason, audit_id, id);
+                        communityMapper.deleteTempCommunity(new_id);
+                        return "社区审核完成";
+                    }
+                    auditMapper.auditCommunityFail(LocalDateTime.now(), reason, audit_id, id);
+                    return "社区审核完成";
+                }catch (DataAccessException e){
+                    LOGGER.error(e.getMessage());
+                    return null;
+                }
+            }
+            //不通过成果的审核，成果不能修改
+            if(type==4){
+                try {
+                    auditMapper.getFruitNewIdByAuditId(audit_id);
+                    auditMapper.auditFruitFail(LocalDateTime.now(), reason, audit_id, id);
+                    return "成果审核完成";
+                }catch (DataAccessException e){
+                    LOGGER.error(e.getMessage());
+                    return null;
+                }
+            }
+        }
+        return null;
     }
 
     // 更新结对审核

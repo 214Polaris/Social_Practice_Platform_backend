@@ -4,6 +4,8 @@ import jakarta.servlet.http.HttpServletRequest;
 import org.example.practice_platform_backend.service.SaveFileService;
 import org.example.practice_platform_backend.service.SendFileService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.core.task.TaskExecutor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -13,6 +15,9 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutionException;
+import java.util.stream.Collectors;
 
 @RestController
 @EnableAsync
@@ -25,20 +30,38 @@ public class MediaController {
     @Autowired
     private SendFileService sendFileService;
 
+    @Autowired
+    @Qualifier("threadPoolExecutor")
+    private TaskExecutor executor;
 
-    // 获取缩略图的 list（70%）
+
+    // 获取缩略图的 list（70%），异步调用
     @PostMapping(value="/get/image/thumbnail")
     public ResponseEntity<?> getImageThumbnail(@RequestParam("images") List<String> images,
                                                @RequestParam("id") int id,
                                                @RequestParam("type") int type){
-        List<String> result = new java.util.ArrayList<>();
-        images.forEach(image->{
-            try {
-                result.add(sendFileService.sendImage(image,type,id));
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
-        });
+        // 使用CompletableFuture异步处理每个图片
+        List<CompletableFuture<String>> futures = images.stream()
+                .map(image -> CompletableFuture.supplyAsync(() -> {
+                    try {
+                        return sendFileService.sendImage(image, type, id);
+                    } catch (IOException e) {
+                        throw new RuntimeException(e);
+                    }
+                }, executor))
+                .toList();
+
+        // 等待所有异步操作完成，并收集结果
+        List<String> result = futures.stream()
+                .map(future -> {
+                    try {
+                        return future.get(); // 获取每个异步操作的结果
+                    } catch (InterruptedException | ExecutionException e) {
+                        throw new RuntimeException("Failed to get image thumbnail", e);
+                    }
+                })
+                .collect(Collectors.toList());
+
         return ResponseEntity.status(200).body(result);
     }
 

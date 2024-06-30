@@ -88,6 +88,18 @@ public interface FruitMapper {
     int deleteComment(Comment comment);
 
     /**
+     * 删除临时成果
+     */
+    @Delete("delete from fruit_info where fruit_id=#{fruit_id}")
+    void deleteTempFruit(@Param("fruit_id") int fruit_id);
+
+    /**
+     * 通过成果
+     */
+    @Update("update fruit_info set is_pass=1 where fruit_id=#{fruit_id}")
+    void passFruit(@Param("fruit_id") int fruit_id);
+
+    /**
      * 减少评论数
      */
     @Update("update fruit_info set comment_num=comment_num-1 where fruit_id=#{fruit_id}")

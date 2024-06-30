@@ -138,4 +138,8 @@ public interface CommunityMapper {
     //查询经纬度
     @Select("select address, longitude,latitude from community where address like CONCAT('%', #{address}, '%')")
     List<JSONObject> getCommunityLongitudeAndLatitude(@Param("address") String address);
+
+    //删除临时社区
+    @Delete("DELETE from community where community_id = #{community_id}")
+    void deleteTempCommunity(@Param("community_id") int community_id);
 }
