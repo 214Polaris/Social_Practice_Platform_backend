@@ -12,6 +12,7 @@ import lombok.Setter;
 @Setter
 public class Report {
     private int project_id;
+    private String need_id;
     private int report_id;
     private String title;
     private String link;

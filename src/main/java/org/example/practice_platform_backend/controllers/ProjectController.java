@@ -6,6 +6,7 @@ import lombok.Getter;
 import net.minidev.json.JSONArray;
 import net.minidev.json.JSONObject;
 import org.example.practice_platform_backend.entity.Project;
+import org.example.practice_platform_backend.entity.Report;
 import org.example.practice_platform_backend.entity.User;
 import org.example.practice_platform_backend.mapper.AuditMapper;
 import org.example.practice_platform_backend.mapper.ProjectMapper;
@@ -151,7 +152,14 @@ public class ProjectController {
         return ResponseEntity.status(200).body(JSON.toJSONString(result));
     }
 
-
+    @PostMapping("/res/report")
+    public ResponseEntity<?> uploadReport(@RequestBody Report report){
+        report.setProject_id(projectMapper.getProjectIdByNeedId(Integer.parseInt(report.getNeed_id())));
+        int report_id = projectService.insertReport(report);
+        JSONObject result = new JSONObject();
+        result.put("report_id", report_id);
+        return ResponseEntity.ok(JSON.toJSONString(result));
+    }
 
 
 

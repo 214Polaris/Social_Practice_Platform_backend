@@ -74,9 +74,8 @@ public class UserService {
                         "project_new", Audit::getNew_id
                 );
          getReasonMap = Map.of(
-                        "team", Audit::getFail_interpretation,
-                        "fruit", Audit::getFail_interpretation,
-                        "project", Audit::getFail_interpretation
+                        "team_new", Audit::getFail_interpretation,
+                        "fruit_new", Audit::getFail_interpretation
                 );
           getCoverMap = Map.of(
                         "team", teamMapper::getTeamAvatarPathByTeamNumber,
@@ -84,7 +83,7 @@ public class UserService {
                         "project",projectMapper::getCoverPathByProjectId,
                         "team_new", teamMapper::getTeamAvatarPathByTeamNumber,
                         "fruit_new",fruitMapper::getFruitCover,
-                        "project_new",projectMapper::getNeedTitleByProjectId
+                        "project_new",projectMapper::getCoverPathByProjectId
                 );
 
            getComId = Map.of(

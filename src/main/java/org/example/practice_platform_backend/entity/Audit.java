@@ -43,7 +43,7 @@ public class Audit implements Comparable<Audit>{
                     .thenComparing(a -> a.apply_time, Comparator.nullsFirst(LocalDateTime::compareTo));
     @Override
     public int compareTo(Audit o) {
-        return COMPARATOR.compare(this, o);
+        return COMPARATOR.compare(o, this);
     }
 
     // 社区审核列表

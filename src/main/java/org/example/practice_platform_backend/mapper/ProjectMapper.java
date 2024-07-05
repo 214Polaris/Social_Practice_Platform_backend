@@ -56,6 +56,14 @@ public interface ProjectMapper {
     Report[] getReportByProjectId(int project_id);
 
     /**
+     * 新增报道
+     */
+    @Insert("insert into report (project_id, title, link) values" +
+            "(#{project_id}, #{title}, #{link})")
+    @Options(useGeneratedKeys = true, keyProperty = "report_id")
+    void addReport(Report report);
+
+    /**
      * 查询需求列表
      */
     @Select("select * from community_need where community_id = #{community_id}")
@@ -159,5 +167,11 @@ public interface ProjectMapper {
     @Update("update community_need set is_pair = #{is_pair} where need_id = " +
             "(select need_id from  succ_project where project_id = #{project_id})")
     void updateNeedStatus(@Param("is_pair") int is_pair, @Param("project_id") int project_id);
+
+    /**
+     * 根据need_id 查对应的project_id
+     */
+    @Select("select project_id from succ_project where need_id = #{need_id}")
+    int getProjectIdByNeedId(@Param("need_id") int need_id);
 
 }
