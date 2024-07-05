@@ -23,7 +23,7 @@ public interface TeamMapper {
            from college_team as t
            join college_team_teacher as c on t.team_number = c.team_number
            join user on c.user_id = user.user_id
-           where t.team_number = 1
+           where t.team_number = #{team_id}
            """)
     Team getTeamById(int team_id);
 
