@@ -4,6 +4,7 @@ import net.minidev.json.JSONArray;
 import net.minidev.json.JSONObject;
 import org.example.practice_platform_backend.entity.Audit;
 import org.example.practice_platform_backend.entity.Project;
+import org.example.practice_platform_backend.entity.Report;
 import org.example.practice_platform_backend.entity.Team;
 import org.example.practice_platform_backend.mapper.*;
 import org.example.practice_platform_backend.utils.ImageUtils;
@@ -191,5 +192,10 @@ public class ProjectService {
             list.add(item);
         }
         return list;
+    }
+
+    public int insertReport(Report report) {
+        projectMapper.addReport(report);
+        return report.getReport_id();
     }
 }
