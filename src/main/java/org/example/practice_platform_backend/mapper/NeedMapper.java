@@ -18,7 +18,7 @@ public interface NeedMapper {
     CommunityNeed getNeedByNeedId(@Param("need_id") int need_id);
 
     // 根据需求 id 获取详细需求(未审核)
-    @Select("select need_id,title, post_time, introduction, resource, community_id, address from community_need " +
+    @Select("select need_id,title, post_time, introduction, resource, community_id, address,longitude,latitude from community_need " +
             "where is_pass = 0 and need_id = #{need_id}")
     CommunityNeed getUnAuditNeedByNeedId(@Param("need_id") int need_id);
 
@@ -36,7 +36,7 @@ public interface NeedMapper {
     List<JSONObject> getNeedByUserId(@Param("user_id") int user_id);
 
     //注册新的需求
-    @Insert("INSERT into community_need(title, post_time, introduction, resource, is_pass, is_pair, address, community_id,longitude,latitude)\n" +
+    @Insert("INSERT into community_need(title, post_time, introduction, resource, is_pass, is_pair, address, community_id,longitude,latitude) " +
             "value(#{title},#{post_time},#{introduction},#{resource},#{is_pass},#{is_pair},#{address},#{community_id},#{longitude},#{latitude})")
     @Options(useGeneratedKeys = true, keyProperty = "need_id")
     void registerNeed(CommunityNeed communityNeed);

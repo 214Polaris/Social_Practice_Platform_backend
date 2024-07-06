@@ -14,8 +14,9 @@ import java.util.List;
 public interface CommunityMapper {
 
     //注册社区
-    @Insert("INSERT into community(community_name,introduction,address,is_pass,user_id,avatar_path) " +
-            "values(#{community_name},#{introduction},#{address},0,#{user_id},'community_avatar/default_avatar.jpg')")
+    @Insert("INSERT into community(community_name,introduction,address,is_pass,user_id,avatar_path,longitude,latitude) " +
+            "values(#{community_name},#{introduction},#{address},0,#{user_id},'community_avatar/default_avatar.jpg'," +
+            " #{longitude},#{latitude})")
     @Options(useGeneratedKeys = true, keyProperty = "community_id")
     @Transactional
     void registerCommunity(Community community);
@@ -28,6 +29,8 @@ public interface CommunityMapper {
             "<if test='community_name != null'>community_name = #{community_name},</if>" +
             "<if test='introduction != null'>introduction = #{introduction},</if>" +
             "<if test='address != null'>address = #{address},</if>" +
+            "<if test='longitude != null'>longitude = #{longitude},</if>" +
+            "<if test='latitude != null'>latitude = #{latitude},</if>" +
             "<if test='is_pass!=null'> is_pass= #{is_pass},</if>" +
             "</set>" +
             "WHERE community_id = #{community_id}" +
@@ -68,9 +71,13 @@ public interface CommunityMapper {
             "LIMIT 2 OFFSET #{offset}")
     Fruit[] getCommunityFruits(int community_id, int offset);
 
-    //负责人 id 查找社区
+    //负责人 id 查找社区id
     @Select("select community_id from community where user_id = #{user_id} AND is_pass = 1")
     Integer findCommunityIdByUserId(@Param("user_id") int user_id);
+
+    //负责人 id 查找社区
+    @Select("select * from community where user_id = #{user_id} AND is_pass = 1")
+    Integer findCommunityByUserId(@Param("user_id") int user_id);
 
     // 获取封面 id
     @Select("SELECT COUNT(*) FROM community_media WHERE community_id = #{communityId} AND type = 'cover'")

@@ -110,8 +110,14 @@ public class CommunityLeaderController {
             if(!MapService.checkValidAddress(community.getAddress())) {
                 return ResponseEntity.status(400).body("地址格式不合法");
             }
+            if(community.getLatitude()==0 || community.getLongitude()==0){
+                return ResponseEntity.status(400).body("请一起传入经纬度");
+            }
             origin_community.setAddress(community.getAddress());
         }
+//        if((community.getLatitude()!=0 || community.getLongitude()!=0)&&community.getAddress()==null){
+//            return ResponseEntity.status(400).body("传入了经纬度没传入地址");
+//        }
         try {
             community.setUser_id(user.getUser_id());
             communityLeaderService.modifyCommunity(origin_community,community);
@@ -130,7 +136,7 @@ public class CommunityLeaderController {
             return ResponseEntity.status(400).body("该用户不是社区负责人");
         }
         int user_id = jwtUtils.getUserInfoFromToken(request.getHeader("token"), User.class).getUser_id();
-        Integer community_id = communityMapper.findCommunityIdByUserId(user_id);
+        Integer community_id = communityMapper.findCommunityByUserId(user_id);
         if(community_id==null){
             return ResponseEntity.status(400).body("该用户不存在社区");
         }

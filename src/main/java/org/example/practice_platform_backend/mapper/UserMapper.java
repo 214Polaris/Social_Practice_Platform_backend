@@ -111,7 +111,7 @@ public interface UserMapper {
     /**
      * user_id 获取 User 信息
      */
-    @Select("select name,username,phone_number,avatar_path,gender from user where user_id=#{user_id}")
+    @Select("select user_id,name,username,phone_number,avatar_path,gender from user where user_id=#{user_id}")
     JSONObject getUserByUserId(@Param("user_id")int user_id);
 
 }
