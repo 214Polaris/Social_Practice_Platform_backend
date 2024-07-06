@@ -102,6 +102,7 @@ public interface TeamMapper {
             "<if test='team_name != null'> team_name = #{team_name},</if>" +
             "<if test='introduction != null'> introduction = #{introduction},</if>" +
             "<if test='academy != null'>academy = #{academy},</if>" +
+            "<if test='is_pass!=null'> is_pass= #{is_pass},</if>" +
             "</set>" +
             "WHERE team_number = #{team_number}" +
             "</script>")

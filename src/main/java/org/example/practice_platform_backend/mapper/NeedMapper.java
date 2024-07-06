@@ -94,6 +94,7 @@ public interface NeedMapper {
             "<if test='resource != null'>resource = #{resource},</if>" +
             "<if test='post_time != null'>post_time = #{post_time},</if>" +
             "<if test='address!=null'> address= #{address},</if>" +
+            "<if test='is_pass!=null'> is_pass= #{is_pass},</if>" +
             "<if test='longitude!=null'> longitude=#{longitude},</if>" +
             "<if test='latitude!=null'> latitude=#{latitude},</if>" +
             "</set>" +

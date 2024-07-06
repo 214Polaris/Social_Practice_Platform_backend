@@ -20,5 +20,6 @@ public class Team {
     private String teacher_id;
     private String teacher;
     private List<String> tags;
+    private int is_pass;
 }
 

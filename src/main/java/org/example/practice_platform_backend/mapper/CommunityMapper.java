@@ -28,6 +28,7 @@ public interface CommunityMapper {
             "<if test='community_name != null'>community_name = #{community_name},</if>" +
             "<if test='introduction != null'>introduction = #{introduction},</if>" +
             "<if test='address != null'>address = #{address},</if>" +
+            "<if test='is_pass!=null'> is_pass= #{is_pass},</if>" +
             "</set>" +
             "WHERE community_id = #{community_id}" +
             "</script>")
