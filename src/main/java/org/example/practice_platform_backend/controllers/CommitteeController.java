@@ -6,13 +6,17 @@ import org.example.practice_platform_backend.entity.*;
 import org.example.practice_platform_backend.mapper.*;
 import org.example.practice_platform_backend.service.AuditService;
 import org.example.practice_platform_backend.service.CommunityLeaderService;
+import org.example.practice_platform_backend.utils.ImageUtils;
 import org.example.practice_platform_backend.utils.JwtUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
+
+import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -44,6 +48,12 @@ public class CommitteeController {
     private FruitMapper fruitMapper;
     @Autowired
     private TagsMapper tagsMapper;
+    @Autowired
+    private UserMapper userMapper;
+    @Autowired
+    private ImageUtils imageUtils;
+    @Value("${uploadPath}")
+    private String uploadPath;
 
     // 解析 token 判断是否是校团委
     private Boolean isValid(HttpServletRequest request){
@@ -200,6 +210,21 @@ public class CommitteeController {
         return ResponseEntity.status(200).body(msg);
     }
 
+    //根据 user_id 获取用户信息
+    @GetMapping("/get/leader/detail")
+    public ResponseEntity<?> getLeaderDetail(HttpServletRequest request,@RequestParam("user_id") int user_id) throws IOException {
+        if(!isValid(request)){
+            return ResponseEntity.status(400).body("该用户不是校团委");
+        }
+        JSONObject user = userMapper.getUserByUserId(user_id);
+        if(user==null){
+            return ResponseEntity.status(400).body("用户不存在");
+        }
+        String path = user.getString("avatar_path");
+        user.remove("avatar_path");
+        user.put("avatar", imageUtils.getFileBytes(uploadPath+path));
+        return ResponseEntity.ok(user);
+    }
 
 }
 

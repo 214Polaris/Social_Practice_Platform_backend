@@ -96,8 +96,9 @@ public interface AuditMapper {
      * 根据 auditId 获取队伍
      */
     @Select("""
-           SELECT c.* from audit_team as a
+           SELECT c.*,t.net_id from audit_team as a
            join college_team as c on a.new_id = c.team_number
+           join college_team_teacher as t on t.team_number = c.team_number
            where a.audit_id = #{audit_id} and c.is_pass=0
            """)
     Team getTeamByAuditId(int audit_id);

@@ -1,4 +1,5 @@
 package org.example.practice_platform_backend.mapper;
+import com.alibaba.fastjson.JSONObject;
 import org.example.practice_platform_backend.entity.User;
 import org.apache.ibatis.annotations.*;
 import org.springframework.scheduling.annotation.Async;
@@ -101,11 +102,17 @@ public interface UserMapper {
     @Select("select user_id from user where username = #{username}")
     int getUserIdByUsername(@Param("username")String username);
 
-
     /**
      * 获取一些学生相关的信息
      */
     @Select("select name, academy from user where user_id = #{user_id}")
     HashMap<String,String> getStudentInfo(@Param("user_id")int user_id);
+
+    /**
+     * user_id 获取 User 信息
+     */
+    @Select("select name,username,phone_number,avatar_path,gender from user where user_id=#{user_id}")
+    JSONObject getUserByUserId(@Param("user_id")int user_id);
+
 }
 

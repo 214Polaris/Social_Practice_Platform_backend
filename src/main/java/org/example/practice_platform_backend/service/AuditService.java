@@ -448,6 +448,7 @@ public class AuditService {
                 try{
                     Team team = auditMapper.getTeamByAuditId(audit_id);
                     int new_id = team.getTeam_number();
+                    team.setIs_pass(1);
                     if(new_id!=id){
                         team.setTeam_number(id);
                         teamMapper.modifyTeam(team);

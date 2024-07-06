@@ -35,7 +35,7 @@ import java.util.Objects;
 @RequestMapping("/api")
 public class UserController {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(CommentController.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(UserController.class);
 
     @Value("${uploadPath}")
     private String uploadPath;
@@ -73,13 +73,12 @@ public class UserController {
         }
         // 生成 token 并返回
         HttpHeaders headers = new HttpHeaders();
-        loggedInUser.setPassword(null);
         headers.add("token", jwtUtils.generateToken(loggedInUser));
         return ResponseEntity.ok().headers(headers).body("登录成功");
     }
 
     @PostMapping(value="/register")
-    public ResponseEntity<?> registerUser(@RequestBody User user,HttpServletRequest request){
+    public ResponseEntity<?> registerUser(@RequestBody User user, @RequestParam("password") String passwd, HttpServletRequest request){
         try {
             String category = user.getUser_category();
             // 处理社区负责人的注册情况
@@ -93,6 +92,9 @@ public class UserController {
             }
             if(userMapper.existUsername(user.getUser_name())>0){
                 return ResponseEntity.status(400).body("用户名已存在");
+            }
+            if(user.getUser_name()==null||user.getName()==null||passwd==null){
+                return ResponseEntity.status(400).body("请携带必要信息");
             }
             // 正常注册
             userMapper.register(user);
@@ -126,13 +128,19 @@ public class UserController {
 
     // 修改用户信息
     @PostMapping(value="/modify_info")
-    public ResponseEntity<?> modifyUser(@RequestBody User newInfo, HttpServletRequest request){
+    public ResponseEntity<?> modifyUser(@RequestBody User newInfo,
+                                        HttpServletRequest request){
         String token = request.getHeader("token");
-        int user_id = jwtUtils.getUserInfoFromToken(token,User.class).getUser_id();
-        newInfo.setUser_id(user_id);
-        User user = userMapper.login(newInfo.getUser_name(),newInfo.getPassword());
-        if(user != null){
-            return ResponseEntity.status(400).body("账号密码不能与之前一样");
+        User user = jwtUtils.getUserInfoFromToken(token,User.class);
+        newInfo.setUser_id(user.getUser_id());
+        //社区负责人可以修改密码
+        String passwd = newInfo.getPassword();
+        if(passwd!=null&&user.getUser_category().equals("community")){
+            User isLogin = userMapper.login(newInfo.getUser_name(),passwd);
+            if(isLogin != null){
+                return ResponseEntity.status(400).body("账号密码不能与之前一样");
+            }
+            userMapper.modifyPasswd(passwd,user.getUser_id());
         }
         try{
             userMapper.modifyInfo(newInfo);
