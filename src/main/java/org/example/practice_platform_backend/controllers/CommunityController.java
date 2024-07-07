@@ -51,7 +51,7 @@ public class CommunityController {
 
     //加载社区
     @GetMapping("")
-    public ResponseEntity<?> getCommunity(@RequestParam("id") int community_id){
+    public ResponseEntity<?> getCommunity(@RequestParam("id") int community_id) throws IOException {
         Community community = communityService.getCommunity(community_id);
         if(community==null){
             return ResponseEntity.status(400).body("未找到社区");

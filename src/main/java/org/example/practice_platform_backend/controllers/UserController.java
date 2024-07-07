@@ -78,7 +78,7 @@ public class UserController {
     }
 
     @PostMapping(value="/register")
-    public ResponseEntity<?> registerUser(@RequestBody User user, @RequestParam("password") String passwd, HttpServletRequest request){
+    public ResponseEntity<?> registerUser(@RequestBody User user, HttpServletRequest request){
         try {
             String category = user.getUser_category();
             // 处理社区负责人的注册情况
@@ -93,7 +93,7 @@ public class UserController {
             if(userMapper.existUsername(user.getUser_name())>0){
                 return ResponseEntity.status(400).body("用户名已存在");
             }
-            if(user.getUser_name()==null||user.getName()==null||passwd==null){
+            if(user.getUser_name()==null||user.getName()==null||user.getPassword()==null){
                 return ResponseEntity.status(400).body("请携带必要信息");
             }
             // 正常注册

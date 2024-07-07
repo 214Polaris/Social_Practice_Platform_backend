@@ -11,6 +11,7 @@ import org.example.practice_platform_backend.mapper.NeedMapper;
 import org.example.practice_platform_backend.service.AuditService;
 import org.example.practice_platform_backend.service.CommunityLeaderService;
 import org.example.practice_platform_backend.service.MapService;
+import org.example.practice_platform_backend.service.SaveFileService;
 import org.example.practice_platform_backend.utils.ImageUtils;
 import org.example.practice_platform_backend.utils.JwtUtils;
 import org.slf4j.Logger;
@@ -21,7 +22,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Objects;
 
@@ -44,6 +47,8 @@ public class CommunityLeaderController {
     private AuditService auditService;
     @Autowired
     private AuditMapper auditMapper;
+    @Autowired
+    private SaveFileService saveFileService;
 
 
     //获取该负责人发布的所有需求
@@ -58,6 +63,29 @@ public class CommunityLeaderController {
             return ResponseEntity.status(200).body("暂无发布需求");
         }
         return ResponseEntity.status(200).body(results);
+    }
+
+    //上传社区头像
+    @PostMapping("/upload/community/avatar")
+    @Transactional
+    public ResponseEntity<?> uploadCommunityAvatar(@RequestParam("img") MultipartFile img,
+                                                   @RequestParam("id") int id,
+                                                   HttpServletRequest request) throws IOException {
+        if (img.isEmpty()) {
+            return ResponseEntity.status(400).body("上传失败，文件为空");
+        }
+        // 从 token 中获取 user_id
+        String token = request.getHeader("token");
+        User user = jwtUtils.getUserInfoFromToken(token,User.class);
+        if(!Objects.equals(user.getUser_category(), "community")){
+            return ResponseEntity.status(400).body("不是社区负责人");
+        }
+        Community community = communityMapper.getCommunityById(id);
+        if(community.getUser_id()!=user.getUser_id()){
+            return ResponseEntity.status(400).body("不是该社区的负责人");
+        }
+        saveFileService.saveCommunityAvatar(img,id);
+        return ResponseEntity.ok("完成头像上传");
     }
 
     // 注册社区信息，返回注册后的社区 id，同时同步到审核列表当中
