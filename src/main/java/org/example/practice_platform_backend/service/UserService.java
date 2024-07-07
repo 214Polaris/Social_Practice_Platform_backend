@@ -6,13 +6,16 @@ import org.example.practice_platform_backend.entity.Audit;
 import org.example.practice_platform_backend.mapper.*;
 import org.example.practice_platform_backend.utils.ImageUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.task.TaskExecutor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.*;
+import java.util.concurrent.CompletableFuture;
 import java.util.function.Function;
 
 @Service
@@ -32,6 +35,10 @@ public class UserService {
 
     @Autowired
     private AuditMapper  auditMapper;
+
+    @Autowired
+    @Qualifier("threadPoolExecutor")
+    private TaskExecutor executor;
 
     private final Map<Integer, String> getTypeMap;
 
@@ -141,46 +148,71 @@ public class UserService {
         auditList.addAll(fruitAuditList);
         auditList.addAll(pairAuditList);
         Collections.sort(auditList);
-        for(Audit audit:auditList){
-            JSONObject  jsonObject = new JSONObject();
-            int type = 0;
-            if(audit.getTeam_id() != 0){ // 队伍审核相关
-                if(audit.getIs_pass() == 1){ // 通过！！
-                    type = 1;
-                }else{
-                    type = 2;
+        List<CompletableFuture<JSONObject>> futures = new ArrayList<>();
+        // 提交并行任务
+        auditList.forEach(audit ->{
+            CompletableFuture<JSONObject> JSONObjectFutures = CompletableFuture.supplyAsync(() -> {
+                try {
+                    return handleStuNotice(audit);
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
                 }
-            }else if(audit.getFruit_id() != 0){ // 成果审核相关
-                if(audit.getIs_pass() == 1){
-                     type = 3;
-                }else{
-                     type = 4;
-                }
-            }else if(audit.getProject_id() != 0){
-                if(audit.getIs_pass() == 1){
-                     type = 7;
-                }else{
-                     type = 8;
-                }
-            }
-            String type_String =  getTypeMap.getOrDefault(type, "unknown");
-            int id = getIDMap.get(type_String).apply(audit);
-            String name = getNameMap.getOrDefault(type_String,getDefaultFunction()).apply(id);
-            String reason = getReasonMap.getOrDefault(type_String,getDefaultFunction_str()).apply(audit);
-            String img_path = getCoverMap.getOrDefault(type_String,getDefaultFunction()).apply(id);
-            int comID = getComId.getOrDefault(type_String,getDefaultFunction_int()).apply(audit.getProject_id());
-            String comName = getComName.getOrDefault(type_String,getDefaultFunction()).apply(comID);
-            jsonObject.put("type",type);
-            jsonObject.put("Name", name);
-            jsonObject.put("id",String.valueOf(id));
-            jsonObject.put("reason",reason);
-            jsonObject.put("img", imageUtils.getThumbnail(uploadPath+img_path));
-            jsonObject.put("comID", comID);
-            jsonObject.put("comName",  comName);
-            jsonObject.put("time", audit.getLast_mod_time());
-             list.add(jsonObject);
-        }
+            },  executor);
+            futures.add(JSONObjectFutures);
+        });
+        // 等待并行任务完成并收集结果
+        List<JSONObject> JsonObjectList = futures.stream().map(future -> {
+                    try {
+                        return future.get();
+                    } catch (Exception e) {
+                        System.err.println("Failed to get future result: " + e.getMessage());
+                        return null;
+                    }
+                })
+                .filter(Objects::nonNull)
+                .toList();
+        list.addAll(JsonObjectList);
         return list;
+    }
+
+    public JSONObject handleStuNotice(Audit audit) throws IOException {
+        JSONObject  jsonObject = new JSONObject();
+        int type = 0;
+        if(audit.getTeam_id() != 0){ // 队伍审核相关
+            if(audit.getIs_pass() == 1){ // 通过！！
+                type = 1;
+            }else{
+                type = 2;
+            }
+        }else if(audit.getFruit_id() != 0){ // 成果审核相关
+            if(audit.getIs_pass() == 1){
+                type = 3;
+            }else{
+                type = 4;
+            }
+        }else if(audit.getProject_id() != 0){
+            if(audit.getIs_pass() == 1){
+                type = 7;
+            }else{
+                type = 8;
+            }
+        }
+        String type_String =  getTypeMap.getOrDefault(type, "unknown");
+        int id = getIDMap.get(type_String).apply(audit);
+        String name = getNameMap.getOrDefault(type_String,getDefaultFunction()).apply(id);
+        String reason = getReasonMap.getOrDefault(type_String,getDefaultFunction_str()).apply(audit);
+        String img_path = getCoverMap.getOrDefault(type_String,getDefaultFunction()).apply(id);
+        int comID = getComId.getOrDefault(type_String,getDefaultFunction_int()).apply(audit.getProject_id());
+        String comName = getComName.getOrDefault(type_String,getDefaultFunction()).apply(comID);
+        jsonObject.put("type",type);
+        jsonObject.put("Name", name);
+        jsonObject.put("id",String.valueOf(id));
+        jsonObject.put("reason",reason);
+        jsonObject.put("img", imageUtils.getThumbnail(uploadPath+img_path));
+        jsonObject.put("comID", comID);
+        jsonObject.put("comName",  comName);
+        jsonObject.put("time", audit.getLast_mod_time());
+        return jsonObject;
     }
 
     /**

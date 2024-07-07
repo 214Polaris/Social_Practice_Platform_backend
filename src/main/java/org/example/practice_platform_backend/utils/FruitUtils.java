@@ -142,10 +142,8 @@ public class FruitUtils {
             String cover_path = mediaMapper.getFruitCoverPath(fruit_id);
             if(cover_path == null){
                 continue;
-            }else{
-                cover_path = uploadPath +  cover_path;
             }
-            activity_json.put("fruit_cover",  imageUtils.getThumbnail(cover_path));
+            activity_json.put("fruit_cover",  cover_path);
             result.add(activity_json);
         }
         return  result;

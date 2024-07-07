@@ -1,10 +1,7 @@
 package org.example.practice_platform_backend.mapper;
 
 import org.apache.ibatis.annotations.*;
-import org.example.practice_platform_backend.entity.Comment;
-import org.example.practice_platform_backend.entity.Fruit;
-import org.example.practice_platform_backend.entity.FruitMedia;
-import org.example.practice_platform_backend.entity.Kudos;
+import org.example.practice_platform_backend.entity.*;
 import org.springframework.data.repository.query.Param;
 
 import java.sql.Time;
@@ -215,4 +212,13 @@ public interface FruitMapper {
      */
     @Select("SELECT title FROM fruit_info WHERE fruit_id = #{fruit_id}")
     String getFruitTitleByFruitId(int fruit_id);
+
+    /**
+     * 根据成果id 查对应需求信息
+     */
+    @Select("Select * from community_need as cn " +
+            "join succ_project as sp on cn.need_id =  sp.need_id " +
+            "join fruit_info as fi on fi.project_id = sp.project_id " +
+            "where fi.fruit_id = #{fruit_id}")
+    Project getNeedByFruitId(int fruit_id);
 }
