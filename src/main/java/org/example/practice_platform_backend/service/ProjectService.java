@@ -146,7 +146,7 @@ public class ProjectService {
             if(coverPath == null){
                 continue;
             }
-            String cover = imageUtils.getThumbnail(uploadPath + coverPath);
+            String cover = imageUtils.getFileBytes(uploadPath + coverPath);
             item.put("demand_img", cover);
             List<String> tags = tagsMapper.searchTags(need.getNeed_id());
             item.put("tagList", tags);

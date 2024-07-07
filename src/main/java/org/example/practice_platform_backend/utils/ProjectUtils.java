@@ -118,7 +118,7 @@ public class ProjectUtils {
                 continue;
             }
             String coverPath = uploadPath + cover;
-            needJSON.put("demand_img", imageUtils.getThumbnail(coverPath));
+            needJSON.put("demand_img", imageUtils.getFileBytes(coverPath));
             need_list.add(needJSON);
         }
         return need_list;
