@@ -1,7 +1,8 @@
 package org.example.practice_platform_backend.controllers;
 
 import jakarta.servlet.http.HttpServletRequest;
-import net.minidev.json.JSONObject;
+import com.alibaba.fastjson.JSONObject;
+import org.example.practice_platform_backend.entity.Audit;
 import org.example.practice_platform_backend.entity.Community;
 import org.example.practice_platform_backend.entity.CommunityNeed;
 import org.example.practice_platform_backend.entity.User;
@@ -105,7 +106,7 @@ public class CommunityLeaderController {
         if(!MapService.checkValidAddress(community.getAddress())){
             return ResponseEntity.status(400).body("地址格式不合法");
         }
-        if(auditMapper.getCommunityAuditByUserId(user_id)!=null){
+        if(!auditMapper.getCommunityAuditByUserId(user_id).isEmpty()){
             return ResponseEntity.status(400).body("已有待审核的社区");
         };
         if(community.getLatitude()==0 || community.getLongitude()==0){

@@ -1,6 +1,6 @@
 package org.example.practice_platform_backend.controllers;
 
-import net.minidev.json.JSONObject;
+import com.alibaba.fastjson.JSONObject;
 import org.example.practice_platform_backend.mapper.CommunityMapper;
 import org.example.practice_platform_backend.mapper.NeedMapper;
 import org.example.practice_platform_backend.service.MapService;

@@ -1,6 +1,6 @@
 package org.example.practice_platform_backend.mapper;
 
-import net.minidev.json.JSONObject;
+import com.alibaba.fastjson.JSONObject;
 import org.apache.ibatis.annotations.*;
 import org.example.practice_platform_backend.entity.CommunityNeed;
 import org.springframework.scheduling.annotation.Async;
@@ -124,4 +124,13 @@ public interface NeedMapper {
     //查询经纬度
     @Select("select address, longitude,latitude from community_need where address like CONCAT('%', #{address}, '%')")
     List<JSONObject> getNeedLongitudeAndLatitude(@Param("address") String address);
+
+    //获取所有需求
+    @Select("""
+            SELECT n.* from community_need as n
+            join need_match as m on m.need_id = n.need_id
+            join need_category as c on c.id = m.category_id
+            where c.id = #{id}
+            """)
+    List<CommunityNeed> getNeedByTagId(@Param("id") int id);
 }
