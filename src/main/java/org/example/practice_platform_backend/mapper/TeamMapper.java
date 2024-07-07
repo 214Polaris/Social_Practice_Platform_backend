@@ -143,6 +143,10 @@ public interface TeamMapper {
     @Delete("delete from student where user_id = #{user_id}")
     boolean deleteMember(@Param("user_id")int user_id);
 
+    //删除队伍绑定的 tags
+    @Delete("delete from team_category where team_number=#{team_number}")
+    void deleteTeamCategory(@Param("team_number")int team_number);
+
     // 删除多出来的队伍
     @Delete("delete from college_team where team_number = #{team_number}")
     void deleteExtraTeam(@Param("team_number")int team_number);

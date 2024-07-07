@@ -143,9 +143,9 @@ public class CommunityLeaderController {
         if(communityNeed.getAddress()==null||!MapService.checkValidAddress(communityNeed.getAddress())){
             return ResponseEntity.status(400).body("地址未填写或地址格式错误");
         }
-        if(auditMapper.getNeedAuditByUserId(user_id)!=null){
-            return ResponseEntity.status(400).body("已有待审核的需求");
-        }
+//        if(auditMapper.getNeedAuditByUserId(user_id)!=null){
+//            return ResponseEntity.status(400).body("已有待审核的需求");
+//        }
         communityNeed.setIs_pair(0);
         communityNeed.setIs_pass(0);
         communityNeed.setCommunity_id(community_id);
@@ -186,9 +186,9 @@ public class CommunityLeaderController {
         if(!needMapper.selectNeedByUserId(user.getUser_id()).contains(communityNeed.getNeed_id())){
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body("当前用户并未发布过该需求");
         }
-        if(auditMapper.getNeedAuditByUserId(user.getUser_id())!=null){
-            return ResponseEntity.status(400).body("已有待审核的需求");
-        }
+//        if(auditMapper.getNeedAuditByUserId(user.getUser_id())!=null){
+//            return ResponseEntity.status(400).body("已有待审核的需求");
+//        }
         auditService.applyNeedChanges(origin_need,communityNeed);
         needMapper.registerNeed(origin_need);
         int new_id = origin_need.getNeed_id();

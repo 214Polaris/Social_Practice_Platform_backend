@@ -2,6 +2,7 @@ package org.example.practice_platform_backend.service;
 
 import org.example.practice_platform_backend.utils.ImageUtils;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestParam;
 

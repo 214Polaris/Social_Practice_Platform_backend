@@ -153,7 +153,7 @@ public class AuditService {
         try {
             String coverPath = needMapper.getCoverPathByNeedId(need.getNeed_id());
             coverPath = ImageUtils.getRealName(coverPath);
-            String image = sendFileService.sendImage(coverPath,1,need.getNeed_id());
+            String image = sendFileService.sendOriginalImage(coverPath,1,need.getNeed_id());
             needAudit.setImg(image);
         } catch (IOException e) {
             LOGGER.error(e.getMessage());
@@ -197,7 +197,7 @@ public class AuditService {
             try {
                 String coverPath = fruitMapper.getFruitCover(audit.getFruit_id());
                 coverPath = ImageUtils.getRealName(coverPath);
-                String image = sendFileService.sendImage(coverPath,2, fruitAudit.getId());
+                String image = sendFileService.sendOriginalImage(coverPath,2, fruitAudit.getId());
                 fruitAudit.setImg(image);
             } catch (IOException e) {
                 LOGGER.error(e.getMessage());
@@ -432,6 +432,7 @@ public class AuditService {
                         need.setNeed_id(id);
                         needMapper.modifyNeed(need);
                         auditMapper.auditNeedPass(LocalDateTime.now(), audit_id, id);
+
                         needMapper.deleteTempNeed(new_id);
                     }else{
                         needMapper.modifyNeed(need);
@@ -502,12 +503,13 @@ public class AuditService {
             }
         }
         else{
-            //不通过社区需求的审核，直接删掉新的即可
+            //不通过社区需求的审核，直接删掉新的即可，还要删掉绑的 tags
             if(type==1){
                 try {
                     int new_id = auditMapper.getNeedByAuditId(audit_id);
                     if(new_id!=id){
                         auditMapper.auditNeedFail(LocalDateTime.now(), reason, audit_id, id);
+                        needMapper.deleteTagsByNeedId(new_id);
                         needMapper.deleteTempNeed(new_id);
                         return "社区需求审核完成";
                     }
@@ -524,6 +526,7 @@ public class AuditService {
                     int new_id = auditMapper.getTeamIdByAuditId(audit_id);
                     if(new_id!=id){
                         auditMapper.auditTeamFail(LocalDateTime.now(), reason, audit_id, id);
+                        teamMapper.deleteTeamCategory(new_id);
                         teamMapper.deleteExtraTeam(new_id);
                         return "队伍审核完成";
                     }

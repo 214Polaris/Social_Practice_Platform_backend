@@ -40,11 +40,12 @@ public class MediaController {
     public ResponseEntity<?> getImageThumbnail(@RequestParam("images") List<String> images,
                                                @RequestParam("id") int id,
                                                @RequestParam("type") int type){
+
         // 使用CompletableFuture异步处理每个图片
         List<CompletableFuture<String>> futures = images.stream()
                 .map(image -> CompletableFuture.supplyAsync(() -> {
                     try {
-                        return sendFileService.sendImage(image, type, id);
+                        return sendFileService.sendOriginalImage(image, type, id);
                     } catch (IOException e) {
                         throw new RuntimeException(e);
                     }

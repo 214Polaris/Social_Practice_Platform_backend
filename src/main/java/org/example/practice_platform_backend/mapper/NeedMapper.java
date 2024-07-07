@@ -6,7 +6,6 @@ import org.example.practice_platform_backend.entity.CommunityNeed;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.HashMap;
 import java.util.List;
 
 @Mapper
@@ -107,6 +106,10 @@ public interface NeedMapper {
     @Delete("DELETE from community_need " +
             "where need_id = #{need_id} ")
     void deleteTempNeed(@Param("need_id") int need_id);
+
+    //删除需求绑定的所有 tags
+    @Delete("DELETE FROM need_match WHERE need_id = #{needId}")
+    void deleteTagsByNeedId(@Param("needId") int needId);
 
     //媒体 id 查媒体名字
     @Select("SELECT path from need_media where media_id = #{media_id}")
