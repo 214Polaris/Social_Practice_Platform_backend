@@ -150,4 +150,10 @@ public interface CommunityMapper {
     //删除临时社区
     @Delete("DELETE from community where community_id = #{community_id}")
     void deleteTempCommunity(@Param("community_id") int community_id);
+
+    //添加头像
+    @Update("update community set avatar_path =#{avatar_path} where " +
+            "community_id = #{community_id}")
+    void updateCommunityAvatar(@Param("avatar_path") String avatar_path,
+                               @Param("community_id") int community_id);
 }

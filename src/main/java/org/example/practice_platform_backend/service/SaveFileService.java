@@ -137,6 +137,19 @@ public class SaveFileService {
         CompletableFuture.completedFuture(true);
     }
 
+    // 处理保存社区头像操作
+    public void saveCommunityAvatar(MultipartFile file, int id) throws IOException {
+        // 把传进来的 MultipartFile 文件转换成 File 并创建临时文件
+        String suffix="jpg";
+        String fileName ="community_avatar/" + id + "_avatar." + suffix ;
+        String fileDir = uploadPath;
+        //保存原图
+        saveBytesFile(file.getInputStream(),fileDir,fileName);
+        //将头像名称保存到数据库中
+        communityMapper.updateCommunityAvatar(fileName,id);
+        CompletableFuture.completedFuture(true);
+    }
+
     @Transactional
     // 保存图片
     public ResponseEntity<String> saveImage(MultipartFile file, int id, int index,boolean isCover){

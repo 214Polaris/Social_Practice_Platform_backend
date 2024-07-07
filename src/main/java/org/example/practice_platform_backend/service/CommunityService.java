@@ -42,7 +42,7 @@ public class CommunityService {
     private String uploadPath;
 
     //加载社区信息
-    public Community getCommunity(int id){
+    public Community getCommunity(int id) throws IOException {
         Community community = communityMapper.getCommunityById(id);
         if(community == null){
             return null;
@@ -54,6 +54,7 @@ public class CommunityService {
             }
         });
         community.setMediaList(mediaList);
+        community.setAvatar_path(imageUtils.getFileBytes(uploadPath+community.getAvatar_path()));
         return community;
     }
 
