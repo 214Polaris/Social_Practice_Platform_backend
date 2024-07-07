@@ -1,14 +1,14 @@
 package org.example.practice_platform_backend.controllers;
 
-import org.example.practice_platform_backend.mapper.MemberListMapper;
-import org.example.practice_platform_backend.mapper.SearchResultMapper;
-import org.example.practice_platform_backend.mapper.TagsMapper;
+import com.alibaba.fastjson.JSONObject;
+import org.example.practice_platform_backend.entity.CommunityNeed;
+import org.example.practice_platform_backend.entity.Team;
+import org.example.practice_platform_backend.mapper.*;
 import org.example.practice_platform_backend.utils.ImageUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.scheduling.annotation.Async;
 import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.stereotype.Controller;
 import org.example.practice_platform_backend.entity.SearchResult;
@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.dao.DataAccessException;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -42,6 +43,10 @@ public class SearchResultController {
 
     @Autowired
     private ImageUtils imageUtils;
+    @Autowired
+    private NeedMapper needMapper;
+    @Autowired
+    private TeamMapper teamMapper;
 
     @Transactional
     @GetMapping(value = "search")
@@ -124,5 +129,41 @@ public class SearchResultController {
         }catch (IOException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    //首页
+    @GetMapping("/mainPage")
+    public ResponseEntity<?> getMainPage(@RequestParam("category") String category,
+                                         @RequestParam("tag_id") Integer tag_id) {
+        if(tag_id == null||category==null){
+            return ResponseEntity.status(400).body("tag_id 和 category 不能为空");
+        }
+        if (Objects.equals(category, "村镇需求")) {
+            List<CommunityNeed> needs = needMapper.getNeedByTagId(tag_id);
+            needs.forEach(need -> {
+                String path = needMapper.getCoverPathByNeedId(need.getNeed_id());
+                List<JSONObject> mediaList = new ArrayList<>(List.of());
+                JSONObject cover = new JSONObject();
+                try {
+                    cover.put("cover", imageUtils.getFileBytes(uploadPath+path));
+                } catch (IOException e) {
+                    e.fillInStackTrace();
+                }
+                mediaList.add(cover);
+                need.setMediaList(mediaList);
+            });
+            return ResponseEntity.ok(needs);
+        } else if (Objects.equals(category, "高校突击队")) {
+            List<Team> teams = teamMapper.getTeamByTagId(tag_id);
+            teams.forEach(team -> {
+                try {
+                    team.setAvatar_path(imageUtils.getFileBytes(uploadPath+team.getAvatar_path()));
+                } catch (IOException e) {
+                    e.fillInStackTrace();
+                }
+            });
+            return ResponseEntity.ok(teams);
+        }
+        return ResponseEntity.status(400).body("类别错误");
     }
 }

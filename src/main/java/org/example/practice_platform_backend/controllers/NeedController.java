@@ -1,7 +1,7 @@
 package org.example.practice_platform_backend.controllers;
 
+import com.alibaba.fastjson.JSONObject;
 import jakarta.servlet.http.HttpServletRequest;
-import net.minidev.json.JSONObject;
 import org.example.practice_platform_backend.entity.CommunityNeed;
 import org.example.practice_platform_backend.entity.User;
 import org.example.practice_platform_backend.mapper.NeedMapper;
@@ -38,7 +38,7 @@ public class NeedController {
         //返回图片名称
         mediaList.forEach(media->{
             if(!Objects.equals(media.get("type"), "video")){
-                String path = media.getAsString("path");
+                String path = media.getString("path");
                 path = ImageUtils.getRealName(path);
                 media.put("path",path);
             }

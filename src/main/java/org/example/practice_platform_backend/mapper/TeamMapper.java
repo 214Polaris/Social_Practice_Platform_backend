@@ -150,4 +150,13 @@ public interface TeamMapper {
     // 删除多出来的队伍
     @Delete("delete from college_team where team_number = #{team_number}")
     void deleteExtraTeam(@Param("team_number")int team_number);
+
+    //获取指定 tag 的所有队伍
+    @Select("""
+            SELECT t.* from college_team as t\s
+            join team_category as c on t.team_number = c.team_number\s
+            join need_category as n on n.id = c.category_id
+            where n.id = #{id}
+            """)
+    List<Team> getTeamByTagId(int id);
 }

@@ -3,7 +3,7 @@ package org.example.practice_platform_backend.entity;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Getter;
 import lombok.Setter;
-import net.minidev.json.JSONObject;
+import com.alibaba.fastjson.JSONObject;
 
 import java.util.Date;
 import java.util.List;
