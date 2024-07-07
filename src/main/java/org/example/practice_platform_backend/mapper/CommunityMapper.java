@@ -150,4 +150,11 @@ public interface CommunityMapper {
     //删除临时社区
     @Delete("DELETE from community where community_id = #{community_id}")
     void deleteTempCommunity(@Param("community_id") int community_id);
+
+    // 根据需求id 查社区信息
+    @Select("select * from community as c " +
+            "join community_need as cn on c.community_id = cn.community_id " +
+            "where cn.need_id = #{need_id}")
+    Community getCommunityByNeedId(int need_id);
+
 }

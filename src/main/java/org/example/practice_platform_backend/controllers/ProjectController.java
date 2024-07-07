@@ -5,10 +5,12 @@ import jakarta.servlet.http.HttpServletRequest;
 import lombok.Getter;
 import net.minidev.json.JSONArray;
 import net.minidev.json.JSONObject;
+import org.example.practice_platform_backend.entity.Community;
 import org.example.practice_platform_backend.entity.Project;
 import org.example.practice_platform_backend.entity.Report;
 import org.example.practice_platform_backend.entity.User;
 import org.example.practice_platform_backend.mapper.AuditMapper;
+import org.example.practice_platform_backend.mapper.CommunityMapper;
 import org.example.practice_platform_backend.mapper.ProjectMapper;
 import org.example.practice_platform_backend.mapper.TeamMapper;
 import org.example.practice_platform_backend.service.ProjectService;
@@ -40,6 +42,9 @@ public class ProjectController {
 
     @Autowired
     private AuditMapper auditMapper;
+
+    @Autowired
+    private CommunityMapper  communityMapper;
     //结对详情信息get,只实现了传图片
     @GetMapping("/project/detail")
     public ResponseEntity<?>  getProjectDetail(@Param("proj_id") String proj_id) throws IOException {
@@ -152,19 +157,16 @@ public class ProjectController {
         return ResponseEntity.status(200).body(JSON.toJSONString(result));
     }
 
-    @PostMapping("/res/report")
-    public ResponseEntity<?> uploadReport(@RequestBody Report report){
-        report.setProject_id(projectMapper.getProjectIdByNeedId(Integer.parseInt(report.getNeed_id())));
-        int report_id = projectService.insertReport(report);
+    /**
+     * 根据需求 获取对应社区
+     */
+    @GetMapping("/need/get/community")
+    public  ResponseEntity<?> getCommunityByNeed(@RequestParam("NeedID") int need_id){
         JSONObject result = new JSONObject();
-        result.put("report_id", report_id);
-        return ResponseEntity.ok(JSON.toJSONString(result));
+        Community community = communityMapper.getCommunityByNeedId(need_id);
+        result.put("ComID", community.getCommunity_id());
+        result.put("ComName", community.getCommunity_name());
+        return ResponseEntity.status(200).body(JSON.toJSONString(result));
     }
-
-
-
-
-
-
 }
 

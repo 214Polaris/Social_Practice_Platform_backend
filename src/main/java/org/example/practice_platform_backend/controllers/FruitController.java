@@ -7,8 +7,10 @@ import net.minidev.json.JSONObject;
 import org.example.practice_platform_backend.entity.*;
 import org.example.practice_platform_backend.mapper.CommentMapper;
 import org.example.practice_platform_backend.mapper.FruitMapper;
+import org.example.practice_platform_backend.mapper.ProjectMapper;
 import org.example.practice_platform_backend.mapper.UserMapper;
 import org.example.practice_platform_backend.service.FruitService;
+import org.example.practice_platform_backend.service.ProjectService;
 import org.example.practice_platform_backend.utils.FruitUtils;
 import org.example.practice_platform_backend.utils.JwtUtils;
 import org.slf4j.Logger;
@@ -48,6 +50,12 @@ public class FruitController {
     // jwt
     @Autowired
     private JwtUtils jwtUtils;
+
+    @Autowired
+    private ProjectMapper  projectMapper;
+
+    @Autowired
+    private ProjectService projectService;
 
     @GetMapping(value = "/res/detail")
     public ResponseEntity<?> getResDetail(@RequestParam(value = "demand_id") String fruit_id,
@@ -151,6 +159,30 @@ public class FruitController {
         } catch (Exception e) {
             e.printStackTrace();
             return ResponseEntity.status(400).body("发布失败");
+        }
+    }
+
+    @PostMapping("/res/report")
+    public ResponseEntity<?> uploadReport(@RequestBody Report report){
+        report.setProject_id(projectMapper.getProjectIdByNeedId(Integer.parseInt(report.getNeed_id())));
+        int report_id = projectService.insertReport(report);
+        JSONObject result = new JSONObject();
+        result.put("report_id", report_id);
+        return ResponseEntity.ok(JSON.toJSONString(result));
+    }
+
+
+    @GetMapping("/res/getNeed")
+    public ResponseEntity<?> getNeed(@RequestParam("Fid") int fruit_id){
+        try {
+            JSONObject result = new JSONObject();
+            Project need = fruitMapper.getNeedByFruitId(fruit_id);
+            result.put("NeedID", need.getNeed_id());
+            result.put("NeedName", need.getTitle());
+            return ResponseEntity.status(200).body(JSON.toJSONString(result));
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(400).body("获取成果对应需求失败");
         }
     }
 }
