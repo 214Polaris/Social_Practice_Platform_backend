@@ -60,6 +60,7 @@ public class ProjectService {
         result.put("gov_head",community_avatar);
         result.put("gov_id", need.getCommunity_id());
         String team_avatar = imageUtils.getFileBytes(uploadPath + teamMapper.getTeamAvatarPathByTeamNumber(project.getTeam_number()));
+        result.put("team_name", team.getTeam_name());
         result.put("team_head",team_avatar);
         result.put("team_stu", userMapper.getNameById(team.getTeam_manager()));
         result.put("team_tea", userMapper.getNameById(teamMapper.getTeacherIdByTeamNumber(team.getTeam_number())));
@@ -145,7 +146,7 @@ public class ProjectService {
             if(coverPath == null){
                 continue;
             }
-            String cover = imageUtils.getThumbnail(uploadPath + coverPath);
+            String cover = imageUtils.getFileBytes(uploadPath + coverPath);
             item.put("demand_img", cover);
             List<String> tags = tagsMapper.searchTags(need.getNeed_id());
             item.put("tagList", tags);

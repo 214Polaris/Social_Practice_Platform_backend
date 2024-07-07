@@ -143,7 +143,7 @@ public class FruitUtils {
             if(cover_path == null){
                 continue;
             }
-            activity_json.put("fruit_cover",  cover_path);
+            activity_json.put("fruit_cover",  imageUtils.getThumbnail(uploadPath + cover_path));
             result.add(activity_json);
         }
         return  result;

@@ -80,7 +80,8 @@ public class CommunityController {
             JSONArray result = projectService.getNeed_list(Integer.parseInt(gov_id));
             return ResponseEntity.status(200).body(JSON.toJSONString(result));
         }catch (Exception e){
-            LOGGER.error(e.getMessage());
+//            LOGGER.error(e.getMessage());
+            e.printStackTrace();
             return ResponseEntity.status(400).body("查询失败");
         }
     }
@@ -95,6 +96,7 @@ public class CommunityController {
             return ResponseEntity.status(200).body(JSON.toJSONString(result));
         } catch (Exception e){
             LOGGER.error(e.getMessage());
+//            e.printStackTrace();
             return ResponseEntity.status(400).body("查询失败");
         }
     }
