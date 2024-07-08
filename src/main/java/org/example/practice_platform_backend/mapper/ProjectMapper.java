@@ -169,7 +169,7 @@ public interface ProjectMapper {
     /**
      * 根据need_id 查对应的project_id
      */
-    @Select("select project_id from succ_project where need_id = #{need_id}")
+    @Select("select project_id from succ_project where is_pass = 1 and need_id = #{need_id}")
     int getProjectIdByNeedId(@Param("need_id") int need_id);
 
     @Select("""

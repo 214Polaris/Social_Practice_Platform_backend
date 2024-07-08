@@ -12,6 +12,7 @@ import java.util.Date;
 @Setter
 public class Fruit {
     private int fruit_id;
+    private String need_id;
     private String title;
     private String introduction;  //简介
     private String tutor;  //导师

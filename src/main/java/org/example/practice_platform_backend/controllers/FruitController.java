@@ -148,6 +148,7 @@ public class FruitController {
                 return ResponseEntity.status(400).body("发布成果请用学生或社区身份操作");
             }
             int user_id = user.getUser_id();
+            fruit.setProject_id(projectMapper.getProjectIdByNeedId(Integer.parseInt(fruit.getNeed_id())));
             fruit.setDate(LocalDateTime.now());
             Map<String,Integer> info = fruitService.postFruit(fruit, user_id);
             int fruit_id = info.get("fruit_id");
