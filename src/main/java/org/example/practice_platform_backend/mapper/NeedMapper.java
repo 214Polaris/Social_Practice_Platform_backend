@@ -3,6 +3,7 @@ package org.example.practice_platform_backend.mapper;
 import com.alibaba.fastjson.JSONObject;
 import org.apache.ibatis.annotations.*;
 import org.example.practice_platform_backend.entity.CommunityNeed;
+import org.example.practice_platform_backend.entity.SearchResult;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -127,10 +128,10 @@ public interface NeedMapper {
 
     //获取所有需求
     @Select("""
-            SELECT n.* from community_need as n
+            SELECT n.need_id as id, n.title as name from community_need as n
             join need_match as m on m.need_id = n.need_id
             join need_category as c on c.id = m.category_id
             where c.id = #{id}
             """)
-    List<CommunityNeed> getNeedByTagId(@Param("id") int id);
+    List<SearchResult> getNeedByTagId(@Param("id") int id);
 }

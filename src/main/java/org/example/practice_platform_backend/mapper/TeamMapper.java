@@ -2,6 +2,7 @@ package org.example.practice_platform_backend.mapper;
 
 import net.minidev.json.JSONObject;
 import org.apache.ibatis.annotations.*;
+import org.example.practice_platform_backend.entity.SearchResult;
 import org.example.practice_platform_backend.entity.Team;
 import org.example.practice_platform_backend.entity.User;
 import org.springframework.data.relational.core.sql.In;
@@ -153,10 +154,14 @@ public interface TeamMapper {
 
     //获取指定 tag 的所有队伍
     @Select("""
-            SELECT t.* from college_team as t\s
-            join team_category as c on t.team_number = c.team_number\s
+            SELECT t.team_number as id,t.team_name as name,t.avatar_path as image from college_team as t
+            join team_category as c on t.team_number = c.team_number
             join need_category as n on n.id = c.category_id
             where n.id = #{id}
             """)
-    List<Team> getTeamByTagId(int id);
+    List<SearchResult> getTeamByTagId(int id);
+
+    //获取学院
+    @Select("select academy from college_team where team_number = #{team_number}")
+    String getAcademyByTeam(int team_number);
 }

@@ -48,5 +48,15 @@ public interface SearchResultMapper {
             "AND fruit.is_pass=1")
     List<SearchResult> searchFruit(@Param("location") String location, @Param("text") String text);
 
+    //按照 tags 搜索成果
+    @Select("""
+            SELECT f.fruit_id as id, f.title as name from fruit_info as f
+            join succ_project as p on p.project_id = f.project_id
+            join community_need as n on n.need_id = p.need_id
+            join need_match as m on m.need_id = n.need_id
+            join need_category as c on c.id = m.category_id
+            where c.id = #{tag_id}
+            """)
+    List<SearchResult> getFruitByTagId(int tag_id);
 
 }

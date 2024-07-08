@@ -1,9 +1,7 @@
 package org.example.practice_platform_backend.mapper;
 
 import org.apache.ibatis.annotations.*;
-import org.example.practice_platform_backend.entity.Fruit;
-import org.example.practice_platform_backend.entity.Project;
-import org.example.practice_platform_backend.entity.Report;
+import org.example.practice_platform_backend.entity.*;
 import org.springframework.data.repository.query.Param;
 
 import java.util.List;
@@ -173,5 +171,15 @@ public interface ProjectMapper {
      */
     @Select("select project_id from succ_project where need_id = #{need_id}")
     int getProjectIdByNeedId(@Param("need_id") int need_id);
+
+    @Select("""
+            SELECT n.need_id as id,n.title as name
+            from succ_project as p
+            join community_need as n on n.need_id = p.need_id
+            join need_match as m on m.need_id = n.need_id
+            join need_category as c on c.id = m.category_id
+            where c.id = #{tag_id}
+            """)
+    List<SearchResult> getProjectByProjectId(int tag_id);
 
 }

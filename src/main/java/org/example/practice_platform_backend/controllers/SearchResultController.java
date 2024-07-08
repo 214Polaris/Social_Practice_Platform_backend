@@ -2,6 +2,7 @@ package org.example.practice_platform_backend.controllers;
 
 import com.alibaba.fastjson.JSONObject;
 import org.example.practice_platform_backend.entity.CommunityNeed;
+import org.example.practice_platform_backend.entity.Project;
 import org.example.practice_platform_backend.entity.Team;
 import org.example.practice_platform_backend.mapper.*;
 import org.example.practice_platform_backend.utils.ImageUtils;
@@ -47,6 +48,10 @@ public class SearchResultController {
     private NeedMapper needMapper;
     @Autowired
     private TeamMapper teamMapper;
+    @Autowired
+    private ProjectMapper projectMapper;
+    @Autowired
+    private FruitMapper fruitMapper;
 
     @Transactional
     @GetMapping(value = "search")
@@ -134,35 +139,70 @@ public class SearchResultController {
     //首页
     @GetMapping("/mainPage")
     public ResponseEntity<?> getMainPage(@RequestParam("category") String category,
-                                         @RequestParam("tag_id") Integer tag_id) {
+                                         @RequestParam("tag_id") Integer tag_id) throws IOException {
         if(tag_id == null||category==null){
             return ResponseEntity.status(400).body("tag_id 和 category 不能为空");
         }
-        if (Objects.equals(category, "村镇需求")) {
-            List<CommunityNeed> needs = needMapper.getNeedByTagId(tag_id);
-            needs.forEach(need -> {
-                String path = needMapper.getCoverPathByNeedId(need.getNeed_id());
-                List<JSONObject> mediaList = new ArrayList<>(List.of());
-                JSONObject cover = new JSONObject();
-                try {
-                    cover.put("cover", imageUtils.getFileBytes(uploadPath+path));
-                } catch (IOException e) {
-                    e.fillInStackTrace();
+        switch (category) {
+            case "村镇需求" -> {
+                List<SearchResult> needs = needMapper.getNeedByTagId(tag_id);
+                needs.forEach(need -> {
+                    String path = needMapper.getCoverPathByNeedId(need.getId());
+                    List<String> tags = tagsMapper.searchTags(need.getId());
+                    Map<String, String> memberList = memberListMapper.getCommunityNamesByNeedId(need.getId());
+                    try {
+                        need.setImage(imageUtils.getFileBytes(uploadPath + path));
+                    } catch (IOException e) {
+                        throw new RuntimeException(e);
+                    }
+                    need.setTags(tags);
+                    need.setList(memberList);
+                });
+                return ResponseEntity.ok(needs);
+            }
+            case "高校突击队" -> {
+                List<SearchResult> teams = teamMapper.getTeamByTagId(tag_id);
+                teams.forEach(team -> {
+                    try {
+                        List<String> tags = tagsMapper.searchTeamTags(team.getId());
+                        Map<String,String> list= new java.util.HashMap<>(Map.of());
+                        list.put("first_name",teamMapper.getAcademyByTeam(team.getId()));
+                        team.setImage(imageUtils.getFileBytes(uploadPath + team.getImage()));
+                        team.setTags(tags);
+                        team.setList(list);
+                    } catch (IOException e) {
+                        e.fillInStackTrace();
+                    }
+                });
+                return ResponseEntity.ok(teams);
+            }
+            case "结对成功墙" -> {
+                List<SearchResult> searchResults = projectMapper.getProjectByProjectId(tag_id);
+                for (SearchResult searchResult : searchResults) {
+                    List<String> tags = tagsMapper.searchTags(searchResult.getId());
+                    Map<String, String> memberList = memberListMapper.getCommunityAndTeamNameByNeedId(searchResult.getId());
+                    String path = needMapper.getCoverPathByNeedId(searchResult.getId());
+                    searchResult.setImage(imageUtils.getFileBytes(uploadPath + path));
+                    searchResult.setTags(tags);
+                    searchResult.setList(memberList);
                 }
-                mediaList.add(cover);
-                need.setMediaList(mediaList);
-            });
-            return ResponseEntity.ok(needs);
-        } else if (Objects.equals(category, "高校突击队")) {
-            List<Team> teams = teamMapper.getTeamByTagId(tag_id);
-            teams.forEach(team -> {
-                try {
-                    team.setAvatar_path(imageUtils.getFileBytes(uploadPath+team.getAvatar_path()));
-                } catch (IOException e) {
-                    e.fillInStackTrace();
+                return ResponseEntity.ok(searchResults);
+            }
+            case "示范项目" -> {
+                List<SearchResult> searchResults = searchResultMapper.getFruitByTagId(tag_id);
+                if (Objects.isNull(searchResults)) {
+                    return ResponseEntity.ok("没有找到匹配的结果");
                 }
-            });
-            return ResponseEntity.ok(teams);
+                for (SearchResult searchResult : searchResults) {
+                    List<String> tags = tagsMapper.searchFruitTags(searchResult.getId());
+                    Map<String, String> memberList = memberListMapper.getCommunityAndTeamNameByFruitId(searchResult.getId());
+                    String path = fruitMapper.getFruitCover(searchResult.getId());
+                    searchResult.setImage(imageUtils.getFileBytes(uploadPath + path));
+                    searchResult.setTags(tags);
+                    searchResult.setList(memberList);
+                }
+                return ResponseEntity.ok(searchResults);
+            }
         }
         return ResponseEntity.status(400).body("类别错误");
     }

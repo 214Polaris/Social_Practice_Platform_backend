@@ -29,6 +29,7 @@ public class CommunityNeed {
     private Float longitude;
     private List<String> tags;
     private List<Integer> tags_id;
+    private String community_name;
     @Getter
     @Setter
     public static class media{
