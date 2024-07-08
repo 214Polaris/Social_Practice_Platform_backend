@@ -235,7 +235,7 @@ public class AuditService {
                 }
                 jsonObject.put("time", audit.getLast_mod_time());
                 String img_path = communityMapper.getCommunityAvatarPath(audit.getCommunity_id());
-                jsonObject.put("img", imageUtils.getThumbnail(uploadPath + img_path));
+                jsonObject.put("img", imageUtils.getFileBytes(uploadPath + img_path));
             }
             else if(audit.getNeed_id() != 0){ // 说明是需求相关
                 if(audit.getNeed_id() == audit.getNew_id()){ // 新需求
@@ -262,7 +262,7 @@ public class AuditService {
                     jsonObject.put("time", audit.getLast_mod_time());
                 }
                 String img_path = needMapper.getCoverPathByNeedId(audit.getNeed_id());
-                jsonObject.put("img", imageUtils.getThumbnail(uploadPath + img_path));
+                jsonObject.put("img", imageUtils.getFileBytes(uploadPath + img_path));
             }
             else if(audit.getProject_id() != 0){ // 说明是结对相关
                 jsonObject.put("type", 7);
@@ -272,7 +272,7 @@ public class AuditService {
                  jsonObject.put("TeamName", teamMapper.getTeamNameByProjectId(audit.getProject_id()));
                  jsonObject.put("TeamID", teamMapper.getTeamIdByProjectId(audit.getProject_id()));
                  String img_path = teamMapper.getTeamAvatarPathByTeamNumber(teamMapper.getTeamIdByProjectId(audit.getProject_id()));
-                 jsonObject.put("img", imageUtils.getThumbnail(uploadPath + img_path));
+                 jsonObject.put("img", imageUtils.getFileBytes(uploadPath + img_path));
                  jsonObject.put("audit_id", audit.getAudit_id());
             }
             else
