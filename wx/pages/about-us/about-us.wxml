@@ -1,0 +1,14 @@
+<view class="about-container">
+  <view class="about-content">
+    <text class="about-description">
+      我们是一支由5位中山大学软件工程学院2021级学生组成的团队。我们来自不同的背景，但拥有共同的热情和追求 —— 坚持以用户为中心，不断探索创新，为您带来更好的体验。
+    </text>
+    <view class="about-item">
+      <text class="about-item-title">团队理念</text>
+      <text class="about-item-content">
+        我们通过互相学习、共同探讨，不断提升自己的技能和知识。在实践中锻炼，积累了丰富的开发经验。
+        团队中每个人都怀着对技术的热爱，以用户体验为中心，致力于为客户提供优质的服务和产品。我们相信，通过团队的努力和协作，一定能为您带来满意的解决方案。
+      </text>
+    </view>
+  </view>
+</view>

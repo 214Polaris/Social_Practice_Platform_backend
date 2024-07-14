@@ -1,0 +1,28 @@
+<template name="92f9b6bc">
+  <view class="_div data-v-3be4d8c4"><t-row class="_t-row data-v-3be4d8c4">
+      <view style="padding-left:10%;font-size:18px;font-weight:bold; margin-top: 6%;" class="_p data-v-3be4d8c4"> 修改社区信息 </view>
+    </t-row> <t-row class="_t-row data-v-3be4d8c4">
+      <view style="padding-left:11%;font-size:14px;margin-top: 6%;" class="_p data-v-3be4d8c4"> 社区名称 </view>
+    </t-row> <t-input value="{{show.name}}" borderless="{{true}}" bindchange="handleProxy" style="padding-left:12%;padding-right:12%;font-size:13px;margin-top: 1%;" data-eventid="{{'0'}}" data-comkey="{{$k}}" class="_t-input data-v-3be4d8c4"></t-input>
+    <view style="margin-left:12%;margin-right:6%;border-bottom:1px solid #f2f2f2; margin-bottom: 2%;" class="_div data-v-3be4d8c4"></view> <t-row class="_t-row data-v-3be4d8c4">
+      <view style="padding-left:11%;font-size:14px;margin-top: 6%;" class="_p data-v-3be4d8c4"> 社区简介 </view>
+    </t-row> <t-input value="{{show.intro}}" borderless="{{true}}" bindchange="handleProxy" style="padding-left:12%;padding-right:12%;font-size:13px;margin-top: 1%;" data-eventid="{{'1'}}" data-comkey="{{$k}}" class="_t-input data-v-3be4d8c4"></t-input>
+    <view style="margin-left:12%;margin-right:6%;border-bottom:1px solid #f2f2f2; margin-bottom: 2%; margin-top:2%" class="_div data-v-3be4d8c4"></view> <t-row style="padding-left:7%;font-size:16px;margin-top: 6%;" class="_t-row data-v-3be4d8c4"><t-cell title="社区地址" arrow hover note="{{data.areaText}}" bindtap="handleProxy" data-eventid="{{'2'}}" data-comkey="{{$k}}" class="_t-cell data-v-3be4d8c4"></t-cell> <t-picker visible="{{data.areaVisible}}" value="{{data.areaValue}}" title="{{title}}" cancelBtn="{{cancelBtn}}" confirmBtn="{{confirmBtn}}" usingCustomNavbar bindchange="handleProxy" bindpick="handleProxy" bindcancel="handleProxy" data-eventid="{{'3'}}" data-comkey="{{$k}}" class="_t-picker data-v-3be4d8c4"><t-picker-item options="{{data.provinces}}" class="_t-picker-item data-v-3be4d8c4"></t-picker-item> <t-picker-item options="{{data.cities}}" class="_t-picker-item data-v-3be4d8c4"></t-picker-item> <t-picker-item options="{{data.counties}}" class="_t-picker-item data-v-3be4d8c4"></t-picker-item></t-picker></t-row>
+    <view style="padding-left:11%;font-size:14px;margin-top: 6%;" class="_p data-v-3be4d8c4"> 图片（最多6张） </view>
+    <view class="_view data-v-3be4d8c4 wrapper" style="margin-left:8%;margin-right: 8%;margin-top:5%;">
+      <view class="_div data-v-3be4d8c4 image-grid">
+        <view wx:key="file.id" key="{{file.id}}" class="_div data-v-3be4d8c4 image-container" bindtap="handleProxy" data-eventid="{{'5_'+index}}" data-comkey="{{$k}}" wx:for="{{originFiles}}" wx:for-index="index" wx:for-item="file">
+          <image src="{{file.url}}" class="_img data-v-3be4d8c4 upload-image"></image> <label class="_span data-v-3be4d8c4 close-button" catchtap="handleProxy" data-eventid="{{'4_'+index}}" data-comkey="{{$k}}">×</label>
+        </view>
+        <view class="_div data-v-3be4d8c4 upload-container"><t-upload media-type="{{['image']}}" files="{{Files}}" max="{{1}}" bindadd="handleProxy" bindsuccess="handleProxy" bindremove="handleProxy" data-eventid="{{'6'}}" data-comkey="{{$k}}" class="_t-upload data-v-3be4d8c4"></t-upload></view>
+      </view>
+    </view> <t-row style="margin-left: 8%; margin-top: 6%; margin-bottom: 4%;display: flex;align-items: center;" class="_t-row data-v-3be4d8c4"><t-col span="5" class="_t-col data-v-3be4d8c4">
+        <view style="padding-left:11%;font-size:14px;" class="_p data-v-3be4d8c4"> 视频 </view>
+      </t-col> <t-col span="9" class="_t-col data-v-3be4d8c4"><button bindtap="handleProxy" class="_button data-v-3be4d8c4 change-button" data-eventid="{{'7'}}" data-comkey="{{$k}}">重新上传视频</button></t-col></t-row>
+    <view style="display: flex;padding-left:5%;padding-right:5%;" class="_view data-v-3be4d8c4"><video id="operate-desc-video" src="{{Videopath}}" controls autoplay object-fit="cover" style="flex: 1;" class="_video data-v-3be4d8c4"></video></view> <t-row style="padding-left:12%;padding-right:12%;margin-top: 8%;" class="_t-row data-v-3be4d8c4"><button bindtap="handleProxy" class="_button data-v-3be4d8c4 red-button" data-eventid="{{'8'}}" data-comkey="{{$k}}">提交审核</button></t-row> <t-toast id="t-toast" class="_t-toast data-v-3be4d8c4"></t-toast> <t-overlay visible="{{OverlayVisible}}" duration="{{500}}" bindtap="handleProxy" data-eventid="{{'9'}}" data-comkey="{{$k}}" class="_t-overlay data-v-3be4d8c4">
+      <view class="_div data-v-3be4d8c4 overlay-content">
+        <image src="{{currentImageUrl}}" class="_img data-v-3be4d8c4 overlay-image"></image>
+      </view>
+    </t-overlay>
+  </view>
+</template>

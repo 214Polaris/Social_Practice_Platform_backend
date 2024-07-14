@@ -1,0 +1,1 @@
+<import src="/pages/audit_Fruit/index.vue.wxml" /><template is="47136623" data="{{ ...$root['0'], $root }}"/>

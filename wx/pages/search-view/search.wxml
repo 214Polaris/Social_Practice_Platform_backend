@@ -1,0 +1,11 @@
+<!--pages/search-view/search.wxml-->
+<!-- 搜索栏 -->
+<view style="display: flex;">
+<cascader-bars bind:setlocation="onSetloc" style="flex:0.4;"></cascader-bars>
+
+<search-bars bind:search="onSearch" style="flex:1;"></search-bars>
+<!-- <search-bars style="flex:0.7;"></search-bars> -->
+</view>
+<!-- 类别选择 -->
+<scoll-one id="scoll-one" bind:changeTab="ChangeTab">
+</scoll-one>

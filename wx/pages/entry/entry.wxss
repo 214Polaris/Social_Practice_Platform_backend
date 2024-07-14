@@ -1,0 +1,73 @@
+page {
+  background-color: #f6f6f6;
+  height: 100%;
+}
+.main {
+  width: 100%;
+  box-sizing: border-box;
+  padding-left: 32rpx;
+  padding-right: 32rpx;
+  padding-top: 48rpx;
+  padding-bottom: 240rpx;
+  position: absolute;
+}
+/* 使得标签栏一直悬浮在底部 */
+.scroll {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 100rpx; /* 设置标签栏的高度 */
+  background-color: #fff; /* 设置标签栏的背景颜色 */
+}
+.background {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 28%;
+  background-color: #fff; 
+  z-index: -1;
+}
+/* 卡片的样式 */
+.card{
+  /*卡片的宽度*/  
+  width: 100%;
+  /*左外边距，这里代表距离最左边的距离*/
+  margin-left: 0%;
+  margin-top: 3%;
+  margin-bottom: 3%;
+  margin-right: 3%;
+  /*卡片的高度。*/
+  height: 150rpx;
+  /*背景色，可以自己更换*/
+  background: rgb(226, 208, 208);
+  /* radius是卡片的边框的圆润c程度
+    shadow是阴影效果，四个值分别为水平阴影，垂直阴影，模糊距离，阴影的颜色。
+  */
+  border-radius: 10rpx;
+  box-shadow: 5rpx 5rpx 5rpx #cdcfcf;
+}
+
+.title-wrap {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  padding-left: 16rpx;
+  padding-right: 16rpx;
+}
+.title-icon {
+  width: 296rpx;
+  height: 80rpx;
+}
+.desc {
+  color: rgba(0, 0, 0, 0.4);
+  margin-top: 32rpx;
+  font-size: 28rpx;
+  font-weight: 500;
+  line-height: 44rpx;
+  margin-bottom: 48rpx;
+  padding-left: 16rpx;
+  padding-right: 16rpx;
+}
+

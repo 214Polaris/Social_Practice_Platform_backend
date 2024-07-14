@@ -1,0 +1,44 @@
+<template name="0ef4160a">
+  <view class="_div data-v-60a7a1a8"><t-row class="_t-row data-v-60a7a1a8">
+      <view style="padding-left:10%;font-size:18px;font-weight:bold; margin-top: 6%;" class="_p data-v-60a7a1a8">
+        {{show.team_name }}
+      </view>
+    </t-row>
+    <view style="margin-left:12%;margin-right:6%;border-bottom:1px solid #f2f2f2; margin-bottom: 2%; margin-top:2%" class="_div data-v-60a7a1a8"></view> <t-row class="_t-row data-v-60a7a1a8">
+      <view style="padding-left:11%;font-size:14px;margin-top: 6%;font-weight:bold;" class="_p data-v-60a7a1a8"> 队伍简介 </view>
+    </t-row> <t-row class="_t-row data-v-60a7a1a8">
+      <view style="padding-left:12%;padding-right:12%;font-size:13px;margin-top: 6%;" class="_p data-v-60a7a1a8">
+        {{show.introduction}}
+      </view>
+    </t-row>
+    <view style="margin-left:12%;margin-right:6%;border-bottom:1px solid #f2f2f2; margin-bottom: 2%; margin-top:2%" class="_div data-v-60a7a1a8"></view> <t-row class="_t-row data-v-60a7a1a8">
+      <view style="padding-left:11%;font-size:14px;margin-top: 6%;font-weight:bold;" class="_p data-v-60a7a1a8"> 所属学院 </view>
+    </t-row> <t-row class="_t-row data-v-60a7a1a8">
+      <view style="padding-left:12%;padding-right:12%;font-size:13px;margin-top: 6%;" class="_p data-v-60a7a1a8">
+        {{show.academy}}
+      </view>
+    </t-row>
+    <view style="margin-left:12%;margin-right:6%;border-bottom:1px solid #f2f2f2; margin-bottom: 2%; margin-top:2%" class="_div data-v-60a7a1a8"></view>
+    <view style="padding-left:11%;font-size:14px;margin-top: 6%;font-weight:bold;" class="_p data-v-60a7a1a8"> 地点 </view> <t-row class="_t-row data-v-60a7a1a8">
+      <view style="padding-left:12%;padding-right:6%;font-size:13px;margin-top: 6%;" class="_p data-v-60a7a1a8">
+        {{show.address}}
+      </view>
+    </t-row>
+    <view style="margin-left:12%;margin-right:6%;border-bottom:1px solid #f2f2f2; margin-bottom: 2%; margin-top:2%" class="_div data-v-60a7a1a8"></view> <t-row class="_t-row data-v-60a7a1a8">
+      <view style="padding-left:11%;font-size:14px;margin-top: 6%;font-weight:bold;" class="_p data-v-60a7a1a8"> 指导老师 </view>
+    </t-row> <t-row class="_t-row data-v-60a7a1a8">
+      <view style="padding-left:12%;padding-right:6%;font-size:13px;margin-top: 6%;" class="_p data-v-60a7a1a8">
+        {{show.teacher}}
+      </view>
+    </t-row>
+    <view style="margin-left:12%;margin-right:6%;border-bottom:1px solid #f2f2f2; margin-bottom: 2%; margin-top:2%" class="_div data-v-60a7a1a8"></view> <t-toast id="t-toast" class="_t-toast data-v-60a7a1a8"></t-toast> <t-row style="padding:6%;" class="_t-row data-v-60a7a1a8"><t-col span="12" class="_t-col data-v-60a7a1a8"><button bindtap="handleProxy" class="_button data-v-60a7a1a8 red-button" data-eventid="{{'0'}}" data-comkey="{{$k}}">不通过</button></t-col> <t-col span="12" class="_t-col data-v-60a7a1a8"><button bindtap="handleProxy" class="_button data-v-60a7a1a8 red-button" data-eventid="{{'1'}}" data-comkey="{{$k}}">通过审核</button></t-col></t-row> <t-toast id="t-toast" class="_t-toast data-v-60a7a1a8"></t-toast> <t-popup visible="{{ExplainVisible}}" placement="bottom" class="_t-popup data-v-60a7a1a8">
+      <view class="_view data-v-60a7a1a8 block">
+        <view class="_view data-v-60a7a1a8 header">
+          <view class="_view data-v-60a7a1a8 btn btn--cancel" aria-role="button" bindtap="handleProxy" data-eventid="{{'2'}}" data-comkey="{{$k}}">取消</view>
+          <view class="_view data-v-60a7a1a8 title">填写审核不通过说明</view>
+          <view class="_view data-v-60a7a1a8 btn btn--confirm" aria-role="button" bindtap="handleProxy" data-eventid="{{'3'}}" data-comkey="{{$k}}">确定</view>
+        </view> <t-row class="_t-row data-v-60a7a1a8"><t-input value="{{noAgreeValue}}" bindchange="handleProxy" placeholder="请输入说明" style="padding:5%" data-eventid="{{'4'}}" data-comkey="{{$k}}" class="_t-input data-v-60a7a1a8"></t-input></t-row>
+      </view>
+    </t-popup>
+  </view>
+</template>

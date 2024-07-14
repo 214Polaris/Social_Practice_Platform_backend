@@ -1,0 +1,9 @@
+{
+    "usingComponents": {
+      "cascader-bars":"with-title/index",
+      "other":"other/index",
+      "badge": "badge/index",
+      "scroll-success":"scroll-success/index"
+    },
+    "navigationBarTitleText": "成果墙"
+}

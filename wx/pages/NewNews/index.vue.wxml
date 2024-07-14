@@ -1,0 +1,19 @@
+<template name="5aca6ec6">
+  <view class="_div data-v-66997e44"><t-row class="_t-row data-v-66997e44">
+      <view style="padding-left:11%;font-size:14px;margin-top: 6%;" class="_p data-v-66997e44"> 请选择需求： </view> <t-dropdown-menu style="margin-top: 10rpx;" class="_t-dropdown-menu data-v-66997e44"><t-dropdown-item options="{{product.options}}" value="{{product.value}}" bindchange="handleProxy" data-eventid="{{'0'}}" data-comkey="{{$k}}" class="_t-dropdown-item data-v-66997e44"></t-dropdown-item></t-dropdown-menu>
+    </t-row> <t-row class="_t-row data-v-66997e44">
+      <view style="padding-left:11%;font-size:14px;margin-top: 6%;" class="_p data-v-66997e44"> 标题 </view>
+    </t-row> <t-input value="{{title}}" borderless="{{true}}" bindchange="handleProxy" placeholder="请输入标题" style="padding-left:12%;padding-right:12%;font-size:13px;margin-top: 1%;" data-eventid="{{'1'}}" data-comkey="{{$k}}" class="_t-input data-v-66997e44"></t-input>
+    <view style="margin-left:12%;margin-right:6%;border-bottom:1px solid #f2f2f2; margin-bottom: 2%;" class="_div data-v-66997e44"></view> <t-row class="_t-row data-v-66997e44">
+      <view style="padding-left:11%;font-size:14px;margin-top: 6%;" class="_p data-v-66997e44"> 文本 </view>
+    </t-row> <t-textarea style="padding-left:11%;padding-right:11%;" t-class="external-class" placeholder="请输入成果文本" disableDefaultPadding="{{true}}" indicator value="{{text}}" bindchange="handleProxy" data-eventid="{{'2'}}" data-comkey="{{$k}}" class="_t-textarea data-v-66997e44"></t-textarea>
+    <view style="margin-left:12%;margin-right:6%;border-bottom:1px solid #f2f2f2; margin-bottom: 2%;" class="_div data-v-66997e44"></view> <t-row class="_t-row data-v-66997e44">
+      <view style="padding-left:11%;font-size:14px;margin-top: 6%;" class="_p data-v-66997e44"> 地点 </view>
+    </t-row> <t-input value="{{position}}" borderless="{{true}}" bindchange="handleProxy" placeholder="请输入地点" style="padding-left:12%;padding-right:12%;font-size:13px;margin-top: 1%;" data-eventid="{{'3'}}" data-comkey="{{$k}}" class="_t-input data-v-66997e44"></t-input>
+    <view style="margin-left:12%;margin-right:6%;border-bottom:1px solid #f2f2f2; margin-bottom: 2%;" class="_div data-v-66997e44"></view>
+    <view style="padding-left:11%;font-size:14px;margin-top: 6%;" class="_p data-v-66997e44"> 上传图片（最多6张）（第一张为封面） </view>
+    <view class="_view data-v-66997e44 wrapper" style="margin-left:8%;margin-right: 8%;margin-top:5%; padding-left: 3%;"><t-upload media-type="{{['image']}}" max="{{6}}" files="{{originFiles}}" gridConfig="{{gridConfig}}" bindadd="handleProxy" bindremove="handleProxy" data-eventid="{{'4'}}" data-comkey="{{$k}}" class="_t-upload data-v-66997e44"></t-upload></view>
+    <view style="padding-left:11%;font-size:14px;margin-top: 6%;" class="_p data-v-66997e44"> 视频 </view>
+    <view class="_view data-v-66997e44 wrapper" style="margin-left:8%;margin-right: 8%;margin-top:5%; padding-left: 3%;"><t-upload media-type="{{['video']}}" max="{{1}}" files="{{VideoFiles}}" bindadd="handleProxy" bindremove="handleProxy" data-eventid="{{'5'}}" data-comkey="{{$k}}" class="_t-upload data-v-66997e44"></t-upload></view> <t-row style="padding-left:12%;padding-right:12%;margin-top: 4%;" class="_t-row data-v-66997e44"><button bindtap="handleProxy" class="_button data-v-66997e44 red-button" data-eventid="{{'6'}}" data-comkey="{{$k}}">提交审核</button></t-row> <t-toast id="t-toast" class="_t-toast data-v-66997e44"></t-toast>
+  </view>
+</template>

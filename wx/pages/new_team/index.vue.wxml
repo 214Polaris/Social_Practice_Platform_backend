@@ -1,0 +1,20 @@
+<template name="6fb21776">
+  <view class="_div data-v-62ba22b2"><t-row class="_t-row data-v-62ba22b2">
+      <view style="padding-left:10%;font-size:18px;font-weight:bold; margin-top: 6%;" class="_p data-v-62ba22b2"> 注册队伍信息 </view>
+    </t-row> <t-row class="_t-row data-v-62ba22b2">
+      <view style="padding-left:11%;font-size:14px;margin-top: 6%;" class="_p data-v-62ba22b2"> 队伍名称 </view>
+    </t-row> <t-input value="{{show.name}}" borderless="{{true}}" bindchange="handleProxy" style="padding-left:12%;padding-right:12%;font-size:13px;margin-top: 1%;" data-eventid="{{'0'}}" data-comkey="{{$k}}" class="_t-input data-v-62ba22b2"></t-input>
+    <view style="margin-left:12%;margin-right:6%;border-bottom:1px solid #f2f2f2; margin-bottom: 2%;" class="_div data-v-62ba22b2"></view> <t-row class="_t-row data-v-62ba22b2">
+      <view style="padding-left:11%;font-size:14px;margin-top: 6%;" class="_p data-v-62ba22b2"> 队伍简介 </view>
+    </t-row> <t-input value="{{show.intro}}" borderless="{{true}}" bindchange="handleProxy" style="padding-left:12%;padding-right:12%;font-size:13px;margin-top: 1%;" data-eventid="{{'1'}}" data-comkey="{{$k}}" class="_t-input data-v-62ba22b2"></t-input>
+    <view style="margin-left:12%;margin-right:6%;border-bottom:1px solid #f2f2f2; margin-bottom: 2%; margin-top:2%" class="_div data-v-62ba22b2"></view> <t-row style="align-items: center;" class="_t-row data-v-62ba22b2">
+      <view style="padding-left:11%;font-size:14px;margin-top: 6%;" class="_p data-v-62ba22b2"> 队伍类别 </view> <t-button size="medium" theme="danger" bindtap="handleProxy" style="margin-right:5%;margin-left:3%;display: inline-block;margin-top: 6%;" data-eventid="{{'2'}}" data-comkey="{{$k}}" class="_t-button data-v-62ba22b2">请选择</t-button>
+    </t-row> <t-row style="padding-left:7%;font-size:16px;margin-top: 6%;" class="_t-row data-v-62ba22b2"><t-cell title="所属院系" arrow hover note="{{data.areaText}}" bindtap="handleProxy" data-eventid="{{'3'}}" data-comkey="{{$k}}" class="_t-cell data-v-62ba22b2"></t-cell> <t-picker visible="{{data.areaVisible}}" value="{{data.areaValue}}" cancelBtn="取消" confirmBtn="确认" usingCustomNavbar bindchange="handleProxy" bindcancel="handleProxy" data-eventid="{{'4'}}" data-comkey="{{$k}}" class="_t-picker data-v-62ba22b2"><t-picker-item options="{{data.faculties}}" class="_t-picker-item data-v-62ba22b2"></t-picker-item></t-picker></t-row>
+    <view class="_view data-v-62ba22b2 allview" style="padding-left:7%;padding-right:2%;"><t-input label="指导老师" placeholder="苏玉鑫" align="right" value="{{data.selectedName}}" suffixIcon="{{data.suffixIcon}}" bindchange="handleProxy" bindfocus="handleProxy" data-eventid="{{'5'}}" data-comkey="{{$k}}" class="_t-input data-v-62ba22b2"></t-input></view>
+    <view wx:if="{{data.isSearchListShow}}" class="_view data-v-62ba22b2 search-list-container"><scroll-view scroll-y class="_scroll-view data-v-62ba22b2 search-list">
+        <view wx:key="item.name" key="{{item.name}}" bindtap="handleProxy" class="_div data-v-62ba22b2 search-list-item" data-eventid="{{'6_'+index}}" data-comkey="{{$k}}" wx:for="{{data.matchedNameList}}" wx:for-index="index" wx:for-item="item">
+          {{ item.name }}
+        </view>
+      </scroll-view></view> <t-row style="padding-left:12%;padding-right:12%;margin-top: 4%;" class="_t-row data-v-62ba22b2"><button bindtap="handleProxy" class="_button data-v-62ba22b2 red-button" data-eventid="{{'7'}}" data-comkey="{{$k}}">提交审核</button></t-row> <t-toast id="t-toast" class="_t-toast data-v-62ba22b2"></t-toast>
+  </view>
+</template>

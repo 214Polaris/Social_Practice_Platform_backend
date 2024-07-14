@@ -1,0 +1,16 @@
+{
+  "navigationBarTitleText": "需求详情",
+  "usingComponents": {
+    "t-image": "tdesign-miniprogram/image/image",
+    "v-tag":"tdesign-miniprogram/tag/tag",
+    "t-icon": "tdesign-miniprogram/icon/icon",
+    "t-cell": "tdesign-miniprogram/cell/cell",
+    "t-divider": "tdesign-miniprogram/divider/divider",
+    "t-tab-bar": "tdesign-miniprogram/tab-bar/tab-bar",
+    "t-tab-bar-item": "tdesign-miniprogram/tab-bar-item/tab-bar-item",
+    "t-popup": "tdesign-miniprogram/popup/popup",
+    "t-swiper": "tdesign-miniprogram/swiper/swiper",
+    "t-swiper-nav": "tdesign-miniprogram/swiper-nav/swiper-nav",
+    "t-image-viewer": "tdesign-miniprogram/image-viewer/image-viewer"
+  }
+}

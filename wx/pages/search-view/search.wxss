@@ -1,0 +1,11 @@
+/* pages/search-view/search.wxss */
+.btn{
+  width: 125rpx; /* 设置按钮宽度为 100px */
+  height: 60rpx; /* 设置按钮高度为 40px */
+  top: 30rpx;
+  background-color: rgb(185, 99, 99); /* 设置背景色为暗红色 */
+  color: white; /* 设置文字颜色为白色 */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}

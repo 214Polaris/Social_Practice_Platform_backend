@@ -1,0 +1,6 @@
+<t-tab-bar defaultValue="label1" split="{{false}}">
+  <t-tab-bar-item value="label1" icon="home">主页</t-tab-bar-item>
+  <t-tab-bar-item value="label2" icon="app" bind:tap="clickSuccess">成果墙</t-tab-bar-item>
+  <!-- <t-tab-bar-item badge-props="{{ {count: 'New'} }}" value="label3" icon="chat" bind:tap="clickChat">聊天</t-tab-bar-item> -->
+  <t-tab-bar-item value="label4" icon="user" bind:tap="clickMy">我的</t-tab-bar-item>
+</t-tab-bar>

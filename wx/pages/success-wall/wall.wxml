@@ -1,0 +1,16 @@
+<!--pages/success-wall/wall.wxml-->
+<!-- 搜索栏 -->
+<view style="display: flex;">
+<cascader-bars style="flex:0.4;" bind:setlocation="onSetloc"></cascader-bars>
+<other style="flex:1;"></other>
+</view>
+<!-- 起名也要符合规范 -->
+<scroll-success id="scoll" bind:changeTab="Updateclass" bind:changeSecond="Updatestag">
+</scroll-success>
+
+<!-- 放底部标签栏 -->
+<t-tab-bar defaultValue="label2" split="{{false}}" value="label2">
+  <t-tab-bar-item value="label1" icon="home" bind:tap="clickHome">主页</t-tab-bar-item>
+  <t-tab-bar-item value="label2" icon="app">成果墙</t-tab-bar-item>
+  <t-tab-bar-item value="label4" icon="user" bind:tap="clickMy">我的</t-tab-bar-item>
+</t-tab-bar>

@@ -1,0 +1,18 @@
+<!--pages/map-view/map.wxml-->
+
+ 
+ <map 
+  id="map" 
+  longitude="113.324520" 
+  latitude="23.099994" 
+  scale="5.8" 
+  
+  markers="{{markers}}" 
+  bindregionchange="dealScale"
+  
+  bindmarkertap="markertap" 
+  bind:tap="makerclick"
+  setting="{{mapSetting}}"
+  polyline="{{polyline}}" 
+  style="width:100%;height:1600rpx;">
+</map>

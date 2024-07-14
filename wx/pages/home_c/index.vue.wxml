@@ -1,0 +1,106 @@
+<template name="71674ca8">
+  <view class="_div data-v-4cd8f564">
+    <view class="_div data-v-4cd8f564 header-container" style="margin-bottom: 20rpx;">
+      <t-avatar class="_t-avatar data-v-4cd8f564 avatar-example" image="{{image}}" style="margin-top: 12rpx;"></t-avatar>
+      <view class="_div data-v-4cd8f564 name" style="font-weight: bold;margin-top: 12rpx;">{{ name }}</view>
+    </view>
+
+    <view class="_div data-v-4cd8f564 inner-container" style="margin-bottom: 20px;">
+      <t-row class="_t-row data-v-4cd8f564">
+        <t-col span="24" class="_t-col data-v-4cd8f564">
+          <view style="padding-left:2%;font-size:32rpx;font-weight: bold;margin-bottom: 2%;" class="_p data-v-4cd8f564"> 我的服务 </view>
+          <view style="border-bottom:1px solid #f2f2f2; margin-bottom: 2%;" class="_div data-v-4cd8f564"></view>
+        </t-col>
+      </t-row>
+      <t-row class="_t-row data-v-4cd8f564">
+        <t-col span="6" style="text-align: center;" bindtap="handleProxy" data-eventid="{{'0'}}" data-comkey="{{$k}}" class="_t-col data-v-4cd8f564">
+          <view style="display: inline-block;" class="_div data-v-4cd8f564">
+            <t-icon name="assignment-user" size="64rpx" bind:click="onIconTap" style="color: #bd1b06; margin-top: 10rpx;" class="_t-icon data-v-4cd8f564"></t-icon>
+          </view>
+          <view style="font-size: 24rpx; font-weight: bold; display: inline-block;" class="_div data-v-4cd8f564">个人资料</view>
+        </t-col>
+        <t-col span="6" style="text-align: center;" bindtap="handleProxy" data-eventid="{{'1'}}" data-comkey="{{$k}}" class="_t-col data-v-4cd8f564">
+          <view style="display: inline-block;" class="_div data-v-4cd8f564">
+            <t-icon name="fact-check" size="64rpx" bind:click="onIconTap" style="color: #bd1b06; margin-top: 12rpx; margin-bottom: 6rpx;" class="_t-icon data-v-4cd8f564"></t-icon>
+          </view>
+          <view style="font-size: 24rpx; font-weight: bold; display: inline-block;" class="_div data-v-4cd8f564">互动消息</view>
+        </t-col>
+        <t-col span="6" style="text-align: center;" bindtap="handleProxy" data-eventid="{{'2'}}" data-comkey="{{$k}}" class="_t-col data-v-4cd8f564">
+          <view style="display: inline-block;" class="_div data-v-4cd8f564">
+            <t-icon name="system-messages" size="64rpx" bind:click="onIconTap" style="color: #bd1b06; margin-top: 10rpx;" class="_t-icon data-v-4cd8f564"></t-icon>
+          </view>
+          <view style="font-size: 24rpx; font-weight: bold; display: inline-block;" class="_div data-v-4cd8f564">消息通知</view>
+        </t-col>
+      </t-row>
+    </view>
+    <view class="_div data-v-4cd8f564 inner-container" style="margin-top:-16rpx; margin-bottom: 48rpx;">
+      <t-row class="_t-row data-v-4cd8f564">
+        <t-col span="24" class="_t-col data-v-4cd8f564">
+          <view style="padding-left:2%;font-size:32rpx;font-weight: bold;margin-bottom: 2%;" class="_p data-v-4cd8f564"> 平台服务 </view>
+          <view style="border-bottom:1px solid #f2f2f2; margin-bottom: 2%;" class="_div data-v-4cd8f564"></view>
+        </t-col>
+      </t-row>
+
+      <t-row class="_t-row data-v-4cd8f564">
+        <t-col span="6" style="text-align: center;" bindtap="handleProxy" data-eventid="{{'3'}}" data-comkey="{{$k}}" class="_t-col data-v-4cd8f564">
+          <view style="display: inline-block;" class="_div data-v-4cd8f564">
+            <t-icon name="look-around" size="64rpx" bind:click="onIconTap" style="color: #bd1b06; margin-top: 8rpx;" class="_t-icon data-v-4cd8f564"></t-icon>
+          </view>
+          <view style="font-size: 24rpx; font-weight: bold; display: inline-block;" class="_div data-v-4cd8f564">关于我们</view>
+        </t-col>
+        <t-col span="6" style="text-align: center;" bindtap="handleProxy" data-eventid="{{'4'}}" data-comkey="{{$k}}" class="_t-col data-v-4cd8f564">
+          <view style="display: inline-block;" class="_div data-v-4cd8f564">
+            <t-icon name="chat-bubble-smile" size="64rpx" bind:click="onIconTap" style="color: #bd1b06; margin-top: 5rpx;" class="_t-icon data-v-4cd8f564"></t-icon>
+          </view>
+          <view style="margin-top:14rpx;font-size: 24rpx; font-weight: bold; display: inline-block;" class="_div data-v-4cd8f564">联系我们</view>
+        </t-col>
+      </t-row>
+
+
+    </view>
+    <view class="_div data-v-4cd8f564 inner-container" style="margin-top: 20rpx; margin-bottom: 20rpx;">
+      <t-row class="_t-row data-v-4cd8f564">
+        <t-col span="24" class="_t-col data-v-4cd8f564">
+          <view style="padding-left:2%;font-size:32rpx;font-weight: bold;margin-bottom: 2%;" class="_p data-v-4cd8f564"> 组织服务 </view>
+          <view wx:if="{{comID!=null}}" style="border-bottom:1px solid #f2f2f2; margin-bottom: 2%;" class="_div data-v-4cd8f564"></view>
+          <view style="padding-left:3%;color:#928f8f; font-size:24rpx;font-weight: bold;margin-bottom: 2%;" wx:if="{{comID==null}}" class="_p data-v-4cd8f564"> 尚未添加社区 </view>
+        </t-col>
+      </t-row>
+      <t-row class="_t-row data-v-4cd8f564">
+
+        <t-col span="6" style="text-align: center;" bindtap="handleProxy" data-eventid="{{'5'}}" data-comkey="{{$k}}" class="_t-col data-v-4cd8f564">
+          <view style="display: inline-block;" class="_div data-v-4cd8f564">
+            <t-icon name="assignment-user" size="64rpx" bind:click="onIconTap" style="color: #bd1b06; margin-top: 4px;" class="_t-icon data-v-4cd8f564"></t-icon>
+          </view>
+          <view wx:if="{{isPositiveInteger}}" style="font-size: 24rpx; font-weight: bold; display: inline-block;" class="_div data-v-4cd8f564">修改社区信息</view>
+          <view wx:else style="font-size: 24rpx; font-weight: bold; display: inline-block;" class="_div data-v-4cd8f564">注册社区信息</view>
+        </t-col>
+        <t-col span="6" style="text-align: center;" bindtap="handleProxy" data-eventid="{{'6'}}" data-comkey="{{$k}}" class="_t-col data-v-4cd8f564">
+          <view style="display: inline-block;" class="_div data-v-4cd8f564">
+            <t-icon name="fact-check" size="64rpx" bind:click="onIconTap" style="color: #bd1b06; margin-top: 8rpx;" class="_t-icon data-v-4cd8f564"></t-icon>
+          </view>
+          <view style="margin-top:4rpx;font-size: 24rpx; font-weight: bold; display: inline-block;" class="_div data-v-4cd8f564">发布需求</view>
+        </t-col>
+        <t-col span="6" style="text-align: center;" bindtap="handleProxy" data-eventid="{{'7'}}" data-comkey="{{$k}}" class="_t-col data-v-4cd8f564">
+          <view style="display: inline-block;" class="_div data-v-4cd8f564">
+            <t-icon name="system-messages" size="64rpx" bind:click="onIconTap" style="color: #bd1b06; margin-top: 4px;" class="_t-icon data-v-4cd8f564"></t-icon>
+          </view>
+          <view style="font-size: 24rpx; font-weight: bold; display: inline-block; margin-bottom: -8rpx;" class="_div data-v-4cd8f564">修改需求</view>
+        </t-col>
+        <t-col span="6" style="text-align: center;" bindtap="handleProxy" data-eventid="{{'8'}}" data-comkey="{{$k}}" class="_t-col data-v-4cd8f564">
+
+          <view style="display: inline-block;" class="_div data-v-4cd8f564">
+            <t-icon name="collection" size="64rpx" style="color: #bd1b06; margin-top: 4px;" class="_t-icon data-v-4cd8f564"></t-icon>
+          </view>
+          <view style="font-size: 24rpx; font-weight: bold; display: inline-block;" class="_div data-v-4cd8f564">社区主页</view>
+        </t-col>
+      </t-row>
+    </view>
+    <t-toast id="t-toast" class="_t-toast data-v-4cd8f564"></t-toast>
+    <t-tab-bar defaultValue="label3" split="false" value="label3" class="_t-tab-bar data-v-4cd8f564">
+      <t-tab-bar-item value="label1" icon="home" bindtap="handleProxy" data-eventid="{{'7'}}" data-comkey="{{$k}}" class="_t-tab-bar-item data-v-4cd8f564">主页</t-tab-bar-item>
+      <t-tab-bar-item value="label2" icon="app" bindtap="handleProxy" data-eventid="{{'8'}}" data-comkey="{{$k}}" class="_t-tab-bar-item data-v-4cd8f564">成果墙</t-tab-bar-item>
+      <t-tab-bar-item value="label3" icon="user" class="_t-tab-bar-item data-v-4cd8f564">我的</t-tab-bar-item>
+    </t-tab-bar>
+  </view>
+</template>

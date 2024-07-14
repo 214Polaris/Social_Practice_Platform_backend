@@ -1,0 +1,78 @@
+<t-tabs defaultValue="{{0}}" space-evenly="{{false}}" bind:change="onTabsChange" bind:click="onTabsClick">
+  <t-tab-panel label="村镇需求" value="0">
+    <view wx:for="{{demand_list}}" wx:for-item="team" style="width: 750rpx; height: 200rpx; display: block; box-sizing: border-box">
+      <view bind:tap="onClickTeamed" data-team="{{team}}" data-class="{{class}}">
+        <t-cell title="{{team.team_title}}" align="top" hover image="{{team.team_img}}" bordered="{{false}}" />
+        <view class="block" style="position: relative; left: 0rpx; top: -85rpx; width: 750rpx; height: 71rpx; display: flex; box-sizing: border-box">
+          <view wx:for="{{team.tags}}" wx:key="id" wx:for-item="tag" style="position: relative; left: 127rpx; top: -3rpx">
+            <v-tag class="margin-16" variant="outline" theme="primary">{{tag}}</v-tag>
+          </view>
+        </view>
+        <view class="team_icon" style="width: 615rpx; height: 43rpx; display: flex; box-sizing: border-box; position: relative; left: 0rpx; top: -15rpx">
+          <t-icon name="flag"></t-icon>
+          <span style="margin-left: 8rpx;">{{team.team_name['first_name']}}</span>
+        </view>
+      </view>
+    </view>
+  </t-tab-panel>
+
+  <t-tab-panel label="高校突击队" value="1">
+    <view wx:for="{{team_list}}" wx:for-item="team" style="width: 750rpx; height: 200rpx; display: block; box-sizing: border-box">
+      <view bind:tap="onClickTeamed" data-team="{{team}}" data-class="{{class}}">
+        <t-cell title="{{team.team_title}}" align="top" hover image="{{team.team_img}}" bordered="{{false}}" />
+        <view class="block" style="position: relative; left: 0rpx; top: -85rpx; width: 750rpx; height: 71rpx; display: flex; box-sizing: border-box">
+          <view wx:for="{{team.tags}}" wx:key="id" wx:for-item="tag" style="position: relative; left: 127rpx; top: -3rpx">
+            <v-tag class="margin-16" variant="outline" theme="primary">{{tag}}</v-tag>
+          </view>
+        </view>
+        <view class="team_icon" style="width: 615rpx; height: 43rpx; display: flex; box-sizing: border-box; position: relative; left: 0rpx; top: -15rpx">
+          <t-icon name="usergroup"></t-icon>
+          <span style="margin-left: 8rpx;">{{team.team_name['first_name']}}</span>
+        </view>
+      </view>
+    </view>
+  </t-tab-panel>
+
+  <t-tab-panel label="结对成功墙" value="2">
+    <!-- 内容显示 -->
+    <view wx:for="{{teamed_list}}" wx:for-item="team" style="width: 750rpx; height: 200rpx; display: block; box-sizing: border-box">
+      <view bind:tap="onClickTeamed" data-team="{{team}}" data-class="{{class}}">
+        <t-cell title="{{team.team_title}}" align="top" hover image="{{team.team_img}}" bordered="{{false}}" />
+        <view class="block" style="position: relative; left: 0rpx; top: -85rpx; width: 750rpx; height: 71rpx; display: flex; box-sizing: border-box">
+          <view wx:for="{{team.tags}}" wx:key="id" wx:for-item="tag" style="position: relative; left: 127rpx; top: -3rpx">
+            <v-tag class="margin-16" variant="outline" theme="primary">{{tag}}</v-tag>
+          </view>
+        </view>
+        <view class="team_icon" style="width: 615rpx; height: 70rpx;box-sizing: border-box; position: relative; display: flex;left: 0rpx; top: -35rpx">
+          <t-icon name="usergroup"></t-icon>
+          <span style="margin-left: 8rpx;">{{team.team_name['first_name']}}</span>
+        </view>
+        <view class="team_icon" style="width: 615rpx; height: 100rpx;box-sizing: border-box; position: relative; display: flex;left: 0rpx; top: -10rpx">
+          <t-icon name="home"></t-icon>
+          <span style="margin-left: 8rpx;">{{team.team_name['second_name']}}</span>
+        </view>
+      </view>
+    </view>
+  </t-tab-panel>
+
+  <t-tab-panel label="示范项目" value="3">
+    <view wx:for="{{proj_list}}" wx:for-item="team" style="width: 750rpx; height: 200rpx; display: block; box-sizing: border-box">
+      <view bind:tap="onClickTeamed" data-team="{{team}}" data-class="{{class}}">
+        <t-cell title="{{team.team_title}}" align="top" hover image="{{team.team_img}}" bordered="{{false}}" />
+        <view class="block" style="position: relative; left: 0rpx; top: -85rpx; width: 750rpx; height: 71rpx; display: flex; box-sizing: border-box">
+          <view wx:for="{{team.tags}}" wx:key="id" wx:for-item="tag" style="position: relative; left: 127rpx; top: -3rpx">
+            <v-tag class="margin-16" variant="outline" theme="primary">{{tag}}</v-tag>
+          </view>
+        </view>
+        <view class="team_icon" style="width: 615rpx; height: 70rpx;box-sizing: border-box; position: relative; display: flex;left: 0rpx; top: -35rpx">
+          <t-icon name="usergroup"></t-icon>
+          <span style="margin-left: 8rpx;">{{team.team_name['first_name']}}</span>
+        </view>
+        <view class="team_icon" style="width: 615rpx; height: 100rpx;box-sizing: border-box; position: relative; display: flex;left: 0rpx; top: -10rpx">
+          <t-icon name="home"></t-icon>
+          <span style="margin-left: 8rpx;">{{team.team_name['second_name']}}</span>
+        </view>
+      </view>
+    </view>
+  </t-tab-panel>
+</t-tabs>

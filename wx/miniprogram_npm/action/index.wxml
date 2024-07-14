@@ -1,0 +1,31 @@
+<view class="example-search">
+  <t-search
+    value="{{value}}"
+    center
+    placeholder="搜索需求、示范项目"
+    action="{{actionText}}"
+    bind:blur="blurHandle"
+    bind:focus="focusHandle"
+    bind:action-click="actionHandle"
+    bind:change="changeHandle"
+    bind:icon-click="setSearch"
+  />
+<!-- 如果焦点在输入框的话显示历史记录 -->
+<view wx:if="{{iffocus}}">
+<!-- 历史记录的显示 -->
+<view wx:for="{{searchRecords}}" wx:key="*this">
+<view class="liclass" style="color:#ac3e1d;border-bottom:0;" data-item="{{item}}"bindtap="tapSearchStorage">
+<text style="width:100rpx">{{item}}</text>
+</view>
+</view>
+<!-- 清空历史记录 -->
+<view wx:if="{{searchRecords.length!==0}}" style="text-align:center;" bindtap="clearSearchStorage">
+<view style="display: flex; justify-content: flex-end;align-items: center;">
+    <t-icon name="delete" size="18rpx" color="#ac3e1d"></t-icon>
+    <text style="margin-left: 5px;font-size:32rpx;color: #ac3e1d;">清空记录</text>
+</view>
+
+</view>
+</view>
+
+</view>

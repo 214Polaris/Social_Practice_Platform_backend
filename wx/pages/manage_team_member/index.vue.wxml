@@ -1,0 +1,39 @@
+<template name="702d784b">
+  <view class="_div data-v-14e1a726">
+    <view class="_div data-v-14e1a726 search"><t-row style="display: flex;align-items: center;" class="_t-row data-v-14e1a726"><t-col span="20" class="_t-col data-v-14e1a726"><t-search value="{{value}}" center placeholder="请输入关键字" bindaction-click="handleProxy" bindchange="handleProxy" bindclear="handleProxy" shape="round" data-eventid="{{'0'}}" data-comkey="{{$k}}" class="_t-search data-v-14e1a726"></t-search></t-col> <t-col span="4" class="_t-col data-v-14e1a726"><t-icon name="user-add" size="48rpx" color="rgb(163, 159, 159)" bindtap="handleProxy" data-eventid="{{'1'}}" data-comkey="{{$k}}" class="_t-icon data-v-14e1a726"></t-icon></t-col></t-row></view>
+    <view wx:key="person.user_id" key="{{person.user_id}}" class="_div data-v-14e1a726 people" wx:for="{{filteredPeople}}" wx:for-index="index" wx:for-item="person"><t-row class="_t-row data-v-14e1a726"><t-col span="2" class="_t-col data-v-14e1a726"></t-col> <t-col span="18" style="align-self: center;" class="_t-col data-v-14e1a726">
+          <view style="padding-left:2%;font-size:14px;margin-bottom: 2%;" class="_p data-v-14e1a726">
+            {{ person.Name }}
+          </view>
+          <view style="display:flex; align-items: center;margin-bottom: 2%;" class="_div data-v-14e1a726"><t-icon name="museum-1" size="36rpx" color="rgb(163, 159, 159)" bindtap="handleProxy" data-eventid="{{'2_'+index}}" data-comkey="{{$k}}" class="_t-icon data-v-14e1a726"></t-icon>
+            <view style="color: rgb(163, 159, 159);font-size:11px; padding-left:1%" class="_p data-v-14e1a726">
+              {{ person.college }}
+            </view> <t-icon name="personal-information" size="34rpx" color="rgb(163, 159, 159)" bindtap="handleProxy" style="margin-left: 7%;" data-eventid="{{'3_'+index}}" data-comkey="{{$k}}" class="_t-icon data-v-14e1a726"></t-icon>
+            <view style="color: rgb(163, 159, 159);font-size:11px; padding-left:1%" class="_p data-v-14e1a726">
+              {{ person.userName }}
+            </view>
+          </view>
+        </t-col> <t-col span="2" style="align-self: center;" class="_t-col data-v-14e1a726"><t-icon name="delete" size="40rpx" color="rgb(163, 159, 159)" bindtap="handleProxy" data-eventid="{{'4_'+index}}" data-comkey="{{$k}}" class="_t-icon data-v-14e1a726"></t-icon></t-col></t-row>
+      <view style="border-bottom:1px solid #f2f2f2; margin-bottom: 2%; margin-top:2%" class="_div data-v-14e1a726"></view>
+    </view> <t-popup visible="{{deleteVisible}}" placement="center" class="_t-popup data-v-14e1a726">
+      <view class="_view data-v-14e1a726 .block-center">
+        <view style="font-size:18px; font-weight: bold;margin-bottom: 5%;" class="_p data-v-14e1a726">删除提醒</view>
+        <view style="font-size:16px;" class="_p data-v-14e1a726">确定要删除这个队员吗？</view>
+        <view style="margin-top:10%;" class="_div data-v-14e1a726"><t-button size="large" theme="danger" bindtap="handleProxy" style="margin-right:5%;" data-eventid="{{'5'}}" data-comkey="{{$k}}" class="_t-button data-v-14e1a726">确认</t-button> <t-button size="large" theme="danger" bindtap="handleProxy" data-eventid="{{'6'}}" data-comkey="{{$k}}" class="_t-button data-v-14e1a726">取消</t-button></view>
+      </view>
+    </t-popup> <t-popup visible="{{addVisible}}" placement="bottom" class="_t-popup data-v-14e1a726">
+      <view class="_view data-v-14e1a726 block">
+        <view class="_view data-v-14e1a726 header">
+          <view class="_view data-v-14e1a726 btn btn--cancel" aria-role="button" bindtap="handleProxy" data-eventid="{{'7'}}" data-comkey="{{$k}}">取消</view>
+          <view class="_view data-v-14e1a726 title">添加新队员</view>
+          <view class="_view data-v-14e1a726 btn btn--confirm" aria-role="button" bindtap="handleProxy" data-eventid="{{'8'}}" data-comkey="{{$k}}">确定</view>
+        </view>
+        <view style="padding-left:5%;padding-right:5%;padding-bottom: 3%;" class="_div data-v-14e1a726"><t-row class="_t-row data-v-14e1a726"><t-input value="{{NewUserName}}" bindchange="handleProxy" placeholder="请输入新队员NetID" data-eventid="{{'9'}}" data-comkey="{{$k}}" class="_t-input data-v-14e1a726"></t-input> <t-button size="medium" theme="danger" bindtap="handleProxy" style="margin-right:5%;margin-left:3%;display: inline-block;" data-eventid="{{'10'}}" data-comkey="{{$k}}" class="_t-button data-v-14e1a726">查找</t-button></t-row>
+          <view style="font-size:13px;margin-left:4%;margin-top:3%;" class="_div data-v-14e1a726"><t-row class="_t-row data-v-14e1a726"> 请核对信息无误 </t-row> <t-row style="margin-top:2%;" class="_t-row data-v-14e1a726"><t-col span="10" style="text-align: center" class="_t-col data-v-14e1a726"> 姓名：{{ newName }}
+              </t-col> <t-col span="8" style="text-align: center" class="_t-col data-v-14e1a726"> 学院：{{ newCollege }}
+              </t-col></t-row></view>
+        </view>
+      </view>
+    </t-popup> <t-toast id="t-toast" class="_t-toast data-v-14e1a726"></t-toast>
+  </view>
+</template>

@@ -1,0 +1,31 @@
+<template name="012ba29e">
+  <view class="_div data-v-2600bf14"><t-row class="_t-row data-v-2600bf14">
+      <view style="margin-left: 80%; margin-top:16px;" class="_div data-v-2600bf14"><t-icon name="add" size="48rpx" color="rgb(163, 159, 159)" bindtap="handleProxy" data-eventid="{{'0'}}" data-comkey="{{$k}}" class="_t-icon data-v-2600bf14"></t-icon></view>
+    </t-row>
+    <view wx:key="clas.id" key="{{clas.id}}" class="_div data-v-2600bf14 classi" wx:for="{{classi}}" wx:for-index="index" wx:for-item="clas"><t-row class="_t-row data-v-2600bf14"><t-col span="21" class="_t-col data-v-2600bf14">
+          <view style="padding-left:2%;font-size:14px;margin-bottom: 2%;" class="_p data-v-2600bf14">
+            {{ clas.name }}
+          </view>
+        </t-col> <t-col span="3" style="align-self: center;" class="_t-col data-v-2600bf14">
+          <view style="display:flex; align-items: center;margin-bottom: 2%;" class="_div data-v-2600bf14"><t-icon name="edit-1" size="36rpx" color="rgb(163, 159, 159)" bindtap="handleProxy" data-eventid="{{'1_'+index}}" data-comkey="{{$k}}" class="_t-icon data-v-2600bf14"></t-icon></view>
+        </t-col></t-row>
+      <view style="border-bottom:1px solid #f2f2f2; margin-bottom: 2%; margin-top:2%" class="_div data-v-2600bf14"></view>
+    </view> <t-popup visible="{{addVisible}}" placement="bottom" class="_t-popup data-v-2600bf14">
+      <view class="_view data-v-2600bf14 block">
+        <view class="_view data-v-2600bf14 header">
+          <view class="_view data-v-2600bf14 btn btn--cancel" aria-role="button" bindtap="handleProxy" data-eventid="{{'2'}}" data-comkey="{{$k}}">取消</view>
+          <view class="_view data-v-2600bf14 title">添加新的类别</view>
+          <view class="_view data-v-2600bf14 btn btn--confirm" aria-role="button" bindtap="handleProxy" data-eventid="{{'3'}}" data-comkey="{{$k}}" style="color: #aa4c43">确定</view>
+        </view> <t-row class="_t-row data-v-2600bf14"><t-input value="{{NewClassivalue}}" bindchange="handleProxy" placeholder="请输入类别名称" style="padding:5%" data-eventid="{{'4'}}" data-comkey="{{$k}}" class="_t-input data-v-2600bf14"></t-input></t-row>
+      </view>
+    </t-popup> <t-popup visible="{{editVisible}}" bind:visible-change="oneditVisibleChange" placement="bottom" class="_t-popup data-v-2600bf14">
+      <view class="_view data-v-2600bf14 block">
+        <view class="_view data-v-2600bf14 header">
+          <view class="_view data-v-2600bf14 btn btn--cancel" aria-role="button" bindtap="handleProxy" data-eventid="{{'5'}}" data-comkey="{{$k}}">取消</view>
+          <view class="_view data-v-2600bf14 title">编辑类别名称</view>
+          <view class="_view data-v-2600bf14 btn btn--confirm" aria-role="button" bindtap="handleProxy" data-eventid="{{'6'}}" data-comkey="{{$k}}" style="color: #aa4c43">确定</view>
+        </view> <t-row class="_t-row data-v-2600bf14"><t-input value="{{EditClassivalue}}" bindchange="handleProxy" style="padding:5%" data-eventid="{{'7'}}" data-comkey="{{$k}}" class="_t-input data-v-2600bf14"></t-input></t-row>
+      </view>
+    </t-popup> <t-toast id="t-toast" class="_t-toast data-v-2600bf14"></t-toast>
+  </view>
+</template>

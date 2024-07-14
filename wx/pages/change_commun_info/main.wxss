@@ -1,0 +1,126 @@
+
+.red-button {
+  padding: 20rpx;
+  width: calc(85% - 32rpx);
+  font-size: 32rpx;
+  color: white;
+  background-color: #DC3545;
+  border: none;
+  border-radius: 8rpx;
+  cursor: pointer;
+}
+.change-button {
+  font-size: 28rpx;
+  color: white;
+  background-color: #DC3545;
+  border: none;
+  border-radius: 8rpx;
+}
+.block {
+  width: 100vw;
+  height: 400rpx;
+  background: var(--td-bg-color-container);
+  border-top-left-radius: 16rpx;
+  border-top-right-radius: 16rpx;
+}
+.upload-image {
+  height: 100%;
+  object-fit: cover;
+}
+.close-button {
+  position: absolute;
+  top: 8rpx;
+  right: 10rpx;
+  background-color: rgba(255, 255, 255, 0.8);
+  border: none;
+  color: black;
+  font-size: 36rpx;
+  cursor: pointer;
+  padding: 8rpx;
+  border-radius: 50%;
+  width: 30rpx;
+  height: 30rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10;
+}
+.image-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16rpx;
+}
+.image-container {
+  width: 100%;
+  padding-top: 100%;
+  position: relative;
+}
+.upload-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+}
+.upload-container .t-upload .t-grid-item {
+  width: 100% !important;
+  max-width: 100% !important;
+  height: auto !important;
+}
+.upload-container .t-upload .t-grid-content {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+}
+.upload-container .t-upload .t-grid-content .t-grid-item {
+  width: 100% !important;
+  max-width: 100% !important;
+}
+.image-container ._img {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.header {
+  display: flex;
+  align-items: center;
+  height: 116rpx;
+}
+.title {
+  flex: 1;
+  text-align: center;
+  font-weight: 600;
+  font-size: 36rpx;
+  color: var(--td-text-color-primary);
+}
+.btn {
+  font-size: 32rpx;
+  padding: 32rpx;
+}
+.btn--cancel {
+  color: var(--td-text-color-secondary);
+}
+.btn--confirm {
+  color: #0052d9;
+}
+.block-center {
+  width: 520rpx;
+  height: 320rpx;
+  padding-top: 6%;
+  text-align: center;
+}
+.overlay-content {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+}
+.overlay-image {
+  width: 100%;
+  object-fit: contain;
+}

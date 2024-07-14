@@ -1,0 +1,47 @@
+
+page {
+  background-color: #f2f2f2;
+}
+.header-container.data-v-4cd8f564 {
+  display: flex;
+  align-items: center;
+  background-color: #fff;
+  width: 100%;
+  padding-bottom: 20rpx;
+  margin-bottom: 40rpx;
+}
+.avatar-example.data-v-4cd8f564 {
+  margin-left: 10%;
+}
+.name.data-v-4cd8f564 {
+  font-size: 36rpx;
+  margin-left: 30rpx;
+}
+.inner-container.data-v-4cd8f564 {
+  padding: 20rpx 40rpx;
+  margin-left: 40rpx;
+  margin-right: 40rpx;
+  background-color: #fff;
+  border-radius: 16rpx;
+  box-shadow: 0 4rpx 8rpx rgba(0, 0, 0, 0.1);
+}
+.btn.data-v-4cd8f564 {
+  border: none;
+  background: none;
+  padding: 20rpx;
+  cursor: pointer;
+}
+.favorite.data-v-4cd8f564 {
+  color: red;
+}
+.help.data-v-4cd8f564 {
+  color: gray;
+}
+#selectFile.data-v-4cd8f564 {
+  width: 90rpx;
+  height: 90rpx;
+  align-items: center;
+  text-align: center;
+  border-radius: 50%;
+  border: 2rpx solid #bd1b06;
+}

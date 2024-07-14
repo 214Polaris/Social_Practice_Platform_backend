@@ -1,0 +1,5 @@
+<template name="f93e1f30">
+  <view class="_div data-v-14f68500">
+    <view wx:key="demand.need_id" key="{{demand.need_id}}" bindtap="handleProxy" data-eventid="{{'0_'+index}}" data-comkey="{{$k}}" wx:for="{{demand_list}}" wx:for-index="index" wx:for-item="demand" class="_div data-v-14f68500"><t-cell title="{{demand.title}}" description="{{demand.post_time}}" note="{{demand.is_pass}}" align="center" image="{{demand.img}}" hover arrow class="_t-cell data-v-14f68500"></t-cell></view> <t-toast id="t-toast" class="_t-toast data-v-14f68500"></t-toast>
+  </view>
+</template>

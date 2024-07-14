@@ -1,0 +1,10 @@
+<template name="ec90e108">
+  <view style="padding-left:8%;padding-right:8%" class="_div data-v-1d0a0854">
+    <view class="_div data-v-1d0a0854 login-container">
+      <view class="_div data-v-1d0a0854 login-text">登录您的账号</view>
+      <view class="_div data-v-1d0a0854 use-text">使用用户名和密码登录</view>
+      <view class="_div data-v-1d0a0854 input-container"><label for="username" class="_label data-v-1d0a0854 input-text">用户名</label> <input id="username" type="text" value="{{username}}" bindinput="handleProxy" class="_input data-v-1d0a0854 input-style" data-eventid="{{'0'}}" data-comkey="{{$k}}" /></view>
+      <view class="_div data-v-1d0a0854 input-container"><label for="password" class="_label data-v-1d0a0854 login-text">密码</label> <input id="password" type="password" value="{{password}}" bindinput="handleProxy" class="_input data-v-1d0a0854 input-style" data-eventid="{{'1'}}" data-comkey="{{$k}}" /></view> <button bindtap="handleProxy" class="_button data-v-1d0a0854 login-button" data-eventid="{{'2'}}" data-comkey="{{$k}}">登录</button>
+    </view> <t-toast id="t-toast" class="_t-toast data-v-1d0a0854"></t-toast>
+  </view>
+</template>

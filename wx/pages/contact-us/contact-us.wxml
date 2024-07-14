@@ -1,0 +1,23 @@
+<view class="contact-container">
+  <view class="contact-header">
+    <text class="contact-title">我们随时欢迎您的建议和反馈</text>
+  </view>
+  <view class="contact-content">
+    <view class="contact-item">
+      <t-icon name="call" size="36rpx"/>
+      <text class="contact-info" bind:tap="onPhoneCall">{{phone}}</text>
+    </view>
+    <view class="contact-item" bind:tap="onCopyMail">
+      <t-icon name="mail" size="36rpx"/>
+      <text class="contact-info" >{{mail}}</text>
+    </view>
+    <view class="contact-item">
+      <t-icon name="location" size="36rpx"/>
+      <text class="contact-info">珠海市香洲区大学路2号中山大学（珠海校区）</text>
+    </view>
+    <view class="contact-item">
+      <t-icon name="logo-wecom" size="36rpx"/>
+      <text class="contact-info" bind:tap="onCopyWechat">15507662529</text>
+    </view>
+  </view>
+</view>

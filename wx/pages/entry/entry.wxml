@@ -1,0 +1,79 @@
+<!-- 背景图片 -->
+<view>
+	<!--pics文件夹下的background.jpg文件-->
+	<image class='background' style="top: {{scrollTop}}rpx" src="../../assets/1.jpg" mode="aspectFill"></image>
+	<!--页面其它部分-->
+</view>
+
+<view class="main" style="top: {{scrollTop}}rpx">
+<!--页面根标签-->
+
+<!-- 搜索栏 -->
+<view style="display: flex;margin-top: 180rpx;">
+<cascader-bars style="flex:0.45;" bind:setlocation="onSetloc"></cascader-bars>
+<other style="flex:1;"></other>
+</view>
+
+<!-- 公告栏 -->
+<t-notice-bar
+  visible="{{true}}"
+  direction="vertical"
+  content="{{content}}"
+  prefixIcon="sound" style="height: min-content;background-color: rgba(238, 230, 230, 0.9);"
+></t-notice-bar>
+<view style="display: flex;">
+
+<!-- 放成功结对滚动卡片 -->
+<view class='card' style="width: 315rpx; height: 179rpx; display: block; box-sizing: border-box">
+
+<view style="display: flex; padding-top: 8rpx;">
+<text style="color: rgb(121, 6, 12);flex: 1;font-size: 30rpx;font-weight: bold;margin-left: 40rpx;margin-top: 10rpx;">成功结队</text>
+<text style="color: rgb(28, 29, 28);flex: 1;font-size: 30rpx;font-weight: bold;margin-left: 40rpx;margin-top: 10rpx;">{{teamNumber}}队</text>
+</view>
+<!-- 放两个都是垂直的滚动 -->
+<t-notice-bar
+  visible="{{true}}"
+  direction="vertical"
+  content="{{team_name1}}"
+  prefixIcon="caret-right-small" style="margin-top: -8rpx;height: min-content;background-color: rgb(226, 208, 208);"
+></t-notice-bar>
+<t-notice-bar
+  visible="{{true}}"
+  direction="vertical"
+  content="{{team_name2}}"
+  prefixIcon="chevron-right-double" style="padding-top: 2rpx; margin-top: -24rpx; height: min-content;background-color: rgb(226, 208, 208);"
+></t-notice-bar>
+
+</view>
+
+<!-- 放结对地图 -->
+<view class='card' style="margin-left: 8px; width: 315rpx; height: 179rpx; display: block; box-sizing: border-box">
+<view>
+<text style="color: rgb(121, 6, 12); flex: 1; font-size: 30rpx; font-weight: bold; margin-left: 40rpx; margin-top: 16rpx; position: relative; left: -2rpx; top: 14rpx">结队地图</text>
+</view>
+<view>
+<text style="color: rgb(134, 132, 132); flex: 1; font-size: 28rpx; font-weight: bold; margin-left: 48rpx; position: relative; left: 0rpx; top: 28rpx">全省情况总览</text>
+</view>
+<view style="display: flex; margin-top: 40rpx; left: 0rpx; top: 2rpx; width: 314rpx; height: 41rpx; box-sizing: border-box" bind:tap="clickMap">
+<text style="color:maroon;font-size: 30rpx;font-weight: bold;margin-left: 40rpx;">去查看</text>
+<t-icon name='chevron-right' style="color:maroon;font-size: 30rpx;font-weight: bold; margin-top: 8rpx;"></t-icon>
+</view>
+
+</view>
+
+</view>
+
+<!-- 放标签栏 -->
+<scoll id="scoll" bind:changeTab="Updateclass" bind:changeSecond="Updatestag" class="scoll">
+</scoll>
+
+<!-- 放底部标签栏 -->
+<!-- <badge style="position: fixed;">
+</badge> -->
+<t-tab-bar defaultValue="label1" split="{{false}}" value="label1">
+  <t-tab-bar-item value="label1" icon="home">主页</t-tab-bar-item>
+  <t-tab-bar-item value="label2" icon="app" bind:tap="clickSuccess">成果墙</t-tab-bar-item>
+  <t-tab-bar-item value="label4" icon="user" bind:tap="clickMy">我的</t-tab-bar-item>
+</t-tab-bar>
+
+</view>

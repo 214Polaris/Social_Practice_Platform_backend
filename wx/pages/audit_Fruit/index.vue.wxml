@@ -1,0 +1,38 @@
+<template name="47136623">
+  <view class="_div data-v-4eae0a8a"><t-row class="_t-row data-v-4eae0a8a">
+      <view style="padding-left:10%;font-size:18px;font-weight:bold; margin-top: 6%;" class="_p data-v-4eae0a8a">
+        {{show.title }}
+      </view>
+    </t-row>
+    <view style="margin-left:12%;margin-right:6%;border-bottom:1px solid #f2f2f2; margin-bottom: 2%; margin-top:2%" class="_div data-v-4eae0a8a"></view> <t-row class="_t-row data-v-4eae0a8a">
+      <view style="padding-left:11%;font-size:14px;margin-top: 6%;font-weight:bold;" class="_p data-v-4eae0a8a"> 成果简介 </view>
+    </t-row> <t-row class="_t-row data-v-4eae0a8a">
+      <view style="padding-left:12%;padding-right:12%;font-size:13px;margin-top: 6%;" class="_p data-v-4eae0a8a">
+        {{show.introduction}}
+      </view>
+    </t-row>
+    <view style="margin-left:12%;margin-right:6%;border-bottom:1px solid #f2f2f2; margin-bottom: 2%; margin-top:2%" class="_div data-v-4eae0a8a"></view> <t-row class="_t-row data-v-4eae0a8a">
+      <view style="padding-left:11%;font-size:14px;margin-top: 6%;font-weight:bold;" class="_p data-v-4eae0a8a"> 所属社区 </view>
+    </t-row> <t-row class="_t-row data-v-4eae0a8a">
+      <view style="padding-left:12%;padding-right:12%;font-size:13px;margin-top: 6%;" class="_p data-v-4eae0a8a">
+        {{show.belong}}
+      </view>
+    </t-row>
+    <view style="margin-left:12%;margin-right:6%;border-bottom:1px solid #f2f2f2; margin-bottom: 2%; margin-top:2%" class="_div data-v-4eae0a8a"></view> <t-row class="_t-row data-v-4eae0a8a">
+      <view style="padding-left:11%;font-size:14px;margin-top: 6%;font-weight:bold;" class="_p data-v-4eae0a8a"> 地点 </view>
+    </t-row> <t-row class="_t-row data-v-4eae0a8a">
+      <view style="padding-left:12%;padding-right:6%;font-size:13px;margin-top: 6%;" class="_p data-v-4eae0a8a">
+        {{show.position}}
+      </view>
+    </t-row>
+    <view style="margin-left:12%;margin-right:6%;border-bottom:1px solid #f2f2f2; margin-bottom: 2%; margin-top:2%" class="_div data-v-4eae0a8a"></view> <t-toast id="t-toast" class="_t-toast data-v-4eae0a8a"></t-toast> <t-row style="padding:6%;" class="_t-row data-v-4eae0a8a"><t-col span="12" class="_t-col data-v-4eae0a8a"><button bindtap="handleProxy" class="_button data-v-4eae0a8a red-button" data-eventid="{{'0'}}" data-comkey="{{$k}}">不通过</button></t-col> <t-col span="12" class="_t-col data-v-4eae0a8a"><button bindtap="handleProxy" class="_button data-v-4eae0a8a red-button" data-eventid="{{'1'}}" data-comkey="{{$k}}">通过审核</button></t-col></t-row> <t-toast id="t-toast" class="_t-toast data-v-4eae0a8a"></t-toast> <t-popup visible="{{ExplainVisible}}" placement="bottom" class="_t-popup data-v-4eae0a8a">
+      <view class="_view data-v-4eae0a8a block">
+        <view class="_view data-v-4eae0a8a header">
+          <view class="_view data-v-4eae0a8a btn btn--cancel" aria-role="button" bindtap="handleProxy" data-eventid="{{'2'}}" data-comkey="{{$k}}">取消</view>
+          <view class="_view data-v-4eae0a8a title">填写审核不通过说明</view>
+          <view class="_view data-v-4eae0a8a btn btn--confirm" aria-role="button" bindtap="handleProxy" data-eventid="{{'3'}}" data-comkey="{{$k}}">确定</view>
+        </view> <t-row class="_t-row data-v-4eae0a8a"><t-input value="{{noAgreeValue}}" bindchange="handleProxy" placeholder="请输入说明" style="padding:5%" data-eventid="{{'4'}}" data-comkey="{{$k}}" class="_t-input data-v-4eae0a8a"></t-input></t-row>
+      </view>
+    </t-popup>
+  </view>
+</template>

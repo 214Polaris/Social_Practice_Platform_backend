@@ -1,0 +1,62 @@
+<template name="2c2214e9">
+  <view class="_div data-v-c3ea31fe">
+    <t-row class="_t-row data-v-c3ea31fe">
+      <view style="padding-left:10%;font-size:18px;font-weight:bold; margin-top: 6%;" class="_p data-v-c3ea31fe"> 发布需求 </view>
+    </t-row>
+    <t-row class="_t-row data-v-c3ea31fe">
+      <view style="padding-left:11%;font-size:14px;margin-top: 6%;" class="_p data-v-c3ea31fe"> 需求名称 </view>
+    </t-row>
+    <t-input value="{{NeedName}}" borderless="{{true}}" bindchange="handleProxy" placeholder="请输入新需求名称" style="padding-left:12%;padding-right:12%;font-size:13px;margin-top: 1%;" data-eventid="{{'0'}}" data-comkey="{{$k}}" class="_t-input data-v-c3ea31fe"></t-input>
+    <view style="margin-left:12%;margin-right:6%;border-bottom:1px solid #f2f2f2; margin-bottom: 2%;" class="_div data-v-c3ea31fe"></view>
+    <t-row class="_t-row data-v-c3ea31fe">
+      <view style="padding-left:11%;font-size:14px;margin-top: 6%;" class="_p data-v-c3ea31fe"> 需求简介 </view>
+    </t-row>
+    <t-input value="{{NeedIntro}}" borderless="{{true}}" bindchange="handleProxy" placeholder="请输入新需求简介" style="padding-left:12%;padding-right:12%;font-size:13px;margin-top: 1%;" maxlength="200" data-eventid="{{'1'}}" data-comkey="{{$k}}" class="_t-input data-v-c3ea31fe"></t-input>
+    <view style="margin-left:12%;margin-right:6%;border-bottom:1px solid #f2f2f2; margin-bottom: 2%; margin-top:2%" class="_div data-v-c3ea31fe"></view>
+    <t-row class="_t-row data-v-c3ea31fe">
+      <view style="padding-left:11%;font-size:14px;margin-top: 6%;" class="_p data-v-c3ea31fe"> 需求资源 </view>
+    </t-row>
+    <t-input value="{{NeedResource}}" borderless="{{true}}" bindchange="handleProxy" placeholder="请输入新需求资源" style="padding-left:12%;padding-right:12%;font-size:13px;margin-top: 1%;" maxlength="80" data-eventid="{{'2'}}" data-comkey="{{$k}}" class="_t-input data-v-c3ea31fe"></t-input>
+    <view style="margin-left:12%;margin-right:6%;border-bottom:1px solid #f2f2f2; margin-bottom: 2%; margin-top:2%" class="_div data-v-c3ea31fe"></view>
+    <t-row style="padding-left:7%;font-size:16px;margin-top: 6%;" class="_t-row data-v-c3ea31fe">
+      <t-cell title="需求地址" arrow hover note="{{data.areaText}}" bindtap="handleProxy" data-eventid="{{'3'}}" data-comkey="{{$k}}" class="_t-cell data-v-c3ea31fe"></t-cell>
+      <t-picker visible="{{data.areaVisible}}" value="{{data.areaValue}}" title="{{title}}" cancelBtn="{{cancelBtn}}" confirmBtn="{{confirmBtn}}" usingCustomNavbar bindchange="handleProxy" bindpick="handleProxy" bindcancel="handleProxy" data-eventid="{{'4'}}" data-comkey="{{$k}}" class="_t-picker data-v-c3ea31fe">
+        <t-picker-item options="{{data.provinces}}" class="_t-picker-item data-v-c3ea31fe"></t-picker-item>
+        <t-picker-item options="{{data.cities}}" class="_t-picker-item data-v-c3ea31fe"></t-picker-item>
+        <t-picker-item options="{{data.counties}}" class="_t-picker-item data-v-c3ea31fe"></t-picker-item>
+      </t-picker>
+    </t-row>
+    <t-row style="align-items: center;" class="_t-row data-v-c3ea31fe">
+      <view style="padding-left:11%;font-size:14px;margin-top: 6%;" class="_p data-v-c3ea31fe"> 需求类别 </view>
+      <t-button size="medium" theme="danger" bindtap="handleProxy" style="margin-right:5%;margin-left:3%;display: inline-block;margin-top: 6%;" data-eventid="{{'5'}}" data-comkey="{{$k}}" class="_t-button data-v-c3ea31fe">请选择</t-button>
+    </t-row>
+    <t-row style="align-items: center;" class="_t-row data-v-c3ea31fe">
+      <view style="padding-left: 13%; font-size: 14px; margin-top: 3%;" class="_p data-v-c3ea31fe _p data-v-c3ea31fe">
+        {{ data.showTagName }}
+      </view>
+    </t-row>
+    <t-popup visible="{{data.visible}}" bind:visible-change="onVisibleChange" placement="bottom" style="height: 620rpx;" class="_t-popup data-v-c3ea31fe">
+      <view class="_view data-v-c3ea31fe block">
+        <view class="_view data-v-c3ea31fe header">
+          <view class="_view data-v-c3ea31fe btn btn--cancel" aria-role="button" bindtap="handleProxy" data-eventid="{{'6'}}" data-comkey="{{$k}}">取消</view>
+          <view class="_view data-v-c3ea31fe title">类别选择</view>
+          <view class="_view data-v-c3ea31fe btn btn--confirm" aria-role="button" bindtap="handleProxy" data-eventid="{{'7'}}" data-comkey="{{$k}}">确定</view>
+        </view>
+        <scroll-view scroll-y="true" style="height:600rpx;" class="_scroll-view data-v-c3ea31fe">
+          <t-checkbox-group value="{{data.current}}" bindchange="handleProxy" options="{{data.choose}}" style="height:500rpx;" data-eventid="{{'8'}}" data-comkey="{{$k}}" class="_t-checkbox-group data-v-c3ea31fe"></t-checkbox-group>
+        </scroll-view>
+      </view>
+    </t-popup>
+    <view style="padding-left:11%;font-size:14px;margin-top: 6%;" class="_p data-v-c3ea31fe"> 上传图片 (最多6张)（第一张为封面） </view>
+    <view class="_view data-v-c3ea31fe wrapper" style="margin-left:8%;margin-right: 8%;margin-top:5%; padding-left: 3%;">
+      <t-upload media-type="{{['image']}}" max="{{6}}" files="{{originFiles}}" gridConfig="{{gridConfig}}" bindadd="handleProxy" bindremove="handleProxy" data-eventid="{{'9'}}" data-comkey="{{$k}}" class="_t-upload data-v-c3ea31fe"></t-upload>
+    </view>
+    <view style="margin-left:12%;margin-right:6%;border-bottom:1px solid #f2f2f2; margin-bottom: 2%; margin-top:2%" class="_div data-v-c3ea31fe"></view>
+    <view style="padding-left:11%;font-size:14px;margin-top: 6%;" class="_p data-v-c3ea31fe"> 上传视频 </view>
+    <view class="_view data-v-c3ea31fe wrapper" style="margin-left:8%;margin-right: 8%;margin-top:5%; padding-left: 3%;">
+      <t-upload mediaType="{{['video']}}" max="{{1}}" files="{{VideoList}}" bindadd="handleProxy" bindremove="handleProxy" data-eventid="{{'10'}}" data-comkey="{{$k}}" class="_t-upload data-v-c3ea31fe"></t-upload>
+    </view>
+    <t-row style="padding-left:12%;padding-right:12%;margin-top: 4%;" class="_t-row data-v-c3ea31fe"><button bindtap="handleProxy" class="_button data-v-c3ea31fe red-button" data-eventid="{{'11'}}" data-comkey="{{$k}}">提交审核</button></t-row>
+    <t-toast id="t-toast" class="_t-toast data-v-c3ea31fe"></t-toast>
+  </view>
+</template>

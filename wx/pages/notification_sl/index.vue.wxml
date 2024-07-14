@@ -1,0 +1,38 @@
+<template name="5c710700">
+  <view class="_div data-v-0c8e1e18">
+    <view class="_div data-v-0c8e1e18 noti-container" wx:key="msg.mID" key="{{msg.mID}}" wx:for="{{message}}" wx:for-index="index" wx:for-item="msg"><t-row class="_t-row data-v-0c8e1e18"><t-col span="4" style="margin-left: 5%; " class="_t-col data-v-0c8e1e18">
+          <view wx:if="{{msg.type != 7 && msg.type != 8}}" class="_p data-v-0c8e1e18">
+            <image src="/static/images/通知.svg" style="width:40px;height:36px;" class="_img data-v-0c8e1e18"></image>
+          </view>
+          <view wx:if="{{msg.type == 7 || msg.type == 8}}" class="_p data-v-0c8e1e18">
+            <image src="/static/images/结对帮扶.svg" style="width:40px;height:36px;" class="_img data-v-0c8e1e18"></image>
+          </view>
+        </t-col> <t-col span="20" class="_t-col data-v-0c8e1e18">
+          <view wx:if="{{msg.type != 7 && msg.type != 8}}" style="padding-left:1%;font-size:15px;font-weight: bold;margin-bottom: 2%;" class="_p data-v-0c8e1e18"> 审核结果通知 </view>
+          <view wx:if="{{msg.type == 7 || msg.type == 8}}" style="padding-left:1%;font-size:15px;font-weight: bold;margin-bottom: 2%;" class="_p data-v-0c8e1e18"> 结对通知 </view>
+          <view style="color: #a8a6a6;padding-left:1%;font-size: 12px;" class="_p data-v-0c8e1e18">
+            {{ msg.time }}
+          </view>
+        </t-col></t-row> <t-row style="padding-right: 8%;" class="_t-row data-v-0c8e1e18">
+        <view wx:if="{{msg.type == 1}}" style="margin-left: 22%;font-size:15px; font-weight: bold; margin-bottom: 2%; margin-top: 3%" class="_p data-v-0c8e1e18"> 您注册/修改的队伍信息已经通过审核 </view>
+        <view wx:if="{{msg.type == 2}}" style="margin-left: 22%;font-size:15px; font-weight: bold; margin-bottom: 2%; margin-top: 3%" class="_p data-v-0c8e1e18"> 您注册/修改的队伍信息未通过审核 </view>
+        <view wx:if="{{msg.type == 3}}" style="margin-left: 22%;font-size:15px; font-weight: bold; margin-bottom: 2%; margin-top: 3%" class="_p data-v-0c8e1e18"> 您发布的成果信息已经通过审核 </view>
+        <view wx:if="{{msg.type == 4}}" style="margin-left: 22%;font-size:15px; font-weight: bold; margin-bottom: 2%; margin-top: 3%" class="_p data-v-0c8e1e18"> 您发布的成果信息未通过审核 </view>
+        <view wx:if="{{msg.type == 7}}" style="margin-left: 22%; font-size: 15px; font-weight: bold; margin-bottom: 2%; margin-top: 3%" class="_p data-v-0c8e1e18"><t-link size="large" prefixIcon="flag" hover content="{{msg.comName}}" style="color:#bd1b06" bindtap="handleProxy" data-eventid="{{'0_'+index}}" data-comkey="{{$k}}" class="_t-link data-v-0c8e1e18"></t-link> 该社区接受了您的结对邀请 </view>
+        <view wx:if="{{msg.type == 8}}" style="margin-left: 22%; font-size: 15px; font-weight: bold; margin-bottom: 2%; margin-top: 3%" class="_p data-v-0c8e1e18"><t-link size="large" prefixIcon="flag" hover content="{{msg.comName}}" style="color:#bd1b06" bindtap="handleProxy" data-eventid="{{'1_'+index}}" data-comkey="{{$k}}" class="_t-link data-v-0c8e1e18"></t-link> 该社区拒绝了您的结对邀请 </view>
+      </t-row>
+      <view class="_div data-v-0c8e1e18 detailShow" style="padding:2%; margin-left: 22%; margin-bottom: 2%; margin-top: 5%; margin-right: 10%;" bindtap="handleProxy" data-eventid="{{'2_'+index}}" data-comkey="{{$k}}"><t-row class="_t-row data-v-0c8e1e18"><t-col span="4" class="_t-col data-v-0c8e1e18"><t-image src="{{msg.img}}" mode="aspectFill" width="36" height="36" class="_t-image data-v-0c8e1e18"></t-image></t-col> <t-col span="20" style="align-self: center;" class="_t-col data-v-0c8e1e18">
+            <view style="padding-left:6%;font-size:14px;margin-bottom: 2%;" class="_p data-v-0c8e1e18">
+              {{ msg.Name }}
+            </view>
+          </t-col></t-row></view>
+      <view style="margin-left: 18%; margin-right: 10%;border-bottom:1px solid #f2f2f2; margin-bottom: 2%; margin-top:4%" class="_div data-v-0c8e1e18"></view>
+    </view> <t-popup visible="{{NoPassVisible}}" placement="center" class="_t-popup data-v-0c8e1e18">
+      <view class="_view data-v-0c8e1e18 .block-center">
+        <view style="font-size:18px; font-weight: bold;margin-bottom: 5%;" class="_p data-v-0c8e1e18">审核不成功原因</view>
+        <view style="font-size:16px;" class="_p data-v-0c8e1e18">{{ NoPassReason }}</view>
+        <view style="margin-top:10%;" class="_div data-v-0c8e1e18"><t-button size="large" theme="danger" bindtap="handleProxy" style="margin-right:5%;margin-left:3%" data-eventid="{{'3'}}" data-comkey="{{$k}}" class="_t-button data-v-0c8e1e18">我知道了</t-button> <t-button size="large" theme="danger" bindtap="handleProxy" style="margin-right:3%;" data-eventid="{{'4'}}" data-comkey="{{$k}}" class="_t-button data-v-0c8e1e18">去修改</t-button></view>
+      </view>
+    </t-popup>
+  </view>
+</template>

@@ -1,0 +1,12 @@
+<!--my_page/choose-location/choose_location.wxml-->
+<map 
+  id="map" 
+  longitude="{{longitude}}" 
+  latitude="{{latitude}}" 
+  scale="10" 
+  markers="{{markers}}" 
+  bind:tap="makerClick"
+  setting="{{mapSetting}}"
+  polyline="{{polyline}}" 
+  style="width:100%;height:1300rpx;">
+</map>

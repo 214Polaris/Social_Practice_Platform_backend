@@ -1,0 +1,11 @@
+
+.detailShow.data-v-25eb775a {
+  background-color: #f2f2f2;
+  display: grid;
+}
+.block-center.data-v-25eb775a {
+  width: 440rpx;
+  padding-top: 8%;
+  padding-bottom: 8%;
+  text-align: center;
+}

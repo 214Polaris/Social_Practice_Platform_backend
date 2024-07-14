@@ -1,0 +1,69 @@
+<view>
+  <swiper class="banners" current="{{current}}" circular="true" autoplay="true" interval="{{duration}}" duration="2000" navigation="{{ { type: 'dots' } }}" bind:image-load="onImageLoad">
+    <swiper-item wx:for="{{imageSrc}}" wx:key="id">
+      <block wx:if="{{item.img_flag === 0}}">
+        <view style="display: flex; justify-content: center; align-items: center;">
+          <t-image src="data:image/png;base64,{{item.src}}" mode="heightFix" bind:tap="onClickImg" height="320rpx"></t-image>
+        </view>
+      </block>
+      <block wx:else>
+        <video id="operate-desc-video" src="{{item.src}}" object-fit="cover" autoplay="true" style="width: 100%; height: 100%;" bindloadedmetadata="getLength" bindended="resetInterval" bindended="onImgReq">
+        </video>
+      </block>
+    </swiper-item>
+  </swiper>
+  <view class="title">{{demand_name}}</view>
+  <view class="block">
+    <view class="item" wx:for="{{tagList}}" wx:key="id">
+      <v-tag class="margin-16" variant="outline" theme="primary">{{item}}</v-tag>
+    </view>
+  </view>
+  <view class="locate">
+    <t-icon class="item" name="location" color="#aa4c43"></t-icon>
+    <span style="margin-left: 8rpx;">{{address}}</span>
+  </view>
+  <view bind:tap="onGovClickHandle">
+    <t-cell title="{{gov}}" description="{{gov_manager}}" hover arrow bordered="{{false}}">
+      <view class="avatar" slot="left-icon">
+        <t-image src="data:image/png;base64,{{gov_head}}" mode="heightFix" height="35"></t-image>
+      </view>
+    </t-cell>
+  </view>
+  <view class="demand-intro">
+    <view class="dtitle">需求简介</view>
+    <t-divider />
+    <view class="dcontent">{{demand_intro}}</view>
+  </view>
+  <view style="height: 120rpx;"></view>
+  <view>
+    <t-tab-bar split="{{false}}">
+      <t-tab-bar-item>
+        <t-button open-type="share" t-class="shareBtn" variant="text">
+          <view class="btn-icon">
+            <t-icon name="share" size="40rpx" />
+            <view class="share-text">转发</view>
+          </view>
+        </t-button>
+      </t-tab-bar-item>
+      <t-tab-bar-item />
+      <t-tab-bar-item />
+      <t-button theme="primary" icon="call" content="立即沟通" class="bt-call" bind:tap="handlePopup" t-class="wrapper" block></t-button>
+    </t-tab-bar>
+
+    <t-popup visible="{{visible}}" bind:visible-change="onVisibleChange" placement="center" close-on-overlay-click="true">
+      <t-icon t-class="close-btn" name="close-circle" size="32" color="#fff" bind:tap="onClose" />
+      <view class="pop-block">
+        <view class="poptitle">社区负责人姓名：</view>
+        <view class="poptext">{{gov_manager}}</view>
+        <view class="poptitle">联系电话：</view>
+        <view class="poptext">
+          <view class="contact-item">
+            <t-icon name="call" size="36rpx" style="padding-top: -200rpx;" />
+            <text class="contact-info" bind:tap="onPhoneCall">{{gov_phone}}</text>
+          </view>
+        </view>
+      </view>
+    </t-popup>
+  </view>
+  <t-image-viewer usingCustomNavbar closeBtn="{{true}}" showIndex="{{true}}" visible="{{Imgvisible}}" images="data:image/png;base64,{{imgList}}" bind:close="onClickImg"></t-image-viewer>
+</view>

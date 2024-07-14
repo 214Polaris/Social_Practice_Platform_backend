@@ -1,0 +1,11 @@
+{
+    "usingComponents": {
+    "search-bars":"../../miniprogram_npm/action/index",
+    "cascader-bars":"../../miniprogram_npm/with-title/index",
+    "scoll-one":"../../miniprogram_npm/scroll-one/index"
+    },
+    "navigationBarTitleText": "搜索",
+    "navigationBarBackgroundColor": "#f6f6f6",
+    "navigationBarTextStyle": "black",
+    "backgroundColor": "#f6f6f6"
+}

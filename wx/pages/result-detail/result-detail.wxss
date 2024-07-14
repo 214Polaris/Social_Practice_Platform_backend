@@ -1,0 +1,109 @@
+.title{
+  margin-top: 3px;
+  margin-left: 12px;
+  font-size:36rpx;
+  font-weight: bold;
+}
+
+.wrapper {
+  flex-wrap: wrap;
+  margin: 0 32rpx;
+}
+
+.wrapper t-check-tag {
+  display: block;
+}
+
+.block {
+  display: flex;
+  font-size: 14px;
+  align-items: center;
+  line-height: 76rpx;
+  color: var(--td-text-color-placeholder);
+}
+
+.block text {
+  display: block;
+  width: 160rpx;
+  margin-right: 32rpx;
+}
+
+.block+.block {
+  margin-top: 32rpx;
+}
+
+.block .margin-16:first-child{
+  margin-left: 12px;
+}
+
+.block .margin-16:not(:last-child) {
+  margin-right: 30rpx;
+  background-color: #aa4c43;
+}
+
+.locate{
+  display: flex;
+  margin-top: 8rpx;
+  margin-left: 12px;
+  margin-bottom: 3px;
+  font-size: 28rpx;
+  align-items: center;
+  color: #aa4c439a;
+}
+
+.avatar {
+  width: 96rpx;
+  height: 96rpx;
+  overflow: hidden;
+}
+
+.demand-intro{
+  margin-top: 3px;
+  margin-left: 12px;
+  margin-right: 12px;
+}
+.dtitle{
+  font-size:32rpx;
+  font-weight: bold;
+}
+.dcontent{
+  display: flex;
+  font-size:30rpx;
+  margin-bottom: 30rpx;
+}
+
+.bt-call{
+  margin-left: 10px;
+  margin-right:12px;
+}
+
+.share-text{
+  padding-top: 8rpx;
+  font-size: 22rpx;
+  line-height: 24rpx;
+}
+
+.avatar {
+  width: 96rpx;
+  height: 96rpx;
+  border-radius: 50%;
+  overflow: hidden;
+}
+
+.comment{
+  font-size: 30rpx;
+  margin-right: 12rpx;
+}
+
+.pop-block {
+  width: 100%;
+  height: 240rpx;
+  background: #ffffff;
+  border-radius: 16rpx;
+}
+
+.comment-title{
+  display:flex;
+  flex-flow: row nowrap;
+  justify-content: space-between;
+}

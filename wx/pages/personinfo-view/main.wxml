@@ -1,0 +1,41 @@
+<!--my_page/personinfo-view/changeinfo.wxml-->
+<t-avatar class="avatar-example" image="{{image}}" />
+<t-button theme="primary" icon="user-avatar" content="更换头像" size="large" class="margin" bind:tap="image_click"></t-button>
+<t-demo title="个人信息修改" desc="如需修改直接编辑即可"></t-demo>
+
+<t-popup visible="{{visible}}" bind:visible-change="onVisibleChange" placement="{{'center'}}">
+  <view class="block block--center">
+    <t-icon name="close" size="60rpx" color="#333" style="margin-left: 80%;margin-top: 32rpx;margin-bottom: -2rpx;" bind:tap="close_page"></t-icon>
+    <view style="display: flex; align-items: center;">
+    <view style="flex: 1;">
+        <t-input type="{{type1}}" placeholder="输入原密码" bind:change="input1" value='{{pw1}}'/>
+    </view>
+    <view class="red-button" bind:tap="transform1">{{text1}}</view>
+   </view>
+
+    <view style="display: flex; align-items: center;">
+    <view style="flex: 1;">
+        <t-input type="{{type2}}" placeholder="输入修改密码" bind:change="input2" value='{{pw2}}'/>
+    </view>
+    <view class="red-button" bind:tap="transform2">{{text2}}</view>
+    </view>
+
+<view style="display: flex; align-items: center;">
+    <view style="flex: 1;">
+        <t-input type="{{type3}}" placeholder="确认修改密码" bind:change="input3" value='{{pw3}}'/>
+    </view>
+    <view class="red-button" bind:tap="transform3">{{text3}}</view>
+</view>
+
+<view class="confirm-button" bind:tap="changepw" style="margin-top:8rpx;margin-bottom: 48rpx;">确认修改密码</view>
+
+  </view>
+</t-popup>
+
+<t-button theme="primary" content="修改密码" style ="margin-left: 3%;  transform: scale(0.9); margin-bottom: 3%" bind:tap="handlePopup"></t-button>
+<t-input disabled id="userInput" label="用户名" placeholder="{{user_name}}" value="{{user_name}}"></t-input>
+<t-input disabled id="nameInput" label="姓名" placeholder="{{name}}" value="{{name}}"></t-input>
+<t-input id="sexInput" label="性别" placeholder="{{sex}}" value="{{sex}}"></t-input>
+<t-input id="phoneInput" label="联系电话" placeholder="{{phone}}" value="{{phone}}"></t-input>
+
+<t-button theme="primary" icon="upload" content="提交修改" size="large" class="submit" bind:tap="submit_click"></t-button>

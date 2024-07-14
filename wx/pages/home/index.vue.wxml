@@ -1,0 +1,32 @@
+<template name="6095e148">
+  <view class="_div data-v-8378e3ac">
+    <view class="_div data-v-8378e3ac header-container" style="margin-bottom: 20rpx;"><t-avatar class="_t-avatar data-v-8378e3ac avatar-example" image="{{image}}" style="margin-top: 12rpx;"></t-avatar>
+      <view class="_div data-v-8378e3ac name" style="font-weight: bold; margin-top: 12rpx;">{{ name }}</view>
+    </view>
+    <view class="_div data-v-8378e3ac inner-container" style="margin-bottom: 20rpx;"><t-row class="_t-row data-v-8378e3ac"><t-col span="24" class="_t-col data-v-8378e3ac">
+          <view style="padding-left:2%;font-size:32rpx;font-weight: bold;margin-bottom: 2%;" class="_p data-v-8378e3ac"> 管理服务 </view>
+          <view style="border-bottom:1px solid #f2f2f2; margin-bottom: 2%;" class="_div data-v-8378e3ac"></view>
+        </t-col></t-row> <t-row class="_t-row data-v-8378e3ac"><t-col span="6" style="text-align: center;" bindtap="handleProxy" data-eventid="{{'0'}}" data-comkey="{{$k}}" class="_t-col data-v-8378e3ac">
+          <view style="display: inline-block;" class="_div data-v-8378e3ac"><t-icon name="assignment-user" size="64rpx" bind:click="onIconTap" style="color: #bd1b06; margin-top: 4px;" class="_t-icon data-v-8378e3ac"></t-icon></view>
+          <view style="font-size: 24rpx; font-weight: bold; display: inline-block;" class="_div data-v-8378e3ac">管理负责人</view>
+        </t-col> <t-col span="6" style="text-align: center;" bindtap="handleProxy" data-eventid="{{'1'}}" data-comkey="{{$k}}" class="_t-col data-v-8378e3ac">
+          <view style="display: inline-block;" class="_div data-v-8378e3ac"><t-icon name="fact-check" size="64rpx" bind:click="onIconTap" style="color: #bd1b06; margin-top: 4px;" class="_t-icon data-v-8378e3ac"></t-icon></view>
+          <view style="font-size: 24rpx; font-weight: bold; display: inline-block;" class="_div data-v-8378e3ac">审核通知</view>
+        </t-col> <t-col span="6" style="text-align: center;" bindtap="handleProxy" data-eventid="{{'2'}}" data-comkey="{{$k}}" class="_t-col data-v-8378e3ac">
+          <view style="display: inline-block;" class="_div data-v-8378e3ac"><t-icon name="compass-1" size="64rpx" bind:click="onIconTap" style="color: #bd1b06; margin-top: 4px;" class="_t-icon data-v-8378e3ac"></t-icon></view>
+          <view style="font-size: 24rpx; font-weight: bold; display: inline-block;" class="_div data-v-8378e3ac">管理类别</view>
+        </t-col></t-row></view>
+    <view class="_div data-v-8378e3ac inner-container"><t-row class="_t-row data-v-8378e3ac"><t-col span="24" class="_t-col data-v-8378e3ac">
+          <view style="padding-left:2%;font-size:32rpx;font-weight: bold;margin-bottom: 2%;" class="_p data-v-8378e3ac"> 平台服务 </view>
+          <view style="border-bottom:1px solid #f2f2f2; margin-bottom: 2%;" class="_div data-v-8378e3ac"></view>
+        </t-col></t-row> <t-row class="_t-row data-v-8378e3ac"><t-col span="6" style="text-align: center;" bindtap="handleProxy" data-eventid="{{'3'}}" data-comkey="{{$k}}" class="_t-col data-v-8378e3ac">
+
+          <view style="display: inline-block;" class="_div data-v-8378e3ac"><t-icon name="look-around" size="64rpx" bind:click="onIconTap" style="color: #bd1b06; margin-top: 4px;" class="_t-icon data-v-8378e3ac"></t-icon></view>
+          <view style="font-size: 24rpx; font-weight: bold; display: inline-block;" class="_div data-v-8378e3ac">关于我们</view>
+        </t-col> <t-col span="6" style="text-align: center;" bindtap="handleProxy" data-eventid="{{'4'}}" data-comkey="{{$k}}" class="_t-col data-v-8378e3ac">
+          <view style="display: inline-block;" class="_div data-v-8378e3ac"><t-icon name="chat-bubble-smile" size="64rpx" bind:click="onIconTap" style="color: #bd1b06; margin-top: 4px;" class="_t-icon data-v-8378e3ac"></t-icon></view>
+          <view style="font-size: 24rpx; font-weight: bold; display: inline-block;" class="_div data-v-8378e3ac">联系我们</view>
+
+        </t-col></t-row></view> <t-tab-bar defaultValue="label3" split="false" value="label3" class="_t-tab-bar data-v-8378e3ac"><t-tab-bar-item value="label1" icon="home" bindtap="handleProxy" data-eventid="{{'5'}}" data-comkey="{{$k}}" class="_t-tab-bar-item data-v-8378e3ac">主页</t-tab-bar-item> <t-tab-bar-item value="label2" icon="app" bindtap="handleProxy" data-eventid="{{'6'}}" data-comkey="{{$k}}" class="_t-tab-bar-item data-v-8378e3ac">成果墙</t-tab-bar-item> <t-tab-bar-item value="label3" icon="user" class="_t-tab-bar-item data-v-8378e3ac">我的</t-tab-bar-item></t-tab-bar>
+  </view>
+</template>

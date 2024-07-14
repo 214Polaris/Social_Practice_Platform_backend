@@ -1,0 +1,42 @@
+<template name="32109a8c">
+  <view class="_div data-v-1e4cf6a4">
+    <view class="_div data-v-1e4cf6a4 search"><t-row style="display: flex;align-items: center;" class="_t-row data-v-1e4cf6a4"><t-col span="20" class="_t-col data-v-1e4cf6a4"><t-search value="{{value}}" center placeholder="请输入关键字" bindfocus="handleProxy" bindaction-click="handleProxy" bindchange="handleProxy" bindclear="handleProxy" shape="round" data-eventid="{{'0'}}" data-comkey="{{$k}}" class="_t-search data-v-1e4cf6a4"></t-search></t-col> <t-col span="4" class="_t-col data-v-1e4cf6a4"><t-icon name="add" size="48rpx" color="rgb(163, 159, 159)" bindtap="handleProxy" data-eventid="{{'1'}}" data-comkey="{{$k}}" class="_t-icon data-v-1e4cf6a4"></t-icon></t-col></t-row></view>
+    <view wx:key="person.id" key="{{person.id}}" class="_div data-v-1e4cf6a4 people" wx:for="{{filteredPeople}}" wx:for-index="index" wx:for-item="person"><t-row class="_t-row data-v-1e4cf6a4"><t-col span="4" class="_t-col data-v-1e4cf6a4"><t-image src="{{person.imageSrc}}" mode="aspectFill" width="36" height="36" class="_t-image data-v-1e4cf6a4"></t-image></t-col> <t-col span="18" style="align-self: center;" class="_t-col data-v-1e4cf6a4">
+          <view style="padding-left:2%;font-size:14px;margin-bottom: 2%;" class="_p data-v-1e4cf6a4">
+            {{ person.name }}
+          </view>
+          <view style="display:flex; align-items: center;margin-bottom: 2%;" class="_div data-v-1e4cf6a4"><t-icon name="location" size="36rpx" color="rgb(163, 159, 159)" bindtap="handleProxy" data-eventid="{{'2_'+index}}" data-comkey="{{$k}}" class="_t-icon data-v-1e4cf6a4"></t-icon>
+            <view style="color: rgb(163, 159, 159);font-size:11px; padding-left:1%" class="_p data-v-1e4cf6a4">
+              {{ person.community }}
+            </view> <t-icon name="call" size="34rpx" color="rgb(163, 159, 159)" bindtap="handleProxy" style="margin-left: 3%;" data-eventid="{{'3_'+index}}" data-comkey="{{$k}}" class="_t-icon data-v-1e4cf6a4"></t-icon>
+            <view style="color: rgb(163, 159, 159);font-size:11px; padding-left:1%" class="_p data-v-1e4cf6a4">
+              {{ person.phone }}
+            </view>
+          </view>
+        </t-col> <t-col span="2" style="align-self: center;" class="_t-col data-v-1e4cf6a4"><t-icon name="edit-1" size="40rpx" color="rgb(163, 159, 159)" bindtap="handleProxy" data-eventid="{{'4_'+index}}" data-comkey="{{$k}}" class="_t-icon data-v-1e4cf6a4"></t-icon></t-col></t-row>
+      <view style="border-bottom:1px solid #f2f2f2; margin-bottom: 2%; margin-top:2%" class="_div data-v-1e4cf6a4"></view>
+    </view> <t-popup visible="{{visible}}" bind:visible-change="onVisibleChange" placement="center" class="_t-popup data-v-1e4cf6a4">
+      <view class="_view data-v-1e4cf6a4 .block-center">
+        <view style="font-size:18px; font-weight: bold;margin-bottom: 5%;" class="_p data-v-1e4cf6a4">修改提醒</view>
+        <view style="font-size:16px;" class="_p data-v-1e4cf6a4">确定为该社区修改负责人吗？</view>
+        <view style="margin-top:10%;" class="_div data-v-1e4cf6a4"><t-button size="large" theme="danger" bindtap="handleProxy" style="margin-right:5%;" data-eventid="{{'5'}}" data-comkey="{{$k}}" class="_t-button data-v-1e4cf6a4">确认</t-button> <t-button size="large" theme="danger" bindtap="handleProxy" data-eventid="{{'6'}}" data-comkey="{{$k}}" class="_t-button data-v-1e4cf6a4">取消</t-button></view>
+      </view>
+    </t-popup> <t-popup visible="{{addVisible}}" placement="bottom" class="_t-popup data-v-1e4cf6a4">
+      <view class="_view data-v-1e4cf6a4 block">
+        <view class="_view data-v-1e4cf6a4 header">
+          <view class="_view data-v-1e4cf6a4 btn btn--cancel" aria-role="button" bindtap="handleProxy" data-eventid="{{'7'}}" data-comkey="{{$k}}">取消</view>
+          <view class="_view data-v-1e4cf6a4 title">{{popupTitle}}</view>
+          <view class="_view data-v-1e4cf6a4 btn btn--confirm" aria-role="button" bindtap="handleProxy" data-eventid="{{'8'}}" data-comkey="{{$k}}" style="color: #aa4c43">确定</view>
+        </view> <t-row class="_t-row data-v-1e4cf6a4"><t-input value="{{NewName}}" bindchange="handleProxy" placeholder="请输入社区负责人姓名" style="padding:5%" data-eventid="{{'9'}}" data-comkey="{{$k}}" class="_t-input data-v-1e4cf6a4"></t-input></t-row> <t-row class="_t-row data-v-1e4cf6a4"><t-input value="{{NewPhone}}" bindchange="handleProxy" placeholder="请输入社区负责人电话" style="padding:5%" data-eventid="{{'10'}}" data-comkey="{{$k}}" class="_t-input data-v-1e4cf6a4"></t-input></t-row> <t-row style="padding-left:10%; display: flex;align-items: center;" class="_t-row data-v-1e4cf6a4">
+          <view style="font-size:14px;color:#928f8f;" class="_p data-v-1e4cf6a4">请选择负责人性别</view> <t-radio-group default-value="0" borderless t-class="box" bindchange="handleProxy" data-eventid="{{'11'}}" data-comkey="{{$k}}" class="_t-radio-group data-v-1e4cf6a4"><t-radio block="false" label="男" value="0" class="_t-radio data-v-1e4cf6a4"></t-radio> <t-radio block="false" label="女" value="1" class="_t-radio data-v-1e4cf6a4"></t-radio></t-radio-group>
+        </t-row>
+      </view>
+    </t-popup> <t-popup visible="{{Namevisible}}" bind:visible-change="onVisibleChange" placement="center" class="_t-popup data-v-1e4cf6a4">
+      <view class="_view data-v-1e4cf6a4 .block-center">
+        <view style="font-size:18px; font-weight: bold;margin-bottom: 5%;" class="_p data-v-1e4cf6a4">添加成功</view>
+        <view style="font-size:16px;" class="_p data-v-1e4cf6a4">{{ NewName }}的用户名为{{ unReturn }}</view>
+        <view style="margin-top:10%;" class="_div data-v-1e4cf6a4"><t-button size="large" theme="danger" bindtap="handleProxy" style="margin-right:5%;" data-eventid="{{'12'}}" data-comkey="{{$k}}" class="_t-button data-v-1e4cf6a4">我知道了</t-button></view>
+      </view>
+    </t-popup> <t-toast id="t-toast" class="_t-toast data-v-1e4cf6a4"></t-toast>
+  </view>
+</template>

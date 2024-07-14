@@ -1,0 +1,17 @@
+<view>
+  <t-button block size="large" variant="outline" theme="primary" bind:tap="handlePopup">底部弹出层-带标题及操作</t-button>
+
+  <t-popup visible="{{visible}}" bind:visible-change="onVisibleChange" placement="bottom" style="height: 640rpx;">
+    <view class="block">
+      <view class="header">
+        <view class="btn btn--cancel" aria-role="button" bind:tap="onCancelSelect">取消</view>
+        <view class="title">类别选择</view>
+        <view class="btn btn--confirm" aria-role="button" bind:tap="onConfirmSelect">确定</view>
+      </view>
+      <scroll-view scroll-y="true" style="height:601rpx;">
+      <t-checkbox-group content-disabled="true" value="{{current}}" bind:change="handleGroupChange" options="{{choose}}">
+      </t-checkbox-group>
+      </scroll-view>
+    </view>
+  </t-popup>
+</view>

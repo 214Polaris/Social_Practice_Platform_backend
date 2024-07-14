@@ -1,0 +1,113 @@
+.title{
+  margin-top: 3px;
+  margin-left: 12px;
+  font-size:36rpx;
+  font-weight: bold;
+}
+
+.wrapper {
+  flex-wrap: wrap;
+  margin: 0 32rpx;
+}
+
+.wrapper t-check-tag {
+  display: block;
+}
+
+.block {
+  display: flex;
+  font-size: 14px;
+  align-items: center;
+  line-height: 76rpx;
+  color: var(--td-text-color-placeholder);
+}
+
+.block text {
+  display: block;
+  width: 160rpx;
+  margin-right: 32rpx;
+}
+
+.block+.block {
+  margin-top: 32rpx;
+}
+
+.block .margin-16:first-child{
+  margin-left: 12px;
+}
+
+.block .margin-16:not(:last-child) {
+  margin-right: 30rpx;
+  background-color: #aa4c43;
+}
+
+.locate{
+  display: flex;
+  margin-left: 12px;
+  margin-bottom: 3px;
+  font-size: 28rpx;
+  align-items: center;
+  color: #be574ecb;
+}
+
+.avatar {
+  width: 96rpx;
+  height: 96rpx;
+  overflow: hidden;
+}
+
+.demand-intro{
+  margin-top: 3px;
+  margin-left: 12px;
+}
+.dtitle{
+  font-size:32rpx;
+  font-weight: bold;
+}
+.dcontent{
+  display: flex;
+  font-size:30rpx;
+  margin-bottom: 30rpx;
+}
+
+.bt-call{
+  margin-left: 10px;
+  margin-right:12px;
+}
+
+.share-text{
+  padding-top: 8rpx;
+  font-size: 20rpx;
+  line-height: 24rpx;
+}
+
+.pop-block {
+  width: 480rpx;
+  height: 240rpx;
+  background: #ffffff;
+  border-radius: 16rpx;
+}
+.close-btn {
+  position: absolute;
+  left: 50%;
+  margin-left: -32rpx;
+  bottom: calc(-1 * (48rpx + 64rpx));
+}
+.poptitle{
+  margin-top: 8px;
+  margin-left: 12px;
+  font-size:34rpx;
+  font-weight: bold;
+}
+.poptext{
+  margin-top: 3px;
+  margin-left: 12px;
+  font-size:34rpx;
+}
+
+.contact-item {
+  display: flex;
+  padding: 20rpx;
+  margin-bottom: 20rpx;
+}
+

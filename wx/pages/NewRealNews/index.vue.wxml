@@ -1,0 +1,12 @@
+<template name="0358cd84">
+  <view class="_div data-v-d6233bc8"><t-row class="_t-row data-v-d6233bc8">
+      <view style="padding-left:11%;font-size:14px;margin-top: 6%;" class="_p data-v-d6233bc8"> 请选择需求： </view> <t-dropdown-menu style="margin-top: 10rpx;" class="_t-dropdown-menu data-v-d6233bc8"><t-dropdown-item options="{{product.options}}" value="{{product.value}}" bindchange="handleProxy" data-eventid="{{'0'}}" data-comkey="{{$k}}" class="_t-dropdown-item data-v-d6233bc8"></t-dropdown-item></t-dropdown-menu>
+    </t-row> <t-row class="_t-row data-v-d6233bc8">
+      <view style="padding-left:11%;font-size:14px;margin-top: 6%;" class="_p data-v-d6233bc8"> 标题 </view>
+    </t-row> <t-input value="{{title}}" borderless="{{true}}" bindchange="handleProxy" placeholder="请输入标题" style="padding-left:12%;padding-right:12%;font-size:13px;margin-top: 1%;" data-eventid="{{'1'}}" data-comkey="{{$k}}" class="_t-input data-v-d6233bc8"></t-input>
+    <view style="margin-left:12%;margin-right:6%;border-bottom:1px solid #f2f2f2; margin-bottom: 2%;" class="_div data-v-d6233bc8"></view> <t-row class="_t-row data-v-d6233bc8">
+      <view style="padding-left:11%;font-size:14px;margin-top: 6%;" class="_p data-v-d6233bc8"> 链接 </view>
+    </t-row> <t-input value="{{text}}" borderless="{{true}}" bindchange="handleProxy" placeholder="请输入报道链接" style="padding-left:12%;padding-right:12%;font-size:13px;margin-top: 1%;" data-eventid="{{'2'}}" data-comkey="{{$k}}" class="_t-input data-v-d6233bc8"></t-input>
+    <view style="margin-left:12%;margin-right:6%;border-bottom:1px solid #f2f2f2; margin-bottom: 2%;" class="_div data-v-d6233bc8"></view> <t-row style="padding-left:12%;padding-right:12%;margin-top: 4%;" class="_t-row data-v-d6233bc8"><button bindtap="handleProxy" class="_button data-v-d6233bc8 red-button" data-eventid="{{'3'}}" data-comkey="{{$k}}">发布</button></t-row> <t-toast id="t-toast" class="_t-toast data-v-d6233bc8"></t-toast>
+  </view>
+</template>

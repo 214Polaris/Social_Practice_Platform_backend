@@ -1,0 +1,14 @@
+.example-search {
+  background-color: #fff;
+  padding: 16rpx 32rpx;
+}
+.liclass { 
+  font-size: 14px; 
+  line-height: 34px; 
+  color: #575757; 
+  height: 34px; 
+  display: block; 
+  padding-left: 18px; 
+  background-color: rgba(247, 241, 241, 0.9); 
+  border-bottom: 1px solid #dbdbdb; 
+} 

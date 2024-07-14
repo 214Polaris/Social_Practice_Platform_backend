@@ -1,0 +1,15 @@
+<import src="../../web-cropper/we-cropper/example/we-cropper/we-cropper"/>
+<view class="imgDisposeBlock">
+
+      <view class='imgDisposeArea'>
+          <template is="we-cropper" data="{{...cropperOpt}}"/>
+      </view>
+ 
+      <view class='imgDisposeControlLine'>
+            <view class='editBtn reelectBtn' bind:tap="cancelCrop">取消</view>
+            <view class='editBtn editPerfectBtn' bind:tap="getCropperImage">确定</view>
+      </view>
+ 
+       
+ 
+</view>

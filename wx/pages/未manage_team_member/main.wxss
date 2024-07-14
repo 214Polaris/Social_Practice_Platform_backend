@@ -1,0 +1,50 @@
+
+.search {
+  padding-left: 10%;
+  padding-right: 10%;
+  padding-top: 5%;
+}
+.people {
+  padding-top: 5%;
+  padding-left: 10%;
+  padding-right: 10%;
+}
+.block-center {
+  width: 520rpx;
+  height: 320rpx;
+  padding-top: 6%;
+  text-align: center;
+}
+.block {
+  width: 100vw;
+  background: var(--td-bg-color-container);
+  border-top-left-radius: 16rpx;
+  border-top-right-radius: 16rpx;
+}
+.header {
+  display: flex;
+  align-items: center;
+  height: 116rpx;
+}
+.title {
+  flex: 1;
+  text-align: center;
+  font-weight: 600;
+  font-size: 36rpx;
+  color: var(--td-text-color-primary);
+}
+.btn {
+  font-size: 32rpx;
+  padding: 32rpx;
+}
+.btn--cancel {
+  color: var(--td-text-color-secondary);
+}
+.btn--confirm {
+  color: #0052d9;
+}
+.box {
+  display: flex;
+  justify-content: space-between;
+  background-color: var(--td-bg-color-container, #fff);
+}

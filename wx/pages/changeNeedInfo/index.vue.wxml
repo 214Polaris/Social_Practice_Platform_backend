@@ -1,0 +1,64 @@
+<template name="4813ee9d">
+  <view class="_div data-v-120a353f">
+    <t-row class="_t-row data-v-120a353f">
+      <view style="padding-left:11%;font-size:14px;margin-top: 6%;" class="_p data-v-120a353f"> 需求名称 </view>
+    </t-row>
+    <t-textarea style="padding-left:11%;padding-right:11%;" t-class="external-class" disableDefaultPadding="{{true}}" indicator value="{{title}}" bindchange="handleProxy" data-eventid="{{'0'}}" data-comkey="{{$k}}" class="_t-textarea data-v-120a353f"></t-textarea>
+    <view style="margin-left:12%;margin-right:6%;border-bottom:1px solid #f2f2f2; margin-bottom: 2%;" class="_div data-v-120a353f"></view>
+    <t-row class="_t-row data-v-120a353f">
+      <view style="padding-left:11%;font-size:14px;margin-top: 6%;" class="_p data-v-120a353f"> 需求简介 </view>
+    </t-row>
+    <t-textarea style="padding-left:11%;padding-right:11%;" t-class="external-class-intro" maxlength="200" disableDefaultPadding="{{true}}" indicator value="{{Intro}}" bindchange="handleProxy" data-eventid="{{'1'}}" data-comkey="{{$k}}" class="_t-textarea data-v-120a353f"></t-textarea>
+    <view style="margin-left:12%;margin-right:6%;border-bottom:1px solid #f2f2f2; margin-bottom: 2%;" class="_div data-v-120a353f"></view>
+    <t-row class="_t-row data-v-120a353f">
+      <view style="padding-left:11%;font-size:14px;margin-top: 6%;" class="_p data-v-120a353f"> 需求资源 </view>
+    </t-row>
+    <t-textarea style="padding-left:11%;padding-right:11%;" t-class="external-class" maxlength="80" disableDefaultPadding="{{true}}" indicator value="{{Resource}}" bindchange="handleProxy" data-eventid="{{'2'}}" data-comkey="{{$k}}" class="_t-textarea data-v-120a353f"></t-textarea>
+    <view style="margin-left:12%;margin-right:6%;border-bottom:1px solid #f2f2f2; margin-bottom: 2%; margin-top:2%" class="_div data-v-120a353f"></view>
+    <t-row style="padding-left:7%;font-size:16px;margin-top: 6%;" class="_t-row data-v-120a353f">
+      <t-cell title="需求地址" arrow hover note="{{data.areaText}}" bindtap="handleProxy" data-eventid="{{'3'}}" data-comkey="{{$k}}" class="_t-cell data-v-120a353f"></t-cell>
+      <t-picker visible="{{data.areaVisible}}" value="{{data.areaValue}}" title="{{title}}" cancelBtn="{{cancelBtn}}" confirmBtn="{{confirmBtn}}" usingCustomNavbar bindchange="handleProxy" bindpick="handleProxy" bindcancel="handleProxy" data-eventid="{{'4'}}" data-comkey="{{$k}}" class="_t-picker data-v-120a353f">
+        <t-picker-item options="{{data.provinces}}" class="_t-picker-item data-v-120a353f"></t-picker-item>
+        <t-picker-item options="{{data.cities}}" class="_t-picker-item data-v-120a353f"></t-picker-item>
+        <t-picker-item options="{{data.counties}}" class="_t-picker-item data-v-120a353f"></t-picker-item>
+      </t-picker>
+    </t-row>
+    <t-popup visible="{{data.visible}}" bind:visible-change="onVisibleChange" placement="bottom" style="height: 620rpx;" class="_t-popup data-v-120a353f">
+      <view class="_view data-v-120a353f block">
+        <view class="_view data-v-120a353f header">
+          <view class="_view data-v-120a353f btn btn--cancel" aria-role="button" bindtap="handleProxy" data-eventid="{{'5'}}" data-comkey="{{$k}}">取消</view>
+          <view class="_view data-v-120a353f title">类别选择</view>
+          <view class="_view data-v-120a353f btn btn--confirm" aria-role="button" bindtap="handleProxy" data-eventid="{{'6'}}" data-comkey="{{$k}}">确定</view>
+        </view>
+        <scroll-view scroll-y="true" style="height:600rpx;" class="_scroll-view data-v-120a353f">
+          <t-checkbox-group value="{{data.current}}" bindchange="handleProxy" options="{{data.choose}}" style="height:500rpx;" data-eventid="{{'7'}}" data-comkey="{{$k}}" class="_t-checkbox-group data-v-120a353f"></t-checkbox-group>
+        </scroll-view>
+      </view>
+    </t-popup>
+    <view style="padding-left:11%;font-size:14px;margin-top: 6%;" class="_p data-v-120a353f"> 图片（最多6张） </view>
+    <view class="_view data-v-120a353f wrapper" style="margin-left:8%;margin-right: 8%;margin-top:5%;">
+      <view class="_div data-v-120a353f image-grid">
+        <view wx:key="file.id" key="{{file.id}}" class="_div data-v-120a353f image-container" bindtap="handleProxy" data-eventid="{{'9_'+index}}" data-comkey="{{$k}}" wx:for="{{originFiles}}" wx:for-index="index" wx:for-item="file">
+          <image src="{{file.url}}" class="_img data-v-120a353f upload-image"></image> <label class="_span data-v-120a353f close-button" catchtap="handleProxy" data-eventid="{{'8_'+index}}" data-comkey="{{$k}}">×</label>
+        </view>
+        <view class="_div data-v-120a353f upload-container">
+          <t-upload media-type="{{['image']}}" files="{{Files}}" max="{{1}}" bindadd="handleProxy" bindsuccess="handleProxy" bindremove="handleProxy" data-eventid="{{'10'}}" data-comkey="{{$k}}" class="_t-upload data-v-120a353f"></t-upload>
+        </view>
+      </view>
+    </view>
+    <t-row style="margin-left: 8%; margin-top: 6%; margin-bottom: 4%;display: flex;align-items: center;" class="_t-row data-v-120a353f">
+      <t-col span="5" class="_t-col data-v-120a353f">
+        <view style="padding-left:11%;font-size:14px;" class="_p data-v-120a353f"> 视频 </view>
+      </t-col>
+      <t-col span="9" class="_t-col data-v-120a353f"><button bindtap="handleProxy" class="_button data-v-120a353f change-button" data-eventid="{{'11'}}" data-comkey="{{$k}}">重新上传视频</button></t-col>
+    </t-row>
+    <view style="display: flex;padding-left:5%;padding-right:5%;" class="_view data-v-120a353f"><video id="operate-desc-video" src="{{Videopath}}" controls autoplay object-fit="cover" style="flex: 1;" class="_video data-v-120a353f"></video></view>
+    <t-row style="padding-left:12%;padding-right:12%;margin-top: 4%;" class="_t-row data-v-120a353f"><button bindtap="handleProxy" class="_button data-v-120a353f red-button" data-eventid="{{'12'}}" data-comkey="{{$k}}">提交审核</button></t-row>
+    <t-toast id="t-toast" class="_t-toast data-v-120a353f"></t-toast>
+    <t-overlay visible="{{OverlayVisible}}" duration="{{500}}" bindtap="handleProxy" data-eventid="{{'13'}}" data-comkey="{{$k}}" class="_t-overlay data-v-120a353f">
+      <view class="_div data-v-120a353f overlay-content">
+        <image src="{{currentImageUrl}}" class="_img data-v-120a353f overlay-image"></image>
+      </view>
+    </t-overlay>
+  </view>
+</template>

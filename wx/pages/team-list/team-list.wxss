@@ -1,0 +1,45 @@
+.example-search {
+  background-color: var(--bg-color-demo);
+  padding: 16rpx 32rpx;
+}
+
+.example-search:not(:last-child) {
+  margin-bottom: 32rpx;
+}
+
+.block {
+  display: flex;
+  font-size: 14px;
+  align-items: center;
+  line-height: 76rpx;
+  color: var(--td-text-color-placeholder);
+}
+
+.block text {
+  display: block;
+  width: 160rpx;
+  margin-right: 32rpx;
+}
+
+.block+.block {
+  margin-top: 32rpx;
+}
+
+.block .margin-16:first-child{
+  margin-left: 12rpx;
+}
+
+.block .margin-16:not(:last-child) {
+  margin-right: 30rpx;
+  background-color: #aa4c43;
+}
+
+.team_icon{
+  display: flex;
+  margin-top:-80rpx;
+  margin-left: 138rpx;
+  margin-bottom: 8rpx;
+  font-size: 28rpx;
+  align-items: center;
+  color: #686767;
+}

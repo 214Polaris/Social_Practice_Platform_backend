@@ -1,0 +1,18 @@
+<template name="7b610b54">
+  <view class="_div data-v-57c89336">
+    <view class="_div data-v-57c89336 noti-container"><t-row class="_t-row data-v-57c89336"><t-col span="4" style="margin-left: 5%; " class="_t-col data-v-57c89336"><t-avatar class="_t-avatar data-v-57c89336 avatar-example" image="{{image}}"></t-avatar></t-col> <t-col span="20" class="_t-col data-v-57c89336">
+          <view wx:if="{{type==1}}" style="padding-left:1%;font-size:15px;font-weight: bold;margin-bottom: 2%;" class="_p data-v-57c89336"> 审核通知 </view>
+          <view wx:if="{{type==2}}" style="padding-left:1%;font-size:15px;font-weight: bold;margin-bottom: 2%;" class="_p data-v-57c89336"> 系统通知 </view>
+          <view style="color: #d3d0d0;padding-left:1%;font-size: 12px;" class="_p data-v-57c89336">
+            {{ time }}
+          </view>
+        </t-col></t-row> <t-row class="_t-row data-v-57c89336">
+        <view style="margin-left: 22%;font-size:15px; font-weight: bold; margin-bottom: 2%; margin-top: 5%" class="_p data-v-57c89336"> 您有来自xx社区的需求审核请求! </view>
+      </t-row>
+      <view class="_div data-v-57c89336 detailShow" style="padding:2%; margin-left: 22%; margin-bottom: 2%; margin-top: 5% ;margin-right: 10%;"><t-row class="_t-row data-v-57c89336"><t-col span="4" class="_t-col data-v-57c89336"><t-image src="{{imageSrc}}" mode="aspectFill" width="36" height="36" class="_t-image data-v-57c89336"></t-image></t-col> <t-col span="20" style="align-self: center;" class="_t-col data-v-57c89336">
+            <view style="padding-left:6%;font-size:14px;margin-bottom: 2%;" class="_p data-v-57c89336"> 勇敢少先队 </view>
+          </t-col></t-row></view>
+      <view style="margin-left: 18%; margin-right: 10%;border-bottom:1px solid #f2f2f2; margin-bottom: 2%; margin-top:4%" class="_div data-v-57c89336"></view>
+    </view>
+  </view>
+</template>

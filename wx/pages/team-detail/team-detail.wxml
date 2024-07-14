@@ -1,0 +1,61 @@
+<view>
+  <t-avatar class="avatar-example--large" image="data:image/png;base64,{{imageSrc}}" size="large" style="margin-left: 24rpx; margin-top: 24rpx;"/>
+  <view class="title" style="margin-left: 180rpx;margin-top: -115rpx;">{{team_name}}</view>
+  <view class="block" style="margin-left: 155rpx;">
+    <view class="item" wx:for="{{tagList}}" wx:key="id">
+      <v-tag class="margin-16" variant="outline" theme="primary">{{item}}</v-tag>
+    </view>
+  </view>
+  <view class="member" style="position:absolute; right: 60rpx;">
+    <t-icon class="item" name="usergroup" color="#aa4c43"></t-icon>
+    <span style="margin-left: 8rpx;">{{team_cnt}}</span>
+  </view>
+  <view style="height: 65rpx;"></view>
+  <view class="demand-intro">
+    <view class="dtitle">队伍简介</view>
+    <t-divider/>
+    <view class="dcontent">{{team_intro}}</view>
+  </view>
+  <view class="problock">
+    <view class="protitle">突击队负责人</view>
+    <view class="protxt">{{team_manager}}</view>
+    <view class="protitle">指导老师</view>
+    <view class="protxt">{{team_teacher}}</view>
+  </view>
+  <view class="demand-intro" style="margin-bottom:32rpx;">
+    <view class="dtitle">结对项目</view>
+    <view wx:for="{{teamedList}}" wx:for-item="item">
+      <t-cell title="{{item.proj_title}}" description="{{item.proj_gov}}" hover arrow bind:tap="onClickTeamed" data-id="{{item.proj_id}}" data-demandname="{{item.proj_title}}">
+        <view class="avatar" slot="left-icon">
+          <t-image src="data:image/png;base64,{{item.proj_img}}" mode="heightFix" height="40"></t-image>
+        </view>
+      </t-cell>
+  </view></view>
+  <!-- 占位符 -->
+  <view style="height: 120rpx;"></view>
+  <view>
+    <t-tab-bar split="{{false}}">
+    <t-tab-bar-item>
+    <t-button open-type="share" t-class="shareBtn" variant="text">
+      <view class="btn-icon">
+        <t-icon name="share" size="40rpx" />
+        <view class="share-text">转发</view>
+      </view>
+    </t-button></t-tab-bar-item>
+    <t-tab-bar-item/><t-tab-bar-item/>
+    <t-tab-bar-item/><t-tab-bar-item/><t-tab-bar-item/>
+    <t-button theme="primary" icon="call" content="立即沟通" class="bt-call" bind:tap="handlePopup"  t-class="wrapper" block></t-button>
+</t-tab-bar>
+  </view>
+  <t-popup visible="{{visible}}" bind:visible-change="onVisibleChange" placement="center" close-on-overlay-click="true">
+  <t-icon t-class="close-btn" name="close-circle" size="32" color="#fff" bind:tap="onClose" />
+  <view class="pop-block">
+      <view class="poptitle" style="top: 240rpx;">突击队负责人姓名：</view>
+      <view class="poptext">{{team_manager}}</view>
+      <view class="poptitle">联系电话：
+      <t-icon name="call" size="36rpx" style="margin-top:-38rpx; margin-left: -84rpx;" color="#aa4c43" bind:tap="onCopyNumber"/>
+      </view>
+      <view class="poptext">{{team_phone}}</view>
+  </view>
+</t-popup>
+</view>

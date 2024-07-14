@@ -1,0 +1,40 @@
+<template name="0ba63b90">
+  <view class="_div data-v-0ff416e8"><t-row class="_t-row data-v-0ff416e8">
+      <view style="padding-left:10%;font-size:18px;font-weight:bold; margin-top: 6%;" class="_p data-v-0ff416e8">
+        {{show.community_name }}
+      </view>
+    </t-row> <t-row class="_t-row data-v-0ff416e8">
+      <view style="padding-left:11%;font-size:14px;margin-top: 6%;font-weight:bold;" class="_p data-v-0ff416e8"> 社区简介 </view>
+    </t-row> <t-row class="_t-row data-v-0ff416e8">
+      <view style="padding-left:12%;padding-right:12%;font-size:13px;margin-top: 6%;" class="_p data-v-0ff416e8">
+        {{show.introduction}}
+      </view>
+    </t-row>
+    <view style="margin-left:12%;margin-right:6%;border-bottom:1px solid #f2f2f2; margin-bottom: 2%; margin-top:2%" class="_div data-v-0ff416e8"></view> <t-row class="_t-row data-v-0ff416e8">
+      <view style="padding-left:11%;font-size:14px;margin-top: 6%;font-weight:bold;" class="_p data-v-0ff416e8"> 社区负责人 </view>
+    </t-row> <t-row style="padding-left:12%;padding-right:12%;margin-top: 4%;" class="_t-row data-v-0ff416e8">
+      <view style="font-size:13px;" class="_p data-v-0ff416e8">
+        {{ComName}}
+      </view> <t-icon name="call" size="34rpx" color="rgb(163, 159, 159)" bindtap="handleProxy" style="margin-left: 3%;" data-eventid="{{'0'}}" data-comkey="{{$k}}" class="_t-icon data-v-0ff416e8"></t-icon>
+      <view style="color: rgb(163, 159, 159);font-size:11px; padding-left:1%" class="_p data-v-0ff416e8">
+        {{ Phone }}
+      </view>
+    </t-row>
+    <view style="margin-left:12%;margin-right:6%;border-bottom:1px solid #f2f2f2; margin-bottom: 2%; margin-top:2%" class="_div data-v-0ff416e8"></view> <t-row class="_t-row data-v-0ff416e8">
+      <view style="padding-left:11%;font-size:14px;margin-top: 6%;padding-right:12%;font-weight:bold;" class="_p data-v-0ff416e8"> 地点 </view>
+    </t-row> <t-row class="_t-row data-v-0ff416e8">
+      <view style="padding-left:12%;padding-right:12%;font-size:13px;margin-top: 6%;" class="_p data-v-0ff416e8">
+        {{ show.address }}
+      </view>
+    </t-row>
+    <view style="margin-left:12%;margin-right:6%;border-bottom:1px solid #f2f2f2; margin-bottom: 2%; margin-top:2%" class="_div data-v-0ff416e8"></view> <t-toast id="t-toast" class="_t-toast data-v-0ff416e8"></t-toast> <t-row style="padding:6%;" class="_t-row data-v-0ff416e8"><t-col span="12" class="_t-col data-v-0ff416e8"><button bindtap="handleProxy" class="_button data-v-0ff416e8 red-button" data-eventid="{{'1'}}" data-comkey="{{$k}}">不通过</button></t-col> <t-col span="12" class="_t-col data-v-0ff416e8"><button bindtap="handleProxy" class="_button data-v-0ff416e8 red-button" data-eventid="{{'2'}}" data-comkey="{{$k}}">通过审核</button></t-col></t-row> <t-toast id="t-toast" class="_t-toast data-v-0ff416e8"></t-toast> <t-popup visible="{{ExplainVisible}}" placement="bottom" class="_t-popup data-v-0ff416e8">
+      <view class="_view data-v-0ff416e8 block">
+        <view class="_view data-v-0ff416e8 header">
+          <view class="_view data-v-0ff416e8 btn btn--cancel" aria-role="button" bindtap="handleProxy" data-eventid="{{'3'}}" data-comkey="{{$k}}">取消</view>
+          <view class="_view data-v-0ff416e8 title">填写审核不通过说明</view>
+          <view class="_view data-v-0ff416e8 btn btn--confirm" aria-role="button" bindtap="handleProxy" data-eventid="{{'4'}}" data-comkey="{{$k}}">确定</view>
+        </view> <t-row class="_t-row data-v-0ff416e8"><t-input value="{{noAgreeValue}}" bindchange="handleProxy" placeholder="请输入说明" style="padding:5%" data-eventid="{{'5'}}" data-comkey="{{$k}}" class="_t-input data-v-0ff416e8"></t-input></t-row>
+      </view>
+    </t-popup>
+  </view>
+</template>

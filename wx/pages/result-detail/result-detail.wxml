@@ -1,0 +1,96 @@
+<view>
+  <swiper
+  current="{{current}}"
+  circular="true"
+  autoplay="true"
+  duration="600"
+  interval="{{duration}}"
+  navigation="{{ { type: 'dots' } }}"
+  bind:image-load="onImageLoad"
+>
+  <swiper-item wx:for="{{imageSrc}}" wx:key="id" bindtap="onBannerPreview">
+      <block wx:if="{{item.img_flag === 0}}">
+        <view style="display: flex; justify-content: center; align-items: center;">
+          <t-image src="data:image/png;base64,{{item.src}}" mode="heightFix" height="320rpx"></t-image>
+        </view>
+      </block>
+      <block wx:else>
+        <video id="operate-desc-video" src="{{item.src}}" object-fit="cover" style="width: 100%; height: 100%;" autoplay="true" bindended="resetDuration" bindplay="setDuration"></video>
+      </block>
+    </swiper-item>
+</swiper>
+  <view class="title">{{demand_name}}</view>
+  <view class="locate">
+    <t-icon class="item" name="location" color="#aa4c439a"></t-icon>
+    <span style="margin-left: 8rpx;">{{address}}</span>
+  </view>
+  <view class="locate">
+    <t-icon class="item" name="calendar" color="#aa4c439a"></t-icon>
+    <span style="margin-left: 8rpx;">{{date}}</span>
+  </view>
+  <t-divider/>
+  <view class="demand-intro">
+    <view class="dcontent">{{res_intro}}</view>
+  </view>
+  <t-divider/>
+  <view class="demand-intro">
+    <view class="dtitle comment-title">评论（{{comment}}条）：
+      <view>
+        <t-link content="更多评论" hover navigatorProps="{{navigatorProps}}" extra-data="{{demand_id}}" style="margin-left: -120rpx;">
+        <t-icon name="chevron-right" size="32rpx" style="margin-top:-36rpx;margin-right: -128rpx;"></t-icon>
+        </t-link>
+    </view>
+    </view>
+    <view wx:for="{{comment_list}}" wx:for-item="post">
+      <t-cell title="{{post.user_name}}" description="{{post.date}}" bordered="{{false}}">
+        <view class="avatar" slot="left-icon">
+          <t-image src="data:image/png;base64,{{post.avatar}}" mode="heightFix" height="48"></t-image>
+        </view>
+        </t-cell>
+        <view class="comment" style="width: 550rpx; left: 139rpx; position: relative; top: -29rpx; right:80rpx">{{post.content}}
+      </view>
+      <t-divider/>
+    </view>
+  </view>
+  <view style="height: 120rpx;"></view>
+  <view>
+    <t-tab-bar split="{{false}}">
+      <t-tab-bar-item>
+    <t-button id="like-but" variant="text" bind:tap="onHandleLike">
+      <view class="btn-icon">
+        <t-icon wx:if="{{unlike_flag}}" name="thumb-up" size="40rpx" />
+        <t-icon wx:else name="thumb-up" size="40rpx" color="#aa4c43"/>
+        <view class="share-text">{{like}}</view>
+      </view>
+    </t-button></t-tab-bar-item>
+    <t-tab-bar-item>
+    <t-button open-type="share" t-class="shareBtn" variant="text">
+      <view class="btn-icon">
+        <t-icon name="share" size="40rpx" />
+        <view class="share-text">转发</view>
+      </view>
+    </t-button></t-tab-bar-item>
+    <t-tab-bar-item/><t-tab-bar-item/>
+  <t-button theme="primary" icon="chat" content="评论" class="bt-call" bind:tap="onHandlePopup"  t-class="wrapper" block></t-button>
+</t-tab-bar>
+<t-popup visible="{{visible}}" bind:visible-change="onVisibleChange" placement="bottom" close-on-overlay-click="true">
+  <view class="pop-block">
+  <form catchsubmit="onSubmit">
+      <t-textarea
+        value="{{newcom}}"
+        bind:blur="onTextBlur"
+        placeholder="说点什么吧..."
+        disableDefaultPadding="{{true}}"
+        autosize="{{true}}"
+        style="width:80%; top:-36rpx;"
+        confirm-type="send"
+        focus="{{focus}}"
+        maxlength="200"
+      >
+      </t-textarea>
+      <t-button type="submit" slot="suffix" theme="primary" size="medium" style="position:absolute;bottom:20rpx;left:80%;"> 发布 </t-button>
+    </form>
+  </view>
+</t-popup>
+  </view>
+</view>

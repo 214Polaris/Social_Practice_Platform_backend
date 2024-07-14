@@ -1,0 +1,31 @@
+<template name="5b67c600">
+  <view class="_div data-v-61e3c062">
+    <view style="padding-left:3%;padding-right:3%;" class="_div data-v-61e3c062">
+      <t-tabs defaultValue="{{1}}" bindchange="handleProxy" bindtap="handleProxy" data-eventid="{{'0'}}" data-comkey="{{$k}}" class="_t-tabs data-v-61e3c062">
+        <t-tab-panel label="社区信息" value="1" class="_t-tab-panel data-v-61e3c062"></t-tab-panel>
+        <t-tab-panel label="社区需求" value="2" class="_t-tab-panel data-v-61e3c062"></t-tab-panel>
+        <t-tab-panel label="院系队伍" value="3" class="_t-tab-panel data-v-61e3c062"></t-tab-panel>
+        <t-tab-panel label="需求成果" value="4" class="_t-tab-panel data-v-61e3c062"></t-tab-panel>
+      </t-tabs>
+    </view>
+    <view wx:key="audit.audit_id" key="{{audit.audit_id}}" class="_div data-v-61e3c062 audit" bindtap="handleProxy" data-eventid="{{'2_'+index}}" data-comkey="{{$k}}" wx:for="{{auditList}}" wx:for-index="index" wx:for-item="audit">
+      <t-row class="_t-row data-v-61e3c062">
+        <t-col span="4" style="align-self: center;" class="_t-col data-v-61e3c062">
+          <t-image src="{{audit.img}}" mode="aspectFill" width="36" height="36" class="_t-image data-v-61e3c062"></t-image>
+        </t-col>
+        <t-col span="20" style="align-self: center;" class="_t-col data-v-61e3c062">
+          <view style="padding-left:2%;font-size:14px;margin-bottom: 2%;font-weight: bold;" class="_p data-v-61e3c062">
+            {{audit.name}}
+          </view>
+          <view style="display:flex;margin-left: 2%; align-items: center;margin-bottom: 2%;" wx:if="{{audit.label}}" class="_div data-v-61e3c062">
+            <t-icon name="museum-1" size="36rpx" color="rgb(163, 159, 159)" bindtap="handleProxy" data-eventid="{{'1_'+index}}" data-comkey="{{$k}}" class="_t-icon data-v-61e3c062"></t-icon>
+            <view style="color: rgb(163, 159, 159);font-size:12px; padding-left:1%" class="_p data-v-61e3c062">
+              {{ audit.label }}
+            </view>
+          </view>
+        </t-col>
+      </t-row>
+      <view style="margin-left: 18%; margin-right: 10%;border-bottom:1px solid #f2f2f2; margin-bottom: 2%; margin-top:4%" class="_div data-v-61e3c062"></view>
+    </view>
+  </view>
+</template>

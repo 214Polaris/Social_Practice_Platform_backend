@@ -1,0 +1,10 @@
+{
+  "navigationBarTitleText": "可结对需求",
+    "usingComponents": {
+      "t-search": "tdesign-miniprogram/search/search",
+      "t-cell": "tdesign-miniprogram/cell/cell",
+      "v-tag":"tdesign-miniprogram/tag/tag",
+      "t-divider": "tdesign-miniprogram/divider/divider",
+      "t-icon":"tdesign-miniprogram/icon/icon"
+    }
+}

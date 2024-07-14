@@ -1,0 +1,79 @@
+<view>
+  <view class="title"><t-cell
+  align="middle"
+  title="{{gov_name}}"
+  image="data:image/png;base64,{{gov_head}}"
+  hover
+  bordered="{{false}} "
+  style="font-weight:bold;"
+/></view>
+<t-tabs defaultValue="0"
+  bind:change="onTabsChange"
+  t-class="custom-tabs"
+  t-class-content="custom-panel"
+  style="font-size: 32rpx;">
+  <t-tab-panel label="需求清单" value="0">
+    <view wx:for="{{demand_list}}" wx:for-item="demand" style="width: 750rpx; height: 160rpx; display: block; box-sizing: border-box">
+    <view bind:tap="onClickDemand"
+    data-demand="{{demand}}">
+      <t-cell title="{{demand.demand_name}}"
+    align="top"
+    image="data:image/png;base64,{{demand.demand_img}}"
+    hover
+    bordered="{{false}}"
+    />
+          <view class="block">
+          <view wx:for="{{demand.tags}}" wx:key="id" wx:for-item="tag" style="position: relative; left: 127rpx; top: -85rpx">
+            <v-tag class="margin-16" variant="outline" theme="primary">{{tag}}</v-tag>
+          </view>
+        </view></view>
+    </view>
+  </t-tab-panel>
+  <t-tab-panel label="结对动态" value="1" style="{{tabPanelstyle}}">
+    <view wx:for="{{post_list}}" wx:for-item="post">
+    <view bind:tap="onClickResult" data-post="{{post}}">
+      <t-cell title="{{post.team_name}}"
+      description="{{post.post_time}}"
+    align="top"
+    image="data:image/png;base64,{{post.team_avatar}}"
+    bordered="{{false}}"
+    />
+      <view class="post_content">
+      <view bind:tap="onClickResult">{{post.post_content}}</view>
+      <t-grid class="goal_img" column="{{3}}">
+        <t-grid-item wx:for="{{post.post_img}}" wx:for-item="img">
+          <t-image src="data:image/png;base64,{{img}}" width="160rpx" height="160rpx" bind:tap="onClick" data-post="{{post}}"></t-image>
+        </t-grid-item>
+        <t-image-viewer
+            usingCustomNavbar
+            closeBtn="{{true}}"
+            visible="{{post_visible}}"
+            images="data:image/png;base64,{{post.post_img}}"
+            bind:close="onClose"
+          ></t-image-viewer>
+      </t-grid>
+    </view></view>
+    </view>
+  </t-tab-panel>
+  <t-tab-panel label="结对项目" value="2" style="{{tabPanelstyle}}">
+    <view wx:for="{{teamed_list}}" wx:for-item="team" style="width: 750rpx; height: 188rpx; display: block; box-sizing: border-box" >
+    <view bind:tap="onClickTeamed" data-proj="{{team}}">
+      <t-cell title="{{team.team_title}}"
+        align="top"
+        hover
+        image="data:image/png;base64,{{team.team_img}}"
+        bordered="{{false}}"/>
+      <view class="block" style="position: relative; left: 0rpx; top: -85rpx; width: 750rpx; height: 71rpx; display: flex; box-sizing: border-box">
+          <view wx:for="{{team.tags}}" wx:key="id" wx:for-item="tag" style="position: relative; left: 127rpx; top: -3rpx">
+            <v-tag class="margin-16" variant="outline" theme="primary">{{tag}}</v-tag>
+          </view>
+        </view>
+        <view class="team_icon" style="width: 615rpx; height: 43rpx; display: flex; box-sizing: border-box; position: relative; left: 0rpx; top: -15rpx">
+          <t-icon name="usergroup"></t-icon>
+          <span style="margin-left: 8rpx;">{{team.team_name}}</span>
+        </view>
+      </view>
+    </view>
+  </t-tab-panel>
+</t-tabs>
+</view>

@@ -1,0 +1,96 @@
+<view>
+  <swiper
+  circular="true"
+  autoplay="true"
+  duration="800"
+  interval="{{duration}}"
+  navigation="{{ { type: 'dots' } }}"
+  bind:image-load="onImageLoad"
+>
+  <swiper-item wx:for="{{imageSrc}}" wx:key="id">
+      <block wx:if="{{item.img_flag == 0}}">
+        <view style="display: flex; justify-content: center; align-items: center;">
+          <t-image src="data:image/png;base64,{{item.src}}" mode="heightFix" bind:tap="onClickImg" height="320rpx"></t-image>
+        </view>
+      </block>
+      <block wx:else>
+        <video id="operate-desc-video" src="{{item.src}}" object-fit="cover" style="width: 100%; height: 100%;" bindplay="resetDuration" bindended="setDuration" autoplay="true"></video>
+      </block>
+    </swiper-item>
+</swiper>
+<view style="position: relative; top: 6rpx;">
+  <view class="title">{{demand_name}}</view>
+  <view class="block">
+    <view class="item" wx:for="{{tagList}}" wx:key="id">
+      <v-tag class="margin-16" variant="outline" theme="primary">{{item}}</v-tag>
+    </view>
+  </view>
+  <view class="locate">
+    <t-icon class="item" name="location" color="#aa4c43"></t-icon>
+    <span style="margin-left: 8rpx;">{{address}}</span>
+  </view>
+  <view class="member" style="position: relative; right: 6rpx; top:8rpx;">
+    <t-icon class="item" name="usergroup" color="#aa4c43"></t-icon>
+    <span style="margin-left: 8rpx;">{{team_cnt}}</span>
+  </view>
+  <view style="height: 65rpx;"></view></view>
+  <!-- TODO: pk组件 -->
+  <view class="pk">
+    <t-image src="/pages/teamed-pro-detail/img/success.jpg" mode="widthFix" width="260rpx" style="margin-left: 210rpx;margin-bottom: -12rpx;"></t-image>
+    <t-grid class="pk-block" border="{{border}}" column="{{2}}">
+      <t-grid-item text="{{gov}}" image="data:image/png;base64,{{gov_head}}" />
+      <t-grid-item text="{{team}}" image="data:image/png;base64,{{team_head}}" />
+    </t-grid>
+  </view>
+  <view class="demand-intro">
+    <view class="dtitle">项目简介</view>
+    <t-divider/>
+    <view class="dcontent">{{project_intro}}</view>
+  </view>
+  <view class="problock">
+    <view class="protitle">突击队负责人</view>
+    <view class="protxt">{{team_stu}}</view>
+    <view class="protitle">指导老师</view>
+    <view class="protxt">{{team_tea}}</view>
+  </view>
+  <view class="demand-intro" style="margin-bottom:32rpx;">
+    <view class="dtitle">近期成果</view>
+    <view wx:for="{{activity_list}}" wx:for-item="item">
+      <t-cell title="{{item.title}}" description="{{item.date}}" hover arrow bind:tap="onClickAct" data-result="{{item}}">
+        <view class="avatar" slot="left-icon">
+    <t-image src="data:image/png;base64,{{item.img}}" mode="heightFix" height="40"></t-image>
+  </view>
+      </t-cell>
+    </view>
+  </view>
+  <view class="demand-intro">
+    <view class="dtitle">相关报道</view>
+    <view wx:for="{{report_list}}" wx:for-item="item">
+      <t-cell title="{{item.title}}" description="{{item.date}}" hover arrow bind:tap="onClickArticle" data-link="{{item.link}}">
+      </t-cell>
+    </view>
+  </view>
+  <!-- 占位符 -->
+  <view style="height: 240rpx;"></view>
+  <view>
+    <t-tab-bar split="{{false}}">
+    <t-tab-bar-item>
+    <t-button open-type="share" t-class="shareBtn" variant="text">
+      <view class="btn-icon">
+        <t-icon name="share" size="40rpx" />
+        <view class="share-text">转发</view>
+      </view>
+    </t-button></t-tab-bar-item>
+    <t-tab-bar-item/><t-tab-bar-item/>
+    <t-tab-bar-item/><t-tab-bar-item/>
+</t-tab-bar>
+  </view>
+  <!-- <t-image-viewer
+  usingCustomNavbar
+  closeBtn="{{true}}"
+  showIndex="{{true}}"
+  visible="{{visible}}"
+  images="data:image/png;base64,{{imgList}}"
+  bind:close="onClickImg"
+></t-image-viewer> -->
+</view>

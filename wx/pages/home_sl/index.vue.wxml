@@ -1,0 +1,102 @@
+<template name="5bfefc8c">
+  <view class="_div data-v-643062b8">
+    <view class="_div data-v-643062b8 header-container" style="margin-bottom: 20rpx;">
+      <t-avatar class="_t-avatar data-v-643062b8 avatar-example" image="{{image}}" style="margin-top: 12rpx;"></t-avatar>
+      <view class="_div data-v-643062b8 name" style="font-weight: bold;margin-top: 12rpx;">{{ name }}</view>
+    </view>
+    <view class="_div data-v-643062b8 inner-container" style="margin-top: 20rpx;margin-bottom: 20rpx;">
+      <t-row class="_t-row data-v-643062b8">
+        <t-col span="24" class="_t-col data-v-643062b8">
+          <view style="padding-left:2%;font-size:32rpx;font-weight: bold;margin-bottom: 2%;" class="_p data-v-643062b8"> 我的服务 </view>
+          <view style="border-bottom:1px solid #f2f2f2; margin-bottom: 2%;" class="_div data-v-643062b8"></view>
+        </t-col>
+      </t-row>
+      <t-row class="_t-row data-v-643062b8">
+        <t-col span="6" style="text-align: center;" bindtap="handleProxy" data-eventid="{{'0'}}" data-comkey="{{$k}}" class="_t-col data-v-643062b8">
+          <view style="display: inline-block;" class="_div data-v-643062b8">
+            <t-icon name="chat-message" size="64rpx" bind:click="onIconTap" style="color: #bd1b06; margin-top: 4px;" class="_t-icon data-v-643062b8"></t-icon>
+          </view>
+          <view style="font-size: 24rpx; font-weight: bold; display: inline-block;" class="_div data-v-643062b8">互动消息</view>
+        </t-col>
+        <t-col span="6" style="text-align: center;" bindtap="handleProxy" wx:if="{{isLeader == 1}}" data-eventid="{{'1'}}" data-comkey="{{$k}}" class="_t-col data-v-643062b8">
+          <view style="display: inline-block;" class="_div data-v-643062b8">
+            <t-icon name="system-messages" size="64rpx" bind:click="onIconTap" style="color: #bd1b06; margin-top: 4px;" class="_t-icon data-v-643062b8"></t-icon>
+          </view>
+          <view style="font-size: 24rpx; font-weight: bold; display: inline-block;" class="_div data-v-643062b8">消息通知</view>
+        </t-col>
+      </t-row>
+    </view>
+    <view class="_div data-v-643062b8 inner-container" style="margin-bottom: 20px;">
+      <t-row class="_t-row data-v-643062b8">
+        <t-col span="24" class="_t-col data-v-643062b8">
+          <view style="padding-left:2%;font-size:32rpx;font-weight: bold;margin-bottom: 2%;" class="_p data-v-643062b8"> 平台服务 </view>
+          <view style="border-bottom:1px solid #f2f2f2; margin-bottom: 2%;" class="_div data-v-643062b8"></view>
+        </t-col>
+      </t-row>
+      <t-row class="_t-row data-v-643062b8">
+        <t-col span="6" style="text-align: center;" class="_t-col data-v-643062b8">
+          <view style="display: inline-block;" class="_div data-v-643062b8">
+            <t-icon name="look-around" size="64rpx" bind:click="onIconTap" style="color: #bd1b06; margin-top: 4px;" class="_t-icon data-v-643062b8"></t-icon>
+          </view>
+          <view style="font-size: 24rpx; font-weight: bold; display: inline-block;" class="_div data-v-643062b8">关于我们</view>
+        </t-col>
+        <t-col span="6" style="text-align: center;" class="_t-col data-v-643062b8">
+          <view style="display: inline-block;" class="_div data-v-643062b8">
+            <t-icon name="chat-bubble-smile" size="64rpx" bind:click="onIconTap" style="color: #bd1b06; margin-top: 7rpx;" class="_t-icon data-v-643062b8"></t-icon>
+          </view>
+          <view style="font-size: 24rpx; font-weight: bold; display: inline-block;" class="_div data-v-643062b8">联系我们</view>
+        </t-col>
+      </t-row>
+    </view>
+    <view class="_div data-v-643062b8 inner-container" style="margin-top:-24rpx;" wx:if="{{isLeader == 1}}">
+      <t-row class="_t-row data-v-643062b8">
+        <t-col span="24" class="_t-col data-v-643062b8">
+          <view style="padding-left:2%;font-size:32rpx;font-weight: bold;margin-bottom: 2%;" class="_p data-v-643062b8"> 组织服务 </view>
+          <view wx:if="{{isPositiveInteger}}" style="border-bottom:1px solid #f2f2f2; margin-bottom: 2%;" class="_div data-v-643062b8"></view>
+          <view wx:if="{{!isPositiveInteger}}" style="padding-left:3%;color:#928f8f; font-size:10px;font-weight: bold;margin-bottom: 2%;" class="_p data-v-643062b8"> 尚未加入队伍 </view>
+        </t-col>
+      </t-row>
+      <t-row class="_t-row data-v-643062b8">
+        <t-col span="6" style="text-align: center;" bindtap="handleProxy" data-eventid="{{'2'}}" data-comkey="{{$k}}" class="_t-col data-v-643062b8">
+          <view style="display: inline-block;" class="_div data-v-643062b8">
+            <t-icon name="assignment-user" size="64rpx" bind:click="onIconTap" style="color: #bd1b06; margin-top: 10rpx;" class="_t-icon data-v-643062b8"></t-icon>
+          </view>
+          <view wx:if="{{isPositiveInteger}}" style="font-size: 24rpx; font-weight: bold; display: inline-block;" class="_div data-v-643062b8">修改队伍信息</view>
+          <view wx:else style="font-size: 24rpx; font-weight: bold; display: inline-block;" class="_div data-v-643062b8">注册队伍信息</view>
+        </t-col>
+        <t-col span="6" style="text-align: center;" bindtap="handleProxy" data-eventid="{{'3'}}" data-comkey="{{$k}}" class="_t-col data-v-643062b8">
+          <view style="display: inline-block;" class="_div data-v-643062b8">
+            <t-icon name="fact-check" size="64rpx" bind:click="onIconTap" style="color: #bd1b06; margin-top: 7rpx;" class="_t-icon data-v-643062b8"></t-icon>
+          </view>
+          <view style="font-size: 24rpx; font-weight: bold; display: inline-block;" class="_div data-v-643062b8">管理队员</view>
+        </t-col>
+        <t-col span="6" style="text-align: center;" bindtap="handleProxy" data-eventid="{{'4'}}" data-comkey="{{$k}}" class="_t-col data-v-643062b8">
+          <view style="display: inline-block;" class="_div data-v-643062b8">
+            <t-icon name="system-sum" size="64rpx" bind:click="onIconTap" style="color: #bd1b06; margin-top: 4px;" class="_t-icon data-v-643062b8"></t-icon>
+          </view>
+          <view style="font-size: 24rpx; font-weight: bold; display: inline-block;" class="_div data-v-643062b8">发布成果</view>
+        </t-col>
+        <t-col span="6" style="text-align: center;" bindtap="handleProxy" data-eventid="{{'5'}}" data-comkey="{{$k}}" class="_t-col data-v-643062b8">
+          <view style="display: inline-block;" class="_div data-v-643062b8">
+            <t-icon name="cooperate" size="64rpx" bind:click="onIconTap" style="color: #bd1b06; margin-top: 4px;" class="_t-icon data-v-643062b8"></t-icon>
+          </view>
+          <view style="font-size: 24rpx; font-weight: bold; display: inline-block;" class="_div data-v-643062b8">需求结对</view>
+        </t-col>
+      </t-row>
+      <t-row class="_t-row data-v-643062b8">
+        <t-col span="6" style="text-align: center;" bindtap="handleProxy" data-eventid="{{'6'}}" data-comkey="{{$k}}" class="_t-col data-v-643062b8">
+          <view style="display: inline-block;" class="_div data-v-643062b8">
+            <t-icon name="link-1" size="64rpx" bind:click="onIconTap" style="color: #bd1b06; margin-top: 4px;" class="_t-icon data-v-643062b8"></t-icon>
+          </view>
+          <view style="font-size: 24rpx; font-weight: bold; display: inline-block;" class="_div data-v-643062b8">发布报道</view>
+        </t-col>
+      </t-row>
+    </view>
+    <t-toast id="t-toast" class="_t-toast data-v-643062b8"></t-toast>
+    <t-tab-bar defaultValue="label3" split="false" value="label3" class="_t-tab-bar data-v-643062b8">
+      <t-tab-bar-item value="label1" icon="home" bindtap="handleProxy" data-eventid="{{'7'}}" data-comkey="{{$k}}" class="_t-tab-bar-item data-v-643062b8">主页</t-tab-bar-item>
+      <t-tab-bar-item value="label2" icon="app" bindtap="handleProxy" data-eventid="{{'8'}}" data-comkey="{{$k}}" class="_t-tab-bar-item data-v-643062b8">成果墙</t-tab-bar-item>
+      <t-tab-bar-item value="label3" icon="user" class="_t-tab-bar-item data-v-643062b8">我的</t-tab-bar-item>
+    </t-tab-bar>
+  </view>
+</template>

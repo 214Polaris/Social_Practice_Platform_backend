@@ -1,0 +1,12 @@
+/* pages/comment-detail/comment-detail.wxss */
+.avatar {
+  width: 96rpx;
+  height: 96rpx;
+  border-radius: 50%;
+  overflow: hidden;
+}
+
+.comment{
+  font-size: 30rpx;
+  margin-right: 12rpx;
+}

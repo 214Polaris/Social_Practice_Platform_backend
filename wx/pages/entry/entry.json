@@ -1,0 +1,13 @@
+{
+  "usingComponents": {
+    "search-bars":"action/index",
+    "cascader-bars":"with-title/index",
+    "badge": "badge/index",
+    "scoll":"scroll/index",
+    "other":"other/index"
+  },
+  "navigationBarTitleText": "中山大学社会实践平台",
+  "navigationBarBackgroundColor": "#f6f6f6",
+  "navigationBarTextStyle": "black",
+  "backgroundColor": "#f6f6f6"
+}

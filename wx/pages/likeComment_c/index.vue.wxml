@@ -1,0 +1,26 @@
+<template name="39277bff">
+  <view class="_div data-v-24fb79d7">
+    <view wx:key="item.id" key="{{item.id}}" wx:for="{{notifications}}" wx:for-index="index" wx:for-item="item" class="_div data-v-24fb79d7"><t-row class="_t-row data-v-24fb79d7"><t-col span="4" style="margin-left: 5%; " class="_t-col data-v-24fb79d7"><t-avatar image="{{item.avatar}}" class="_t-avatar data-v-24fb79d7"></t-avatar></t-col> <t-col span="20" class="_t-col data-v-24fb79d7"><t-row class="_t-row data-v-24fb79d7">
+            <view style="padding-left:1%;font-size:15px;font-weight: bold;margin-bottom: 2%;" class="_p data-v-24fb79d7">
+              {{ item.user_name }}
+            </view>
+            <view wx:if="{{item.comment_like}}" style="color: #c2bcbc;padding-left:2%;font-size:14px;font-weight: bold;margin-bottom: 2%;" class="_p data-v-24fb79d7"> 发表评论 </view>
+            <view wx:else style="color: #c2bcbc;padding-left:2%;font-size:14px;font-weight: bold;margin-bottom: 2%;" class="_p data-v-24fb79d7"> 点赞了 </view>
+          </t-row> <t-row class="_t-row data-v-24fb79d7">
+            <view style="color: #d3d0d0;padding-left:1%;font-size: 12px;" class="_p data-v-24fb79d7">
+              {{ item.time }}
+            </view>
+          </t-row></t-col></t-row> <t-row wx:if="{{item.comment_like}}" class="_t-row data-v-24fb79d7">
+        <view style="margin-left: 22%;font-size:15px; font-weight: bold; margin-bottom: 2%; margin-top: 2%" class="_p data-v-24fb79d7">
+          {{item.comment_like}}
+        </view>
+      </t-row>
+      <view class="_div data-v-24fb79d7 detailShow" style="padding:2%; margin-left: 22%; margin-bottom: 2%; margin-top: 2% ;margin-right: 10%;"><t-row class="_t-row data-v-24fb79d7"><t-col span="4" class="_t-col data-v-24fb79d7"><t-image src="{{item.fruit_cover}}" mode="aspectFill" width="36" height="36" class="_t-image data-v-24fb79d7"></t-image></t-col> <t-col span="20" style="align-self: center;" class="_t-col data-v-24fb79d7">
+            <view style="padding-left:6%;font-size:14px;margin-bottom: 2%;" class="_p data-v-24fb79d7">
+              {{item.fruit_name}}
+            </view>
+          </t-col></t-row></view>
+      <view style="margin-left: 18%; margin-right: 10%;border-bottom:1px solid #f2f2f2; margin-bottom: 2%; margin-top:4%" class="_div data-v-24fb79d7"></view>
+    </view>
+  </view>
+</template>

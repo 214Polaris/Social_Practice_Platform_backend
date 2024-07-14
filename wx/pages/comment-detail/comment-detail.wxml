@@ -1,0 +1,17 @@
+<!--pages/comment-detail/comment-detail.wxml-->
+<view wx:for="{{comment_list}}" wx:for-item="post">
+      <t-cell title="{{post.user_name}}" description="{{post.date}}" bordered="{{false}}">
+        <view class="avatar" slot="left-icon">
+          <t-image src="data:image/png;base64,{{post.user_head}}" mode="widthFix" width="48"></t-image>
+        </view>
+        </t-cell>
+        <view class="comment" style="width: 550rpx; left: 139rpx; position: relative; top: -20rpx; right:80rpx">{{post.content}}
+      </view>
+      <t-divider/>
+    </view>
+    <t-back-top
+      theme="round"
+      text="顶部"
+      scroll-top="{{scrollTop}}"
+      bind:to-top="onToTop"
+    ></t-back-top>

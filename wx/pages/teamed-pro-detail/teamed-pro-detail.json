@@ -1,0 +1,15 @@
+{
+  "navigationBarTitleText": "结对详情",
+  "usingComponents": {
+    "t-image": "tdesign-miniprogram/image/image",
+    "v-tag":"tdesign-miniprogram/tag/tag",
+    "t-icon": "tdesign-miniprogram/icon/icon",
+    "t-cell": "tdesign-miniprogram/cell/cell",
+    "t-divider": "tdesign-miniprogram/divider/divider",
+    "t-tab-bar": "tdesign-miniprogram/tab-bar/tab-bar",
+    "t-tab-bar-item": "tdesign-miniprogram/tab-bar-item/tab-bar-item",
+    "t-grid": "tdesign-miniprogram/grid/grid",
+    "t-grid-item": "tdesign-miniprogram/grid-item/grid-item",
+    "t-image-viewer": "tdesign-miniprogram/image-viewer/image-viewer"
+  }
+}

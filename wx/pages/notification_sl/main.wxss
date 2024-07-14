@@ -1,0 +1,8 @@
+
+.noti-container.data-v-0c8e1e18 {
+  margin-top: 5%;
+}
+.detailShow.data-v-0c8e1e18 {
+  background-color: #f2f2f2;
+  display: grid;
+}

@@ -1,0 +1,41 @@
+
+.img {
+  width: 100%;
+  height: 100%;
+}
+.red-button {
+  padding: 20rpx;
+  width: calc(90% - 32rpx);
+  font-size: 32rpx;
+  color: white;
+  background-color: #DC3545;
+  border: none;
+  border-radius: 8rpx;
+  cursor: pointer;
+}
+.block {
+  width: 100vw;
+  height: 400rpx;
+  background: var(--td-bg-color-container);
+  border-top-left-radius: 16rpx;
+  border-top-right-radius: 16rpx;
+}
+.header {
+  display: flex;
+  align-items: center;
+  height: 116rpx;
+}
+.title {
+  flex: 1;
+  text-align: center;
+  font-weight: 600;
+  font-size: 36rpx;
+  color: var(--td-text-color-primary);
+}
+.btn {
+  font-size: 32rpx;
+  padding: 32rpx;
+}
+.btn--cancel {
+  color: var(--td-text-color-secondary);
+}

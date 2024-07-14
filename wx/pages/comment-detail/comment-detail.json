@@ -1,0 +1,12 @@
+{
+    "navigationBarTitleText": "评论详情",
+    "usingComponents": {
+    "t-avatar": "tdesign-miniprogram/avatar/avatar",
+    "t-avatar-group": "tdesign-miniprogram/avatar-group/avatar-group",
+    "t-icon": "tdesign-miniprogram/icon/icon",
+    "t-cell": "tdesign-miniprogram/cell/cell",
+    "t-image": "tdesign-miniprogram/image/image",
+    "t-divider": "tdesign-miniprogram/divider/divider",
+    "t-back-top": "tdesign-miniprogram/back-top/back-top"
+    }
+}

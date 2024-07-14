@@ -1,0 +1,22 @@
+
+.data-v-61e3c062:root {
+  --td-tab-track-color: #bd1b06;
+  --td-tab-track-width: 48rpx;
+  --td-tab-font-size: 29rpx;
+  --td-tab-item-active-color: black;
+}
+.audit.data-v-61e3c062 {
+  padding-left: 8%;
+  padding-right: 8%;
+  padding-top: 4%;
+  display: grid;
+}
+.tag.data-v-61e3c062 {
+  background-color: #fcc3c3;
+  border-radius: 40rpx;
+  display: inline-block;
+  padding: 10rpx 20rpx;
+  color: #bd1b06;
+  font-size: 28rpx;
+  margin-bottom: 2%;
+}

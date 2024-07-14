@@ -1,0 +1,11 @@
+<template name="fe324cb6">
+  <view class="_div data-v-1439527d container" style="margin-top:48rpx;">
+    <view class="_div data-v-1439527d logo-container">
+      <image src="/static/images/sysu.png" alt="Sun Yat-sen University Logo" class="_img data-v-1439527d"></image>
+    </view>
+    <view class="_div data-v-1439527d welcome-text">欢迎来到</view>
+    <view class="_div data-v-1439527d info-text"> 中山大学社会实践管理平台 <view class="_div data-v-1439527d sub-text">请选择您的登录身份</view>
+    </view>
+    <view class="_div data-v-1439527d buttons-container"><button class="_button data-v-1439527d login-button" bindtap="handleProxy" data-eventid="{{'0'}}" data-comkey="{{$k}}">我是校团委</button> <button class="_button data-v-1439527d login-button" bindtap="handleProxy" data-eventid="{{'1'}}" data-comkey="{{$k}}">我是社区负责人</button> <button class="_button data-v-1439527d login-button" bindtap="handleProxy" data-eventid="{{'2'}}" data-comkey="{{$k}}">我是学生/老师</button></view>
+  </view>
+</template>
